@@ -39,13 +39,10 @@ data class Evento(
     var titolo: String,
 
     @ColumnInfo
-    var data_evento: String, // Trovare per mettere data
+    var dataOra_evento: String,
 
     @ColumnInfo
     var aula: String?,
-
-    @ColumnInfo
-    var ora: String,
 
     @ColumnInfo
     var descrizione: String,
@@ -179,10 +176,10 @@ data class LibroPosseduto(
 data class LibroPrestito(
     var username: String,
     var id_possesso: Int,
-    var data_inizio: String, // Mettere Date
+    var data_inizio: String,
 
     @ColumnInfo
-    var data_fine: String, // Mettere Date
+    var data_fine: String,
 
     @ColumnInfo
     var recensione: String?
