@@ -78,7 +78,7 @@ fun LoginScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.size(65.dp))
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate(BookShareRoute.HomeBooks.route) },
             modifier = Modifier.width(150.dp),
             border = BorderStroke(1.dp, Color.Blue)
         ) {
