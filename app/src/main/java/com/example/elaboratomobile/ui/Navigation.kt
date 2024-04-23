@@ -18,6 +18,7 @@ sealed class BookShareRoute(
     companion object {
         val routes = setOf(Login)
         val noAppBar = setOf(Login)
+        val noButtomBar = setOf(Login)
     }
 
 }

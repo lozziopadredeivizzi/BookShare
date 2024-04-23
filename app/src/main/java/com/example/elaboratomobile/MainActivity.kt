@@ -20,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.elaboratomobile.ui.BookShareNavGraph
 import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.ui.composables.AppBar
+import com.example.elaboratomobile.ui.composables.BottomBar
 import com.example.elaboratomobile.ui.theme.ElaboratoMobileTheme
 
 class MainActivity : ComponentActivity() {
@@ -42,7 +43,8 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     Scaffold (
-                        topBar = { AppBar(navController = navController, currentRoute = currentRoute)}
+                        topBar = { AppBar(navController = navController, currentRoute = currentRoute)},
+                        bottomBar = { BottomBar(navController = navController, currentRoute = currentRoute)}
                     ) {contentPadding ->
                         BookShareNavGraph(
                             navController = navController,
