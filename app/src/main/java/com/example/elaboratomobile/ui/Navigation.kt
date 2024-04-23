@@ -15,7 +15,7 @@ sealed class BookShareRoute(
     val arguments: List<NamedNavArgument> = emptyList()
 ) {
     data object Login : BookShareRoute("books", "Login")
-    data object Registrazione : BookShareRoute("books", "Registrazione")
+    data object Registrazione : BookShareRoute("registrazione", "Registrazione")
 
     companion object {
         val routes = setOf(Login, Registrazione)
@@ -36,7 +36,7 @@ fun BookShareNavGraph(
     ) {
         with(BookShareRoute.Login) {
             composable(route) {
-                LoginScreen()
+                LoginScreen(navController)
             }
         }
         with(BookShareRoute.Registrazione){

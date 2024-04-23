@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Button
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -27,9 +29,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.elaboratomobile.ui.BookShareRoute
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavHostController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -95,12 +99,15 @@ fun LoginScreen() {
                 fontSize = 15.sp
             )
             Spacer(modifier = Modifier.size(5.dp))
-            Text(
-                text = "Registrati",
-                textDecoration = TextDecoration.Underline,
-                color = Color.Blue,
-                fontStyle = FontStyle.Italic,
-                fontSize = 15.sp
+            ClickableText(
+                text = AnnotatedString("Registrati"),
+                onClick = { navController.navigate(BookShareRoute.Registrazione.route) },
+                style = TextStyle(
+                    Color.Blue,
+                    textDecoration = TextDecoration.Underline,
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 15.sp
+                )
             )
         }
 
