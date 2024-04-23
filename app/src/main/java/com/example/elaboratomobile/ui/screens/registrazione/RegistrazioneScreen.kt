@@ -1,9 +1,8 @@
-package com.example.elaboratomobile.ui.screens.login
+package com.example.elaboratomobile.ui.screens.registrazione
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,14 +21,12 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun LoginScreen() {
+fun RegistrazioneScreen() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -42,68 +39,66 @@ fun LoginScreen() {
             style = TextStyle(
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.Normal,
-                fontSize = 34.sp,
+                fontSize = 34.sp
             )
         )
-        Spacer(modifier = Modifier.size(36.dp))
-
+        Spacer(modifier = Modifier.size(6.dp))
         Image(
             Icons.Outlined.Image,
-            "App Logo",
+            "profile picture",
             contentScale = ContentScale.Fit,
             colorFilter = ColorFilter.tint(Color.Black),
             modifier = Modifier
-                .padding(vertical = 16.dp)
-                .size(150.dp)
-
+                .padding(2.dp)
+                .size(100.dp)
         )
-        Spacer(modifier = Modifier.size(36.dp))
-
+        Spacer(modifier = Modifier.size(6.dp))
+        OutlinedTextField(
+            value = "",
+            onValueChange = { /*TODO*/ },
+            label = { Text("Nome") }
+        )
+        Spacer(modifier = Modifier.size(2.dp))
+        OutlinedTextField(
+            value = "",
+            onValueChange = {/*TODO*/ },
+            label = { Text(text = "Cognome") }
+        )
+        Spacer(modifier = Modifier.size(2.dp))
+        OutlinedTextField(
+            value = "",
+            onValueChange = { /*TODO*/ },
+            label = { Text("Data Di Nascita") },
+        )
+        Spacer(modifier = Modifier.size(2.dp))
+        OutlinedTextField(
+            value = "",
+            onValueChange = { /*TODO*/ },
+            label = { Text("E-mail") }
+        )
+        Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
             value = "",
             onValueChange = { /*TODO*/ },
             label = { Text("Username") }
         )
-        Spacer(modifier = Modifier.size(36.dp))
+        Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
             value = "",
             onValueChange = { /*TODO*/ },
             label = { Text("Password") }
-
         )
-        Spacer(modifier = Modifier.size(65.dp))
-
+        Spacer(modifier = Modifier.size(36.dp))
         Button(
             onClick = { /*TODO*/ },
-            modifier = Modifier.width(150.dp),
+            modifier = Modifier
+                .width(150.dp),
             border = BorderStroke(1.dp, Color.Blue)
         ) {
             Text(
-                "Accedi",
+                text = "Registrati",
                 color = Color.Black
             )
         }
-        Spacer(modifier = Modifier.size(36.dp))
-
-        Row(
-            modifier = Modifier
-                .padding(12.dp)
-        ) {
-            Text(
-                text = "Non sei ancora registrato?",
-                fontStyle = FontStyle.Italic,
-                fontSize = 15.sp
-            )
-            Spacer(modifier = Modifier.size(5.dp))
-            Text(
-                text = "Registrati",
-                textDecoration = TextDecoration.Underline,
-                color = Color.Blue,
-                fontStyle = FontStyle.Italic,
-                fontSize = 15.sp
-            )
-        }
-
-
     }
 }
