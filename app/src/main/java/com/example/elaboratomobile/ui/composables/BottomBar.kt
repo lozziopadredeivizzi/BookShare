@@ -3,15 +3,12 @@ package com.example.elaboratomobile.ui.composables
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.MenuBook
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -34,7 +31,7 @@ fun BottomBar(
     navController: NavHostController,
     currentRoute: BookShareRoute
 ) {
-    if (!BookShareRoute.noButtomBar.contains(currentRoute)) {
+    if (!BookShareRoute.noBottomBar.contains(currentRoute)) {
         val items = listOf(
             BottomBarIcon(
                 title = "Libri",

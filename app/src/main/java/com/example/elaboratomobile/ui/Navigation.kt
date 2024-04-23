@@ -14,13 +14,13 @@ sealed class BookShareRoute(
     val title: String,
     val arguments: List<NamedNavArgument> = emptyList()
 ) {
-    data object Login : BookShareRoute("books", "Login")
+    data object Login : BookShareRoute("login", "Login")
     data object Registrazione : BookShareRoute("registrazione", "Registrazione")
 
     companion object {
         val routes = setOf(Login, Registrazione)
         val noAppBar = setOf(Login, Registrazione)
-        val noButtomBar = setOf(Login)
+        val noBottomBar = setOf(Login)
     }
 
 }
