@@ -24,9 +24,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.elaboratomobile.ui.BookShareRoute
 
 @Composable
-fun RegistrazioneScreen() {
+fun RegistrazioneScreen(navController: NavHostController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -90,7 +92,7 @@ fun RegistrazioneScreen() {
         )
         Spacer(modifier = Modifier.size(36.dp))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate(BookShareRoute.HomeBooks.route) },
             modifier = Modifier
                 .width(150.dp),
             border = BorderStroke(1.dp, Color.Blue)

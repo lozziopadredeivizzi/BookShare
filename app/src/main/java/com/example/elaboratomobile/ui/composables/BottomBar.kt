@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -37,7 +38,7 @@ fun BottomBar(
                 title = "Libri",
                 selectedIcon = Icons.Filled.MenuBook,
                 unselectedIcon = Icons.Outlined.MenuBook,
-                nextRoute = BookShareRoute.Login // Mettere la rotta a cui devo andare quindi libri
+                nextRoute = BookShareRoute.HomeBooks // Mettere la rotta a cui devo andare quindi libri
             ), BottomBarIcon(
                 title = "Eventi",
                 selectedIcon = Icons.Filled.CalendarMonth,
@@ -56,7 +57,7 @@ fun BottomBar(
             )
         )
         NavigationBar(
-
+            containerColor = MaterialTheme.colorScheme.primary
         ) {
             items.forEach { item ->
                 NavigationBarItem(

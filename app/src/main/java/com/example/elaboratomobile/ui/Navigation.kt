@@ -45,7 +45,7 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.Registrazione){
             composable(route){
-                RegistrazioneScreen()
+                RegistrazioneScreen(navController)
             }
         }
         with(BookShareRoute.HomeBooks){

@@ -31,7 +31,7 @@ fun AppBar(
                 )
             },
             navigationIcon = {
-                if (currentRoute.route != BookShareRoute.Login.route) {
+                if (currentRoute.route != BookShareRoute.HomeBooks.route) {
                     Icon(
                         imageVector = Icons.Outlined.ArrowBack,
                         contentDescription = "Back button"
@@ -42,7 +42,7 @@ fun AppBar(
 
             },
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
+                containerColor = MaterialTheme.colorScheme.primary
             )
         )
     }
