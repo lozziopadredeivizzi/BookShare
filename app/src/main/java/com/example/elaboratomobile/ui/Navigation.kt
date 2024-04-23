@@ -17,7 +17,9 @@ sealed class BookShareRoute(
 
     companion object {
         val routes = setOf(Login)
+        val noAppBar = setOf(Login)
     }
+
 }
 
 @Composable

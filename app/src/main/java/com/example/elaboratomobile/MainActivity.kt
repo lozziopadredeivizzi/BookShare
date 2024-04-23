@@ -19,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.elaboratomobile.ui.BookShareNavGraph
 import com.example.elaboratomobile.ui.BookShareRoute
+import com.example.elaboratomobile.ui.composables.AppBar
 import com.example.elaboratomobile.ui.theme.ElaboratoMobileTheme
 
 class MainActivity : ComponentActivity() {
@@ -40,10 +41,15 @@ class MainActivity : ComponentActivity() {
                             } ?: BookShareRoute.Login
                         }
                     }
-                    BookShareNavGraph(
-                        navController = navController,
-                        modifier = Modifier
-                    )
+                    Scaffold (
+                        topBar = { AppBar(navController = navController, currentRoute = currentRoute)}
+                    ) {contentPadding ->
+                        BookShareNavGraph(
+                            navController = navController,
+                            modifier = Modifier.padding(contentPadding)
+                        )
+                    }
+
 
                 }
             }
