@@ -2,6 +2,7 @@ package com.example.elaboratomobile.ui.screens.events
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,10 +21,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.ContactMail
 import androidx.compose.material.icons.outlined.CreditCard
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -79,21 +83,22 @@ fun EventCard(item: Int) {
             Spacer(modifier = Modifier.size(15.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    Icons.Outlined.CreditCard,
+                    painter = painterResource(id = R.drawable.logo_malatestiana_moderna_1),
                     "logo Biblioteca",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
-                        .size(50.dp)
+                        .width(140.dp)
+                        .padding(horizontal = 10.dp)
                 )
-                Spacer(modifier = Modifier.size(50.dp))
                 Button(
                     onClick = {/*TODO*/ },
                     modifier = Modifier
-                        .width(100.dp)
-                        .height(50.dp),
+                        .width(130.dp)
+                        .height(45.dp)
+                        .padding(horizontal = 10.dp),
                     border = BorderStroke(1.dp, Color.Gray)
                 ) {
-                    Row (verticalAlignment = Alignment.CenterVertically){
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             "Aggiungi a calendario",
                             style = TextStyle(
@@ -101,15 +106,59 @@ fun EventCard(item: Int) {
                                 color = Color.Black
                             )
                         )
-                        Spacer(modifier = Modifier.size(2.dp))
-                        Image(
-                            imageVector = Icons.Outlined.Add,
-                            contentDescription = "aggiungi",
-                            contentScale = ContentScale.FillHeight,
+                        Spacer(modifier = Modifier.size(5.dp))
+                        Icon(imageVector = Icons.Outlined.Add, contentDescription = "aggiungi",
                             modifier = Modifier
-                                .size(205.dp)
-                        )
+                                .size(100.dp))
                     }
+                }
+            }
+            Spacer(modifier = Modifier.size(15.dp))
+            Column(
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(horizontal = 15.dp)
+            ) {
+                Row {
+                    Text(text = "Evento:")
+                    Spacer(modifier = Modifier.size(10.dp))
+                    Text(text = "Titolo dell'evento")
+                }
+                Spacer(modifier = Modifier.size(5.dp))
+                Row {
+                    Text(text = "Data:")
+                    Spacer(modifier = Modifier.size(10.dp))
+                    Text(text = "DD-MM-YYYY")
+                }
+                Spacer(modifier = Modifier.size(5.dp))
+                Row {
+                    Text(text = "Ora:")
+                    Spacer(modifier = Modifier.size(10.dp))
+                    Text(text = "hh-mm")
+                    Spacer(modifier = Modifier.size(10.dp))
+                    Text(text = "hh-mm")
+                }
+                Spacer(modifier = Modifier.size(5.dp))
+                Row {
+                    Text(text = "Presso:")
+                    Spacer(modifier = Modifier.size(10.dp))
+                    Text(text = "Luogo Biblioteca")
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .align(Alignment.End)
+            ) {
+                IconButton(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier
+                        .size(55.dp)
+                        .padding(horizontal = 5.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Info,
+                        contentDescription = "info"
+                    )
                 }
             }
         }
