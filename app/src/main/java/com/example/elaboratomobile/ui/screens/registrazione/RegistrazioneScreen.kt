@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
@@ -46,7 +47,7 @@ fun RegistrazioneScreen(navController: NavHostController) {
         )
         Spacer(modifier = Modifier.size(6.dp))
         Image(
-            Icons.Outlined.Image,
+            Icons.Outlined.AccountBox,
             "profile picture",
             contentScale = ContentScale.Fit,
             colorFilter = ColorFilter.tint(Color.Black),
@@ -70,7 +71,7 @@ fun RegistrazioneScreen(navController: NavHostController) {
         OutlinedTextField(
             value = "",
             onValueChange = { /*TODO*/ },
-            label = { Text("Data Di Nascita") },
+            label = { Text("Data Di Nascita") }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(

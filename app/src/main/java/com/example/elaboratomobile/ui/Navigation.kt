@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.elaboratomobile.ui.screens.books.HomeBooksScreen
 import com.example.elaboratomobile.ui.screens.login.LoginScreen
+import com.example.elaboratomobile.ui.screens.events.EventScreen
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneScreen
 
 sealed class BookShareRoute(
@@ -17,11 +18,11 @@ sealed class BookShareRoute(
 ) {
     data object Login : BookShareRoute("login", "Login")
     data object Registrazione : BookShareRoute("registrazione", "Registrazione")
-
     data object HomeBooks : BookShareRoute("libri", "Libri")
+    data object Events : BookShareRoute("eventi", "Eventi")
 
     companion object {
-        val routes = setOf(Login, Registrazione, HomeBooks)
+        val routes = setOf(Login, Registrazione, HomeBooks, Events)
         val noAppBar = setOf(Login, Registrazione)
         val noBottomBar = setOf(Login, Registrazione)
     }
@@ -43,14 +44,19 @@ fun BookShareNavGraph(
                 LoginScreen(navController)
             }
         }
-        with(BookShareRoute.Registrazione){
-            composable(route){
+        with(BookShareRoute.Registrazione) {
+            composable(route) {
                 RegistrazioneScreen(navController)
             }
         }
-        with(BookShareRoute.HomeBooks){
-            composable(route){
+        with(BookShareRoute.HomeBooks) {
+            composable(route) {
                 HomeBooksScreen(navController)
+            }
+        }
+        with(BookShareRoute.Events) {
+            composable(route) {
+                EventScreen(navHostController = navController)
             }
         }
     }

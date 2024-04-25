@@ -31,7 +31,7 @@ fun AppBar(
                 )
             },
             navigationIcon = {
-                if (currentRoute.route != BookShareRoute.HomeBooks.route) {
+                if (currentRoute.route != BookShareRoute.HomeBooks.route && currentRoute.route != BookShareRoute.Events.route) {
                     Icon(
                         imageVector = Icons.Outlined.ArrowBack,
                         contentDescription = "Back button"

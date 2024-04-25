@@ -43,7 +43,7 @@ fun BottomBar(
                 title = "Eventi",
                 selectedIcon = Icons.Filled.CalendarMonth,
                 unselectedIcon = Icons.Outlined.CalendarMonth,
-                nextRoute = BookShareRoute.Login // Mettere la rotta a cui devo andare quindi Eventi
+                nextRoute = BookShareRoute.Events // Mettere la rotta a cui devo andare quindi Eventi
             ), BottomBarIcon(
                 title = "Mappa",
                 selectedIcon = Icons.Filled.LocationOn,
