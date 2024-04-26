@@ -2,6 +2,9 @@ package com.example.elaboratomobile.ui.screens.books
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,42 +21,57 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavHostController
 import com.example.elaboratomobile.R
 import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.ui.composables.RatingBarNoClick
 
 @Composable
-fun HomeBooksScreen(navController: NavHostController) {
-    val lista = (1..20).toList()
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(1),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 80.dp),
-        modifier = Modifier.padding()
-    ) {
-        items(lista) {
-            BookItem(item = it, onClick = {
-                navController.navigate(BookShareRoute.BookDetails.route)
-            })
+fun HomeBooksScreen(navController: NavHostController, list: List<Int>, filter: Boolean) {
+    val lista = list
+    Column(modifier = Modifier.fillMaxSize()) {
+        if (filter) {
+            ComboBox()
+        }
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(1),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 80.dp),
+            modifier = Modifier.padding()
+        ) {
+            items(lista) {
+                BookItem(item = it, onClick = {
+                    navController.navigate(BookShareRoute.BookDetails.route)
+                })
+            }
         }
     }
 }
@@ -125,5 +143,52 @@ fun BookItem(item: Int, onClick: () -> Unit) {
         }
 
     }
+}
 
+@Composable
+fun ComboBox() {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedOption by remember { mutableStateOf<String?>(null) }
+    val options = listOf("Option 1", "Option 2", "Option 3")
+
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.5f)
+                .padding(8.dp)
+                .clickable { expanded = !expanded }
+                .border(color = Color.Black, width = 2.dp, shape = RoundedCornerShape(8.dp))
+                .background(Color.White, RoundedCornerShape(8.dp))
+                .padding(10.dp)
+        ) {
+            Text(
+                text = selectedOption ?: "Filtra per genere",
+                color = if (selectedOption == null) Color.Gray else Color.Black,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Icon(
+                imageVector = Icons.Filled.ArrowDropDown,
+                contentDescription = "Dropdown",
+                modifier = Modifier.align(alignment = Alignment.CenterEnd)
+            )
+        }
+        DropdownMenu(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp),
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            properties = PopupProperties(focusable = false)
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = {
+                        selectedOption = option
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
 }
