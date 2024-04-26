@@ -38,6 +38,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.elaboratomobile.R
+import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.ui.composables.RatingBarNoClick
 
 @Composable
@@ -50,7 +51,9 @@ fun HomeBooksScreen(navController: NavHostController) {
         modifier = Modifier.padding()
     ) {
         items(lista) {
-            BookItem(item = it, onClick = {})
+            BookItem(item = it, onClick = {
+                navController.navigate(BookShareRoute.BookDetails.route)
+            })
         }
     }
 }

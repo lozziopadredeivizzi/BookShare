@@ -36,11 +36,13 @@ fun AppBar(
                 )
             },
             navigationIcon = {
-                if (currentRoute.route != BookShareRoute.HomeBooks.route) {
-                    Icon(
-                        imageVector = Icons.Outlined.ArrowBack,
-                        contentDescription = "Back button"
-                    )
+                if (currentRoute.route == BookShareRoute.BookDetails.route) {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            imageVector = Icons.Outlined.ArrowBack,
+                            contentDescription = "Back button"
+                        )
+                    }
                 }
             },
             actions = {
