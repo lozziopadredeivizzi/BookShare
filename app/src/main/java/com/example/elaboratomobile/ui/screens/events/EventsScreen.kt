@@ -23,6 +23,7 @@ import androidx.compose.material.icons.outlined.ContactMail
 import androidx.compose.material.icons.outlined.CreditCard
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -96,22 +98,23 @@ fun EventCard(item: Int) {
                         .width(130.dp)
                         .height(45.dp)
                         .padding(horizontal = 10.dp),
-                    border = BorderStroke(1.dp, Color.Gray)
+                    border = BorderStroke(1.dp, Color.Gray),
+                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            "Aggiungi a calendario",
-                            style = TextStyle(
-                                fontSize = 10.sp,
-                                color = Color.Black
-                            )
-                        )
-                        Spacer(modifier = Modifier.size(5.dp))
-                        Icon(imageVector = Icons.Outlined.Add, contentDescription = "aggiungi",
-                            modifier = Modifier
-                                .size(100.dp))
-                    }
+                    Icon(
+                        imageVector = Icons.Outlined.Add, contentDescription = "aggiungi",
+                        modifier = Modifier
+                            .size(ButtonDefaults.IconSize),
+                        tint = Color.Black
+                    )
+                    Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(text = "Aggiungi al calendario", style = TextStyle(
+                        fontSize = 10.sp,
+                        color = Color.Black,
+                        textAlign = TextAlign.Center
+                    ))
                 }
+
             }
             Spacer(modifier = Modifier.size(15.dp))
             Column(
