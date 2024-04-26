@@ -73,7 +73,7 @@ fun BookItem(item: Int, onClick: () -> Unit) {
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
-        border = BorderStroke(1.dp, Color.Blue)
+        border = BorderStroke(1.dp, Color.Gray)
     ) {
 
         Box(
