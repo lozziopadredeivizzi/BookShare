@@ -2,9 +2,11 @@ package com.example.elaboratomobile.ui.composables
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,7 +29,7 @@ fun AppBar(
     navController: NavHostController,
     currentRoute: BookShareRoute
 ) {
-    if(!BookShareRoute.noAppBar.contains(currentRoute)) {
+    if (!BookShareRoute.noAppBar.contains(currentRoute)) {
         CenterAlignedTopAppBar(
             title = {
                 Text(
@@ -37,7 +39,8 @@ fun AppBar(
             },
             navigationIcon = {
                 if (currentRoute.route == BookShareRoute.BookDetails.route ||
-                    currentRoute.route == BookShareRoute.FavoriteBooks.route) {
+                    currentRoute.route == BookShareRoute.FavoriteBooks.route
+                ) {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             imageVector = Icons.Outlined.ArrowBack,
@@ -47,15 +50,34 @@ fun AppBar(
                 }
             },
             actions = {
-                      if (currentRoute.route == BookShareRoute.HomeBooks.route) {
-                          IconButton(onClick = { navController.navigate(BookShareRoute.FavoriteBooks.route) }) {
-                              Icon(contentDescription = "Preferiti",
-                                  tint = Color.Red,
-                                  imageVector = Icons.Outlined.Favorite,
-                                  modifier = Modifier.size(30.dp)
-                              )
-                          }
-                      }
+                if (currentRoute.route == BookShareRoute.HomeBooks.route) {
+                    IconButton(onClick = { navController.navigate(BookShareRoute.FavoriteBooks.route) }) {
+                        Icon(
+                            contentDescription = "Preferiti",
+                            tint = Color.Red,
+                            imageVector = Icons.Outlined.Favorite,
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+                }
+                if (currentRoute.route == BookShareRoute.Profile.route) {
+                    IconButton(onClick = {}) {
+                        Icon(
+                            contentDescription = "Cronologia",
+                            tint = Color.Black,
+                            imageVector = Icons.Outlined.AccessTime,
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+                    IconButton(onClick = {}) {
+                        Icon(
+                            contentDescription = "Impostazioni",
+                            tint = Color.Black,
+                            imageVector = Icons.Outlined.Settings,
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+                }
 
             },
             colors = TopAppBarDefaults.topAppBarColors(
