@@ -157,7 +157,7 @@ fun ComboBox() {
                 .fillMaxWidth(0.5f)
                 .padding(8.dp)
                 .clickable { expanded = !expanded }
-                .border(color = Color.Black, width = 2.dp, shape = RoundedCornerShape(8.dp))
+                .border(color = Color.Black, width = 1.dp, shape = RoundedCornerShape(8.dp))
                 .background(Color.White, RoundedCornerShape(8.dp))
                 .padding(10.dp)
         ) {

@@ -53,7 +53,7 @@ fun BottomBar(
                 title = "Profilo",
                 selectedIcon = Icons.Filled.AccountBox,
                 unselectedIcon = Icons.Outlined.AccountBox,
-                nextRoute = BookShareRoute.Login // Mettere la rotta a cui devo andare quindi profilo
+                nextRoute = BookShareRoute.Profile // Mettere la rotta a cui devo andare quindi profilo
             )
         )
         NavigationBar(
