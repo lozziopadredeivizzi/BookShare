@@ -21,9 +21,9 @@ sealed class BookShareRoute(
 ) {
     data object Login : BookShareRoute("login", "Login")
     data object Registrazione : BookShareRoute("registrazione", "Registrazione")
-
     data object HomeBooks : BookShareRoute("libri", "Libri")
     data object Events : BookShareRoute("eventi", "Eventi")
+    data object FavoriteBooks : BookShareRoute("preferiti", "Preferiti")
 
     data object BookDetails : BookShareRoute(
         "libriDettagli{bookId}",
@@ -31,9 +31,9 @@ sealed class BookShareRoute(
 
 
     companion object {
-        val routes = setOf(Login, Registrazione, HomeBooks, Events, BookDetails)
+        val routes = setOf(Login, Registrazione, HomeBooks, Events, BookDetails, FavoriteBooks)
         val noAppBar = setOf(Login, Registrazione)
-        val noBottomBar = setOf(Login, Registrazione, BookDetails)
+        val noBottomBar = setOf(Login, Registrazione, BookDetails, FavoriteBooks)
     }
 
 }
@@ -60,7 +60,7 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.HomeBooks) {
             composable(route) {
-                HomeBooksScreen(navController)
+                HomeBooksScreen(navController, (1..20).toList(), filter = true)
             }
         }
         with(BookShareRoute.Events) {
@@ -71,6 +71,11 @@ fun BookShareNavGraph(
         with(BookShareRoute.BookDetails) {
             composable(route) {
                 BookDetailsScreen(navController = navController)
+            }
+        }
+        with(BookShareRoute.FavoriteBooks) {
+            composable(route) {
+                HomeBooksScreen(navController = navController, (1..5).toList(), filter = false)
             }
         }
     }

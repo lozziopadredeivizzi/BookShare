@@ -36,7 +36,8 @@ fun AppBar(
                 )
             },
             navigationIcon = {
-                if (currentRoute.route == BookShareRoute.BookDetails.route) {
+                if (currentRoute.route == BookShareRoute.BookDetails.route ||
+                    currentRoute.route == BookShareRoute.FavoriteBooks.route) {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             imageVector = Icons.Outlined.ArrowBack,
@@ -47,7 +48,7 @@ fun AppBar(
             },
             actions = {
                       if (currentRoute.route == BookShareRoute.HomeBooks.route) {
-                          IconButton(onClick = { /*TODO*/ }) {
+                          IconButton(onClick = { navController.navigate(BookShareRoute.FavoriteBooks.route) }) {
                               Icon(contentDescription = "Preferiti",
                                   tint = Color.Red,
                                   imageVector = Icons.Outlined.Favorite,
