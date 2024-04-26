@@ -2,16 +2,22 @@ package com.example.elaboratomobile.ui.screens.registrazione
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.Image
+import androidx.compose.material.icons.outlined.ModeEdit
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,15 +52,28 @@ fun RegistrazioneScreen(navController: NavHostController) {
             )
         )
         Spacer(modifier = Modifier.size(6.dp))
-        Image(
-            Icons.Outlined.AccountBox,
-            "profile picture",
-            contentScale = ContentScale.Fit,
-            colorFilter = ColorFilter.tint(Color.Black),
-            modifier = Modifier
-                .padding(2.dp)
-                .size(100.dp)
-        )
+        Box {
+            Image(
+                Icons.Outlined.AccountBox,
+                "pfp",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .size(100.dp)
+            )
+            IconButton(
+                onClick = { /*TODO*/ },
+                modifier = Modifier
+                    .size(35.dp)
+                    .align(Alignment.BottomEnd) // Posiziona l'IconButton nell'angolo in basso a destra
+                    .background(Color.White, shape = CircleShape)
+                    .padding(5.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.ModeEdit,
+                    contentDescription = "modifica pfp",
+                )
+            }
+        }
         Spacer(modifier = Modifier.size(6.dp))
         OutlinedTextField(
             value = "",
