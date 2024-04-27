@@ -41,9 +41,14 @@ fun AppBar(
                 if (currentRoute.route == BookShareRoute.BookDetails.route ||
                     currentRoute.route == BookShareRoute.FavoriteBooks.route ||
                     currentRoute.route == BookShareRoute.Settings.route ||
-                    currentRoute.route == BookShareRoute.Aspetto.route
+                    currentRoute.route == BookShareRoute.Aspetto.route ||
+                    currentRoute.route == BookShareRoute.Chronology.route ||
+                    currentRoute.route == BookShareRoute.ChronologyDetails.route
                 ) {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = {
+                        if (currentRoute.route != BookShareRoute.Chronology.route) navController.navigateUp()
+                        else navController.navigate(BookShareRoute.Profile.route)
+                    }) {
                         Icon(
                             imageVector = Icons.Outlined.ArrowBack,
                             contentDescription = "Back button"
@@ -63,7 +68,7 @@ fun AppBar(
                     }
                 }
                 if (currentRoute.route == BookShareRoute.Profile.route) {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = { navController.navigate(BookShareRoute.Chronology.route) }) {
                         Icon(
                             contentDescription = "Cronologia",
                             tint = Color.Black,
@@ -71,7 +76,7 @@ fun AppBar(
                             modifier = Modifier.size(30.dp)
                         )
                     }
-                    IconButton(onClick = {navController.navigate(BookShareRoute.Settings.route)}) {
+                    IconButton(onClick = { navController.navigate(BookShareRoute.Settings.route) }) {
                         Icon(
                             contentDescription = "Impostazioni",
                             tint = Color.Black,

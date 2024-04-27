@@ -4,13 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.example.elaboratomobile.ui.screens.aspetto.AspettoScreen
 import com.example.elaboratomobile.ui.screens.books.HomeBooksScreen
 import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsScreen
+import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetails
 import com.example.elaboratomobile.ui.screens.login.LoginScreen
 import com.example.elaboratomobile.ui.screens.events.EventScreen
 import com.example.elaboratomobile.ui.screens.profile.ProfileScreen
@@ -18,9 +17,7 @@ import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneScreen
 import com.example.elaboratomobile.ui.screens.settings.SettingsScreen
 
 sealed class BookShareRoute(
-    val route: String,
-    val title: String,
-    val arguments: List<NamedNavArgument> = emptyList()
+    val route: String, val title: String, val arguments: List<NamedNavArgument> = emptyList()
 ) {
     data object Login : BookShareRoute("login", "Login")
     data object Registrazione : BookShareRoute("registrazione", "Registrazione")
@@ -28,26 +25,51 @@ sealed class BookShareRoute(
     data object Events : BookShareRoute("eventi", "Eventi")
     data object FavoriteBooks : BookShareRoute("preferiti", "Preferiti")
     data object Profile : BookShareRoute("profilo", "Profilo")
-    data object  Settings: BookShareRoute("impostazioni", "Impostazioni")
-    data object Aspetto: BookShareRoute("aspetto", "Aspetto")
+    data object Settings : BookShareRoute("impostazioni", "Impostazioni")
+    data object Aspetto : BookShareRoute("aspetto", "Aspetto")
+    data object Chronology : BookShareRoute("cronologia", "Cronologia")
 
     data object BookDetails : BookShareRoute(
-        "libriDettagli{bookId}",
-        "Libri Dettagli")
+        "libriDettagli{bookId}", "Libri Dettagli"
+    )
 
+    data object ChronologyDetails :
+        BookShareRoute(
+            "cronologiaDettagli{bookId}", "Cronologia Dettagli"
+        )
 
     companion object {
-        val routes = setOf(Login, Registrazione, HomeBooks, Events, BookDetails, FavoriteBooks, Profile, Settings, Aspetto)
+        val routes = setOf(
+            Login,
+            Registrazione,
+            HomeBooks,
+            Events,
+            BookDetails,
+            FavoriteBooks,
+            Profile,
+            Settings,
+            Aspetto,
+            Chronology,
+            ChronologyDetails
+        )
         val noAppBar = setOf(Login, Registrazione)
-        val noBottomBar = setOf(Login, Registrazione, BookDetails, FavoriteBooks, Settings, Aspetto)
+        val noBottomBar = setOf(
+            Login,
+            Registrazione,
+            BookDetails,
+            FavoriteBooks,
+            Settings,
+            Aspetto,
+            Chronology,
+            ChronologyDetails
+        )
     }
 
 }
 
 @Composable
 fun BookShareNavGraph(
-    navController: NavHostController,
-    modifier: Modifier = Modifier
+    navController: NavHostController, modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
@@ -66,7 +88,12 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.HomeBooks) {
             composable(route) {
-                HomeBooksScreen(navController, (1..20).toList(), filter = true)
+                HomeBooksScreen(
+                    navController,
+                    (1..20).toList(),
+                    filter = true,
+                    nextRoute = BookShareRoute.BookDetails
+                )
             }
         }
         with(BookShareRoute.Events) {
@@ -81,7 +108,12 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.FavoriteBooks) {
             composable(route) {
-                HomeBooksScreen(navController = navController, (1..5).toList(), filter = false)
+                HomeBooksScreen(
+                    navController = navController,
+                    (1..5).toList(),
+                    filter = false,
+                    nextRoute = BookShareRoute.BookDetails
+                )
             }
         }
         with(BookShareRoute.Profile) {
@@ -89,14 +121,29 @@ fun BookShareNavGraph(
                 ProfileScreen(navHostController = navController)
             }
         }
-        with(BookShareRoute.Settings){
-            composable(route){
+        with(BookShareRoute.Settings) {
+            composable(route) {
                 SettingsScreen(navHostController = navController)
             }
         }
-        with(BookShareRoute.Aspetto){
-            composable(route){
+        with(BookShareRoute.Aspetto) {
+            composable(route) {
                 AspettoScreen(navHostController = navController)
+            }
+        }
+        with(BookShareRoute.Chronology) {
+            composable(route) {
+                HomeBooksScreen(
+                    navController = navController,
+                    list = (1..6).toList(),
+                    filter = false,
+                    nextRoute = BookShareRoute.ChronologyDetails
+                )
+            }
+        }
+        with(BookShareRoute.ChronologyDetails) {
+            composable(route) {
+                ChronologyDetails(navController = navController)
             }
         }
     }
