@@ -14,6 +14,7 @@ import com.example.elaboratomobile.ui.screens.login.LoginScreen
 import com.example.elaboratomobile.ui.screens.events.EventScreen
 import com.example.elaboratomobile.ui.screens.profile.ProfileScreen
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneScreen
+import com.example.elaboratomobile.ui.screens.settings.SettingsScreen
 
 sealed class BookShareRoute(
     val route: String,
@@ -26,6 +27,7 @@ sealed class BookShareRoute(
     data object Events : BookShareRoute("eventi", "Eventi")
     data object FavoriteBooks : BookShareRoute("preferiti", "Preferiti")
     data object Profile : BookShareRoute("profilo", "Profilo")
+    data object  Settings: BookShareRoute("impostazioni", "Impostazioni")
 
     data object BookDetails : BookShareRoute(
         "libriDettagli{bookId}",
@@ -33,9 +35,9 @@ sealed class BookShareRoute(
 
 
     companion object {
-        val routes = setOf(Login, Registrazione, HomeBooks, Events, BookDetails, FavoriteBooks, Profile)
+        val routes = setOf(Login, Registrazione, HomeBooks, Events, BookDetails, FavoriteBooks, Profile, Settings)
         val noAppBar = setOf(Login, Registrazione)
-        val noBottomBar = setOf(Login, Registrazione, BookDetails, FavoriteBooks)
+        val noBottomBar = setOf(Login, Registrazione, BookDetails, FavoriteBooks, Settings)
     }
 
 }
@@ -83,6 +85,11 @@ fun BookShareNavGraph(
         with(BookShareRoute.Profile) {
             composable(route) {
                 ProfileScreen(navHostController = navController)
+            }
+        }
+        with(BookShareRoute.Settings){
+            composable(route){
+                SettingsScreen(navHostController = navController)
             }
         }
     }

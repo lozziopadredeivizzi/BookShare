@@ -39,7 +39,8 @@ fun AppBar(
             },
             navigationIcon = {
                 if (currentRoute.route == BookShareRoute.BookDetails.route ||
-                    currentRoute.route == BookShareRoute.FavoriteBooks.route
+                    currentRoute.route == BookShareRoute.FavoriteBooks.route ||
+                    currentRoute.route == BookShareRoute.Settings.route
                 ) {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
@@ -69,7 +70,7 @@ fun AppBar(
                             modifier = Modifier.size(30.dp)
                         )
                     }
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {navController.navigate(BookShareRoute.Settings.route)}) {
                         Icon(
                             contentDescription = "Impostazioni",
                             tint = Color.Black,

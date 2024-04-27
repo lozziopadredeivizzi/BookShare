@@ -68,7 +68,6 @@ fun ProfileScreen(navHostController: NavHostController) {
             "Nome Cognome",
             style = TextStyle(
                 fontSize = 30.sp,
-                color = Color.Black
             )
         )
         Spacer(modifier = Modifier.size(40.dp))
@@ -81,7 +80,6 @@ fun ProfileScreen(navHostController: NavHostController) {
                 Text(
                     "Username:",
                     style = TextStyle(
-                        color = Color.Black,
                         fontSize = 23.sp
                     )
                 )
@@ -101,7 +99,6 @@ fun ProfileScreen(navHostController: NavHostController) {
                 Text(
                     "Data di nascita:",
                     style = TextStyle(
-                        color = Color.Black,
                         fontSize = 23.sp
                     )
                 )
@@ -121,7 +118,6 @@ fun ProfileScreen(navHostController: NavHostController) {
                 Text(
                     "Libri presi in prestito:",
                     style = TextStyle(
-                        color = Color.Black,
                         fontSize = 23.sp
                     )
                 )

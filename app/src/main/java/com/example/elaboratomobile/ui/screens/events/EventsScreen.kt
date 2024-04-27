@@ -66,8 +66,8 @@ fun MinimalDialog(onDismissRequest: () -> Unit, content: @Composable () -> Unit)
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
+                .height(300.dp)
+                .width(350.dp)
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
         ) {
@@ -154,15 +154,15 @@ fun EventCard(item: Int) {
                 Row {
                     Text(text = "Data:")
                     Spacer(modifier = Modifier.size(10.dp))
-                    Text(text = "DD-MM-YYYY")
+                    Text(text = "DD/MM/YYYY")
                 }
                 Spacer(modifier = Modifier.size(5.dp))
                 Row {
                     Text(text = "Ora:")
                     Spacer(modifier = Modifier.size(10.dp))
-                    Text(text = "hh-mm")
+                    Text(text = "hh:mm")
                     Spacer(modifier = Modifier.size(10.dp))
-                    Text(text = "hh-mm")
+                    Text(text = "hh:mm")
                 }
                 Spacer(modifier = Modifier.size(5.dp))
                 Row {
@@ -220,11 +220,11 @@ fun EventCard(item: Int) {
                                 .padding(horizontal = 5.dp)
                         ) {
                             Row {
-                                Text(text = "Descrizione Evento:")
+                                Text(text = "Descrizione Evento:", modifier = Modifier.width(75.dp))
                                 Spacer(modifier = Modifier.size(10.dp))
                                 Text(text = "descrizione...")
                             }
-                            Spacer(modifier = Modifier.size(5.dp))
+                            Spacer(modifier = Modifier.size(8.dp))
                             Row {
                                 Text(text = "Aula:")
                                 Spacer(modifier = Modifier.size(10.dp))
