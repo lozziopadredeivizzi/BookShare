@@ -40,7 +40,8 @@ fun AppBar(
             navigationIcon = {
                 if (currentRoute.route == BookShareRoute.BookDetails.route ||
                     currentRoute.route == BookShareRoute.FavoriteBooks.route ||
-                    currentRoute.route == BookShareRoute.Settings.route
+                    currentRoute.route == BookShareRoute.Settings.route ||
+                    currentRoute.route == BookShareRoute.Aspetto.route
                 ) {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(

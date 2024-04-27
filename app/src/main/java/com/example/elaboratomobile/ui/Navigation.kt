@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.elaboratomobile.ui.screens.aspetto.AspettoScreen
 import com.example.elaboratomobile.ui.screens.books.HomeBooksScreen
 import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsScreen
 import com.example.elaboratomobile.ui.screens.login.LoginScreen
@@ -28,6 +29,7 @@ sealed class BookShareRoute(
     data object FavoriteBooks : BookShareRoute("preferiti", "Preferiti")
     data object Profile : BookShareRoute("profilo", "Profilo")
     data object  Settings: BookShareRoute("impostazioni", "Impostazioni")
+    data object Aspetto: BookShareRoute("aspetto", "Aspetto")
 
     data object BookDetails : BookShareRoute(
         "libriDettagli{bookId}",
@@ -35,9 +37,9 @@ sealed class BookShareRoute(
 
 
     companion object {
-        val routes = setOf(Login, Registrazione, HomeBooks, Events, BookDetails, FavoriteBooks, Profile, Settings)
+        val routes = setOf(Login, Registrazione, HomeBooks, Events, BookDetails, FavoriteBooks, Profile, Settings, Aspetto)
         val noAppBar = setOf(Login, Registrazione)
-        val noBottomBar = setOf(Login, Registrazione, BookDetails, FavoriteBooks, Settings)
+        val noBottomBar = setOf(Login, Registrazione, BookDetails, FavoriteBooks, Settings, Aspetto)
     }
 
 }
@@ -90,6 +92,11 @@ fun BookShareNavGraph(
         with(BookShareRoute.Settings){
             composable(route){
                 SettingsScreen(navHostController = navController)
+            }
+        }
+        with(BookShareRoute.Aspetto){
+            composable(route){
+                AspettoScreen(navHostController = navController)
             }
         }
     }

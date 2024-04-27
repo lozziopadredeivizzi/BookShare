@@ -1,7 +1,7 @@
 package com.example.elaboratomobile.ui.screens.settings
 
-import android.content.res.Resources.Theme
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,16 +15,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowForwardIos
 import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -41,18 +38,18 @@ fun SettingsScreen(navHostController: NavHostController) {
             .padding(vertical = 6.dp)
             .fillMaxSize()
     ) {
-        Button(
-            onClick = { /*TODO*/ },
+        Spacer(modifier = Modifier.size(10.dp))
+        Box(
             modifier = Modifier
-                .fillMaxWidth(),
-            shape = RectangleShape,
-            colors = ButtonDefaults.buttonColors()
+                .fillMaxWidth()
+                .clickable { navHostController.navigate(BookShareRoute.Aspetto.route) }
+                .padding(horizontal = 20.dp, vertical = 10.dp)
         ) {
             Row {
                 Text(
                     "Tema dell'applicazione",
                     style = TextStyle(
-                        fontSize = 18.sp,
+                        fontSize = 19.sp,
                         textAlign = TextAlign.Start
                     ),
                     modifier = Modifier
@@ -62,21 +59,22 @@ fun SettingsScreen(navHostController: NavHostController) {
                     Icons.Outlined.ArrowForwardIos,
                     "goToAspetto",
                     modifier = Modifier
-                        .size(20.dp)
+                        .size(21.dp)
                 )
             }
         }
-        Button(
-            onClick = { /*TODO*/ },
+        Spacer(modifier = Modifier.size(10.dp))
+        Box(
             modifier = Modifier
-                .fillMaxWidth(),
-            shape = RectangleShape
+                .fillMaxWidth()
+                .clickable { }
+                .padding(horizontal = 20.dp, vertical = 10.dp)
         ) {
             Row {
                 Text(
                     "Modifica profilo",
                     style = TextStyle(
-                        fontSize = 18.sp,
+                        fontSize = 19.sp,
                         textAlign = TextAlign.Start
                     ),
                     modifier = Modifier
@@ -86,15 +84,15 @@ fun SettingsScreen(navHostController: NavHostController) {
                     Icons.Outlined.ArrowForwardIos,
                     "goToModificaProfilo",
                     modifier = Modifier
-                        .size(20.dp)
+                        .size(21.dp)
                 )
             }
         }
         Spacer(modifier = Modifier.size(430.dp))
-        Row (
+        Row(
             modifier = Modifier
                 .padding(horizontal = 20.dp)
-        ){
+        ) {
             Icon(
                 Icons.Outlined.ExitToApp,
                 "logout",
@@ -117,10 +115,10 @@ fun SettingsScreen(navHostController: NavHostController) {
             )
         }
         Spacer(modifier = Modifier.size(40.dp))
-        Row (
+        Row(
             modifier = Modifier
                 .padding(horizontal = 22.dp)
-        ){
+        ) {
             Text(
                 "Versione",
                 style = TextStyle(
@@ -137,6 +135,6 @@ fun SettingsScreen(navHostController: NavHostController) {
                 )
             )
         }
-        
+
     }
 }
