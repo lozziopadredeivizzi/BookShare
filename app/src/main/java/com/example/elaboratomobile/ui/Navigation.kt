@@ -12,6 +12,7 @@ import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsScreen
 import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetails
 import com.example.elaboratomobile.ui.screens.login.LoginScreen
 import com.example.elaboratomobile.ui.screens.events.EventScreen
+import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloScreen
 import com.example.elaboratomobile.ui.screens.profile.ProfileScreen
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneScreen
 import com.example.elaboratomobile.ui.screens.settings.SettingsScreen
@@ -28,6 +29,7 @@ sealed class BookShareRoute(
     data object Settings : BookShareRoute("impostazioni", "Impostazioni")
     data object Aspetto : BookShareRoute("aspetto", "Aspetto")
     data object Chronology : BookShareRoute("cronologia", "Cronologia")
+    data object ModificaProfilo : BookShareRoute("modificaProfilo", "Modifica Profilo")
 
     data object BookDetails : BookShareRoute(
         "libriDettagli{bookId}", "Libri Dettagli"
@@ -35,7 +37,7 @@ sealed class BookShareRoute(
 
     data object ChronologyDetails :
         BookShareRoute(
-            "cronologiaDettagli{bookId}", "Cronologia Dettagli"
+            "cronologiaDettagli{bookId}", "Valuta Libro"
         )
 
     companion object {
@@ -50,7 +52,8 @@ sealed class BookShareRoute(
             Settings,
             Aspetto,
             Chronology,
-            ChronologyDetails
+            ChronologyDetails,
+            ModificaProfilo
         )
         val noAppBar = setOf(Login, Registrazione)
         val noBottomBar = setOf(
@@ -61,7 +64,8 @@ sealed class BookShareRoute(
             Settings,
             Aspetto,
             Chronology,
-            ChronologyDetails
+            ChronologyDetails,
+            ModificaProfilo
         )
     }
 
@@ -144,6 +148,11 @@ fun BookShareNavGraph(
         with(BookShareRoute.ChronologyDetails) {
             composable(route) {
                 ChronologyDetails(navController = navController)
+            }
+        }
+        with(BookShareRoute.ModificaProfilo) {
+            composable(route){
+                ModificaProfiloScreen(navHostController = navController)
             }
         }
     }

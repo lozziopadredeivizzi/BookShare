@@ -67,7 +67,7 @@ fun SettingsScreen(navHostController: NavHostController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { }
+                .clickable {navHostController.navigate(BookShareRoute.ModificaProfilo.route) }
                 .padding(horizontal = 20.dp, vertical = 10.dp)
         ) {
             Row {
