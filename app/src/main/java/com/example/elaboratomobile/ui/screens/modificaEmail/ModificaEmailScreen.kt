@@ -1,6 +1,5 @@
-package com.example.elaboratomobile.ui.screens.modificaUsername
+package com.example.elaboratomobile.ui.screens.modificaEmail
 
-import android.widget.Space
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,13 +14,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.elaboratomobile.ui.BookShareRoute
 
 @Composable
-fun ModificaUsernameScreen(navHostController: NavHostController) {
+fun ModificaEmailScreen(navHostController: NavHostController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -29,21 +27,17 @@ fun ModificaUsernameScreen(navHostController: NavHostController) {
             .fillMaxSize()
     ) {
         Spacer(modifier = Modifier.size(20.dp))
-        OutlinedTextField(
-            value = "Username Corrente",
+        OutlinedTextField(value = "E-mail Corrente",
             onValueChange = {/*TODO*/ },
-            label = { Text(text = "Username") }
-        )
+            label = { Text(text = "E-mail") })
         Spacer(modifier = Modifier.size(10.dp))
         Button(
             onClick = { navHostController.navigate(BookShareRoute.ModificaProfilo.route) },
-            modifier = Modifier
-                .width(150.dp),
+            modifier = Modifier.width(150.dp),
             border = BorderStroke(1.dp, Color.Blue)
         ) {
             Text(
-                text = "Modifica",
-                color = Color.Black
+                text = "Modifica", color = Color.Black
             )
         }
     }

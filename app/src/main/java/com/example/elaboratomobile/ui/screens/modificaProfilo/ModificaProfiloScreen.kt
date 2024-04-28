@@ -38,7 +38,7 @@ fun ModificaProfiloScreen(navHostController: NavHostController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { navHostController.navigate(BookShareRoute.ModificaUsername.route)}
+                .clickable { navHostController.navigate(BookShareRoute.ModificaUsername.route) }
                 .padding(horizontal = 20.dp, vertical = 10.dp)
         ) {
             Column {
@@ -59,7 +59,8 @@ fun ModificaProfiloScreen(navHostController: NavHostController) {
                             .size(21.dp)
                     )
                 }
-                Text("Username attuale",
+                Text(
+                    "Username attuale",
                     style = TextStyle(
                         fontSize = 16.sp,
                         color = Color.Gray
@@ -73,7 +74,7 @@ fun ModificaProfiloScreen(navHostController: NavHostController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { }
+                .clickable { navHostController.navigate(BookShareRoute.ModificaEmail.route) }
                 .padding(horizontal = 20.dp, vertical = 10.dp)
         ) {
             Column {
@@ -94,7 +95,8 @@ fun ModificaProfiloScreen(navHostController: NavHostController) {
                             .size(21.dp)
                     )
                 }
-                Text("E-mail attuale",
+                Text(
+                    "E-mail attuale",
                     style = TextStyle(
                         fontSize = 16.sp,
                         color = Color.Gray
