@@ -44,7 +44,8 @@ fun AppBar(
                     currentRoute.route == BookShareRoute.Aspetto.route ||
                     currentRoute.route == BookShareRoute.Chronology.route ||
                     currentRoute.route == BookShareRoute.ChronologyDetails.route ||
-                    currentRoute.route == BookShareRoute.ModificaProfilo.route
+                    currentRoute.route == BookShareRoute.ModificaProfilo.route ||
+                    currentRoute.route == BookShareRoute.ModificaUsername.route
                 ) {
                     IconButton(onClick = {
                         if (currentRoute.route != BookShareRoute.Chronology.route) navController.navigateUp()

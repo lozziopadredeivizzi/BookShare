@@ -13,6 +13,7 @@ import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetail
 import com.example.elaboratomobile.ui.screens.login.LoginScreen
 import com.example.elaboratomobile.ui.screens.events.EventScreen
 import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloScreen
+import com.example.elaboratomobile.ui.screens.modificaUsername.ModificaUsernameScreen
 import com.example.elaboratomobile.ui.screens.profile.ProfileScreen
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneScreen
 import com.example.elaboratomobile.ui.screens.settings.SettingsScreen
@@ -30,6 +31,7 @@ sealed class BookShareRoute(
     data object Aspetto : BookShareRoute("aspetto", "Aspetto")
     data object Chronology : BookShareRoute("cronologia", "Cronologia")
     data object ModificaProfilo : BookShareRoute("modificaProfilo", "Modifica Profilo")
+    data object ModificaUsername : BookShareRoute("modificaUsername", "Modifica Username")
 
     data object BookDetails : BookShareRoute(
         "libriDettagli{bookId}", "Libri Dettagli"
@@ -53,7 +55,8 @@ sealed class BookShareRoute(
             Aspetto,
             Chronology,
             ChronologyDetails,
-            ModificaProfilo
+            ModificaProfilo,
+            ModificaUsername
         )
         val noAppBar = setOf(Login, Registrazione)
         val noBottomBar = setOf(
@@ -65,7 +68,8 @@ sealed class BookShareRoute(
             Aspetto,
             Chronology,
             ChronologyDetails,
-            ModificaProfilo
+            ModificaProfilo,
+            ModificaUsername
         )
     }
 
@@ -153,6 +157,11 @@ fun BookShareNavGraph(
         with(BookShareRoute.ModificaProfilo) {
             composable(route){
                 ModificaProfiloScreen(navHostController = navController)
+            }
+        }
+        with(BookShareRoute.ModificaUsername){
+            composable(route){
+                ModificaUsernameScreen(navHostController = navController)
             }
         }
     }

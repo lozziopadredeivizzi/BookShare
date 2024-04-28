@@ -38,7 +38,7 @@ fun ModificaProfiloScreen(navHostController: NavHostController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { }
+                .clickable { navHostController.navigate(BookShareRoute.ModificaUsername.route)}
                 .padding(horizontal = 20.dp, vertical = 10.dp)
         ) {
             Column {
