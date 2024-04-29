@@ -2,11 +2,14 @@ package com.example.elaboratomobile.ui.screens.events
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,7 +18,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Info
@@ -80,6 +85,7 @@ fun EventCard(item: Int) {
     var dialogOpen = remember {
         mutableStateOf(false)
     }
+    val scrollState = rememberScrollState()
     Card(
         modifier = Modifier
             .padding(horizontal = 10.dp, vertical = 8.dp)
@@ -217,20 +223,38 @@ fun EventCard(item: Int) {
                                 .padding(horizontal = 5.dp)
                         ) {
                             Row {
-                                Text(text = "Descrizione Evento:", modifier = Modifier.width(75.dp))
-                                Spacer(modifier = Modifier.size(10.dp))
-                                Text(text = "descrizione...")
-                            }
-                            Spacer(modifier = Modifier.size(8.dp))
-                            Row {
                                 Text(text = "Aula:")
                                 Spacer(modifier = Modifier.size(10.dp))
                                 Text(text = "Aula dell'evento nella biblioteca")
                             }
+                            Spacer(modifier = Modifier.size(8.dp))
+                            Row {
+                                Text(
+                                    text = "Descrizione Evento:",
+                                    modifier = Modifier.width(75.dp)
+                                )
+                                Spacer(modifier = Modifier.size(10.dp))
+                                Box(
+                                    modifier = Modifier
+                                        .verticalScroll(scrollState)
+                                        .fillMaxHeight(0.1f)
+                                ) {
+                                    Text(
+                                        text = "Chapters 1 to 4 provide an introduction to the main concepts of the \uD83E\uDD17 Transformers library. By the end of this part of the course, you will be familiar with how Transformer models work and will know how to use a model from the Hugging Face Hub, fine-tune it on a dataset, and share your results on the Hub!\n" +
+                                                "Chapters 5 to 8 teach the basics of \uD83E\uDD17 Datasets and \uD83E\uDD17 Tokenizers before diving into classic NLP tasks. By the end of this part, you will be able to tackle the most common NLP problems by yourself.\n" +
+                                                "Chapters 9 to 12 go beyond NLP, and explore how Transformer models can be used to tackle tasks in speech processing and computer vision. Along the way, you’ll learn how to build and share demos of your models, and optimize them for production environments. By the end of this part, you will be ready to apply \uD83E\uDD17 Transformers to (almost) any machine learning problem!" +
+                                                "Chapters 1 to 4 provide an introduction to the main concepts of the \uD83E\uDD17 Transformers library. By the end of this part of the course, you will be familiar with how Transformer models work and will know how to use a model from the Hugging Face Hub, fine-tune it on a dataset, and share your results on the Hub!\n" +
+                                                "Chapters 5 to 8 teach the basics of \uD83E\uDD17 Datasets and \uD83E\uDD17 Tokenizers before diving into classic NLP tasks. By the end of this part, you will be able to tackle the most common NLP problems by yourself.\n" +
+                                                "Chapters 9 to 12 go beyond NLP, and explore how Transformer models can be used to tackle tasks in speech processing and computer vision. Along the way, you’ll learn how to build and share demos of your models, and optimize them for production environments. By the end of this part, you will be ready to apply \uD83E\uDD17 Transformers to (almost) any machine learning problem!"
+                                    )
+                                }
+                            }
                         }
+
                     }
                 }
             }
+
         }
     }
 }
