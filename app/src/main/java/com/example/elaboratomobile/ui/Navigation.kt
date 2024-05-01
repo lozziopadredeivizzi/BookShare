@@ -1,7 +1,9 @@
 package com.example.elaboratomobile.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -12,12 +14,14 @@ import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsScreen
 import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetails
 import com.example.elaboratomobile.ui.screens.login.LoginScreen
 import com.example.elaboratomobile.ui.screens.events.EventScreen
+import com.example.elaboratomobile.ui.screens.login.LoginViewModel
 import com.example.elaboratomobile.ui.screens.modificaEmail.ModificaEmailScreen
 import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloScreen
 import com.example.elaboratomobile.ui.screens.modificaUsername.ModificaUsernameScreen
 import com.example.elaboratomobile.ui.screens.profile.ProfileScreen
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneScreen
 import com.example.elaboratomobile.ui.screens.settings.SettingsScreen
+import org.koin.androidx.compose.koinViewModel
 
 sealed class BookShareRoute(
     val route: String, val title: String, val arguments: List<NamedNavArgument> = emptyList()
@@ -90,7 +94,14 @@ fun BookShareNavGraph(
     ) {
         with(BookShareRoute.Login) {
             composable(route) {
-                LoginScreen(navController)
+                val loginVm = koinViewModel<LoginViewModel>()
+                val state by loginVm.state.collectAsStateWithLifecycle()
+                LoginScreen(
+                    state = state,
+                    actions = loginVm.actions,
+                    onSubmit = { loginVm.login() },
+                    navController = navController
+                )
             }
         }
         with(BookShareRoute.Registrazione) {

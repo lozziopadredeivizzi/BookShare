@@ -51,7 +51,7 @@ class LoginViewModel(
                 _state.update {
                     it.copy(
                         loginSuccess = false,
-                        errorMessage = "Login fallito, Controllare le credenziali inserite."
+                        errorMessage = "Controllare le credenziali inserite."
                     )
                 }
             }
