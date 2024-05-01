@@ -2,6 +2,7 @@ package com.example.elaboratomobile.data.database
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Query
 import androidx.room.Upsert
 
 @Dao
@@ -29,6 +30,9 @@ interface UtenteDAO {
 
     @Delete
     suspend fun delete(item: Utente)
+
+    @Query("SELECT * FROM UTENTE WHERE username = :username AND password = :password")
+    suspend fun checkLogin(username: String, password: String): Utente?
 }
 
 @Dao
