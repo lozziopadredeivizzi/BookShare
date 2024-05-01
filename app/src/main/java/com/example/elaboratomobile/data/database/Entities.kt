@@ -75,6 +75,29 @@ data class Interazione(
     var id_evento: Int
 )
 
+@Entity(
+    tableName = "piacere",
+    primaryKeys = ["id_libro", "username"],
+    foreignKeys = [
+        ForeignKey(
+            entity = Utente::class,
+            parentColumns = ["username"],
+            childColumns = ["username"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = Libro::class,
+            parentColumns = ["id_libro"],
+            childColumns = ["id_libro"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
+data class Piacere(
+    val id_libro: Int,
+    val username: String
+)
+
 @Entity(tableName = "UTENTE")
 data class Utente(
     @PrimaryKey
@@ -102,7 +125,7 @@ data class Utente(
 
 @Entity(tableName = "LIBRO")
 data class Libro(
-    @PrimaryKey (autoGenerate = true)
+    @PrimaryKey(autoGenerate = true)
     val id_libro: Int,
 
     @ColumnInfo
