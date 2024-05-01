@@ -45,7 +45,7 @@ class LoginViewModel(
         viewModelScope.launch {
             val utente = utenteRepository.checkLogin(_state.value.username, _state.value.password)
             if (utente != null) {
-                viewModelScope.launch { usernameRepository.setCurrentUsername(_state.value.username) }
+                usernameRepository.setCurrentUsername(_state.value.username)
                 _state.update { it.copy(loginSuccess = true) }
             } else {
                 _state.update {
