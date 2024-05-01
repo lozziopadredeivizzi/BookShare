@@ -15,7 +15,8 @@ import java.util.Locale
         Evento::class,
         Interazione::class,
         LibroPrestito::class,
-        LibroPosseduto::class], version = 1
+        LibroPosseduto::class,
+        Piacere::class], version = 1
 )
 @TypeConverters(Converters::class)
 abstract class ElaboratoMobileDatabase : RoomDatabase() {
@@ -32,6 +33,8 @@ abstract class ElaboratoMobileDatabase : RoomDatabase() {
     abstract fun libroPrestitoDAO(): LibroPrestitoDAO
 
     abstract fun libroPossedutoDAO(): LibroPossedutoDAO
+
+    abstract fun piacereDAO(): PiacereDAO
 }
 
 class Converters {
