@@ -76,7 +76,7 @@ data class Interazione(
 )
 
 @Entity(
-    tableName = "piacere",
+    tableName = "PIACERE",
     primaryKeys = ["id_libro", "username"],
     foreignKeys = [
         ForeignKey(
@@ -138,7 +138,7 @@ data class Libro(
     var genere: String,
 
     @ColumnInfo
-    var recensione: String,
+    var recensione: Double,
 
     @ColumnInfo
     var copertina: String,
@@ -205,5 +205,5 @@ data class LibroPrestito(
     var data_fine: String,
 
     @ColumnInfo
-    var recensione: String?
+    var recensione: Int?
 )

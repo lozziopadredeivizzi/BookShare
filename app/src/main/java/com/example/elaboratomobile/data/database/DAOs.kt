@@ -1,16 +1,25 @@
 package com.example.elaboratomobile.data.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Query
 import androidx.room.Upsert
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LibroDAO {
+
+    @Query("SELECT * FROM libro")
+    fun getAll(): Flow<List<Libro>>
     @Upsert
     suspend fun upsert(book: Libro)
 
     @Delete
     suspend fun delete(item: Libro)
+
+    @Query("SELECT EXISTS(SELECT 1 FROM PIACERE WHERE id_libro = :idLibro AND username = :username)")
+    fun isLikedByUser(idLibro: Int, username: String): Flow<Boolean>
 }
 
 @Dao
@@ -29,6 +38,9 @@ interface UtenteDAO {
 
     @Delete
     suspend fun delete(item: Utente)
+
+    @Query("SELECT * FROM UTENTE WHERE username = :username AND password = :password")
+    suspend fun checkLogin(username: String, password: String): Utente?
 }
 
 @Dao

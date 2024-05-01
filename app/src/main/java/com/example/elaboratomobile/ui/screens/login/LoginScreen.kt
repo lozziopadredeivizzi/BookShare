@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Button
@@ -33,14 +35,19 @@ import androidx.navigation.NavHostController
 import com.example.elaboratomobile.ui.BookShareRoute
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(
+    state: LoginState,
+    actions: LoginActions,
+    onSubmit: () -> Unit,
+    navController: NavHostController
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(12.dp)
             .fillMaxSize()
     ) {
-        Spacer(modifier = Modifier.size(36.dp))
+        Spacer(modifier = Modifier.size(20.dp))
         Text(
             text = "BookShare",
             style = TextStyle(
@@ -49,7 +56,6 @@ fun LoginScreen(navController: NavHostController) {
                 fontSize = 34.sp,
             )
         )
-        Spacer(modifier = Modifier.size(36.dp))
 
         Image(
             Icons.Outlined.Image,
@@ -58,27 +64,38 @@ fun LoginScreen(navController: NavHostController) {
             colorFilter = ColorFilter.tint(Color.Black),
             modifier = Modifier
                 .padding(vertical = 16.dp)
-                .size(150.dp)
+                .fillMaxSize(0.3f)
 
         )
-        Spacer(modifier = Modifier.size(36.dp))
+        Spacer(modifier = Modifier.size(10.dp))
+
+        if(state.errorMessage != null) {
+            Text(text = state.errorMessage, color = Color.Red)
+            Spacer(modifier = Modifier.size(15.dp))
+        }
 
         OutlinedTextField(
-            value = "",
-            onValueChange = { /*TODO*/ },
+            value = state.username,
+            onValueChange = actions::setUsername,
             label = { Text("Username") }
         )
-        Spacer(modifier = Modifier.size(36.dp))
+        Spacer(modifier = Modifier.size(20.dp))
         OutlinedTextField(
-            value = "",
-            onValueChange = { /*TODO*/ },
+            value = state.password,
+            onValueChange = actions::setPassword,
             label = { Text("Password") }
 
         )
         Spacer(modifier = Modifier.size(65.dp))
 
         Button(
-            onClick = { navController.navigate(BookShareRoute.HomeBooks.route) },
+            onClick = {
+                if (!state.canSubmit) return@Button
+                onSubmit()
+                if (state.loginSuccess == true) {
+                    navController.navigate(BookShareRoute.HomeBooks.route)
+                }
+            },
             modifier = Modifier.width(150.dp),
             border = BorderStroke(1.dp, Color.Blue)
         ) {
