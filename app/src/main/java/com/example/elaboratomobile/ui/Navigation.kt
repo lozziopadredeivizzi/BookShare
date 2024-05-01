@@ -6,7 +6,9 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.elaboratomobile.data.models.Theme
 import com.example.elaboratomobile.ui.screens.aspetto.AspettoScreen
+import com.example.elaboratomobile.ui.screens.aspetto.ThemeState
 import com.example.elaboratomobile.ui.screens.books.HomeBooksScreen
 import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsScreen
 import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetails
@@ -81,7 +83,7 @@ sealed class BookShareRoute(
 
 @Composable
 fun BookShareNavGraph(
-    navController: NavHostController, modifier: Modifier = Modifier
+    navController: NavHostController, modifier: Modifier = Modifier, themeState: ThemeState, onThemeSelected: (theme: Theme) -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -140,7 +142,7 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.Aspetto) {
             composable(route) {
-                AspettoScreen(navHostController = navController)
+                AspettoScreen(themeState, onThemeSelected, navHostController = navController)
             }
         }
         with(BookShareRoute.Chronology) {

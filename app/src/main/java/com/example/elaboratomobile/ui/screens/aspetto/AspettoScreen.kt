@@ -29,88 +29,81 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.elaboratomobile.ui.theme.ElaboratoMobileTheme
-import org.w3c.dom.Text
-
-enum class Theme { Sistema, Chiaro, Scuro}
+import com.example.elaboratomobile.data.models.Theme
 
 @Composable
-fun AspettoScreen(navHostController: NavHostController) {
-    var selectedTheme by remember { mutableStateOf(Theme.Sistema) }
-    ElaboratoMobileTheme(
-        darkTheme = when (selectedTheme) {
-            Theme.Chiaro -> false
-            Theme.Scuro -> true
-            Theme.Sistema -> isSystemInDarkTheme()
-        }
-    ) {
-        Column(Modifier.selectableGroup()) {
-            Spacer(modifier = Modifier.size(10.dp))
-            Theme.entries.forEach { theme ->
-                Column {
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .height(33.dp)
-                            .selectable(
-                                selected = (theme == selectedTheme),
-                                onClick = { selectedTheme = theme },
-                                role = Role.RadioButton
-                            )
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = theme.toString(),
-                            style = TextStyle(
-                                fontSize = 19.sp
-                            ),
-                            modifier = Modifier
-                                .padding(start = 16.dp)
-                                .width(100.dp)
+fun AspettoScreen(
+    state: ThemeState,
+    onThemeSelected: (theme: Theme) -> Unit,
+    navHostController: NavHostController
+) {
+    Column(Modifier.selectableGroup()) {
+        Spacer(modifier = Modifier.size(10.dp))
+        Theme.entries.forEach { theme ->
+            Column {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(33.dp)
+                        .selectable(
+                            selected = (theme == state.theme),
+                            onClick = { onThemeSelected(theme) },
+                            role = Role.RadioButton
                         )
-                        Spacer(modifier = Modifier.width(170.dp))
-                        RadioButton(
-                            selected = (theme == selectedTheme),
-                            onClick = null,
-                        )
-                    }
-                    if(theme == Theme.Chiaro){
-                        Text("Imposta l’aspetto dell’applicazione in modalità chiara",
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                color = Color.Gray
-                            ),
-                            modifier = Modifier
-                                .padding(horizontal = 30.dp)
-                                .width(250.dp)
-                        )
-                    }
-                    else if(theme == Theme.Scuro){
-                        Text("Imposta l’aspetto dell’applicazione in modalità scura",
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                color = Color.Gray
-                            ),
-                            modifier = Modifier
-                                .padding(horizontal = 30.dp)
-                                .width(250.dp)
-                        )
-                    }
-                    else if(theme == Theme.Sistema){
-                        Text("Imposta l’aspetto dell’applicazione in base alle impostazioni di sistema",
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                color = Color.Gray
-                            ),
-                            modifier = Modifier
-                                .padding(horizontal = 30.dp)
-                                .width(250.dp)
-                        )
-                    }
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = theme.toString(),
+                        style = TextStyle(
+                            fontSize = 19.sp
+                        ),
+                        modifier = Modifier
+                            .padding(start = 16.dp)
+                            .width(100.dp)
+                    )
+                    Spacer(modifier = Modifier.width(170.dp))
+                    RadioButton(
+                        selected = (theme == state.theme),
+                        onClick = null,
+                    )
                 }
-                Spacer(modifier = Modifier.size(8.dp))
+                if (theme == Theme.Chiaro) {
+                    Text(
+                        "Imposta l’aspetto dell’applicazione in modalità chiara",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            color = Color.Gray
+                        ),
+                        modifier = Modifier
+                            .padding(horizontal = 30.dp)
+                            .width(250.dp)
+                    )
+                } else if (theme == Theme.Scuro) {
+                    Text(
+                        "Imposta l’aspetto dell’applicazione in modalità scura",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            color = Color.Gray
+                        ),
+                        modifier = Modifier
+                            .padding(horizontal = 30.dp)
+                            .width(250.dp)
+                    )
+                } else if (theme == Theme.Sistema) {
+                    Text(
+                        "Imposta l’aspetto dell’applicazione in base alle impostazioni di sistema",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            color = Color.Gray
+                        ),
+                        modifier = Modifier
+                            .padding(horizontal = 30.dp)
+                            .width(250.dp)
+                    )
+                }
             }
+            Spacer(modifier = Modifier.size(8.dp))
         }
     }
 }
