@@ -58,8 +58,8 @@ fun RegistrazioneScreen(
         Spacer(modifier = Modifier.size(6.dp))
 
         if (state.errorMessage != null) {
-            Text(text = state.errorMessage, color = Color.Red)
-            Spacer(modifier = Modifier.size(5.dp))
+            Text(text = state.errorMessage, color = Color.Red, style = TextStyle(fontSize = 15.sp))
+            Spacer(modifier = Modifier.size(2.dp))
         }
 
         Box {
@@ -120,7 +120,7 @@ fun RegistrazioneScreen(
             onValueChange = actions::setPassword,
             label = { Text("Password") }
         )
-        Spacer(modifier = Modifier.size(36.dp))
+        Spacer(modifier = Modifier.size(28.dp))
         Button(
             onClick = {
                 if (!state.canSubmit) return@Button
