@@ -69,7 +69,7 @@ fun LoginScreen(
         )
         Spacer(modifier = Modifier.size(10.dp))
 
-        if(state.errorMessage != null) {
+        if (state.errorMessage != null) {
             Text(text = state.errorMessage, color = Color.Red)
             Spacer(modifier = Modifier.size(15.dp))
         }
@@ -84,7 +84,6 @@ fun LoginScreen(
             value = state.password,
             onValueChange = actions::setPassword,
             label = { Text("Password") }
-
         )
         Spacer(modifier = Modifier.size(65.dp))
 
@@ -92,10 +91,9 @@ fun LoginScreen(
             onClick = {
                 if (!state.canSubmit) return@Button
                 onSubmit()
-                //if (state.loginSuccess == true) {
-                //                    navController.navigate(BookShareRoute.HomeBooks.route)
-                //                }
-                navController.navigate(BookShareRoute.HomeBooks.route)
+                if (state.loginSuccess == true) {
+                    navController.navigate(BookShareRoute.HomeBooks.route)
+                }
             },
             modifier = Modifier.width(150.dp),
             border = BorderStroke(1.dp, Color.Blue)

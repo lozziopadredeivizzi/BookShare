@@ -41,6 +41,9 @@ interface UtenteDAO {
 
     @Query("SELECT * FROM UTENTE WHERE username = :username AND password = :password")
     suspend fun checkLogin(username: String, password: String): Utente?
+
+    @Query("SELECT * FROM UTENTE WHERE username = :username")
+    suspend fun checkUsername(username: String): Utente?
 }
 
 @Dao
