@@ -2,6 +2,7 @@ package com.example.elaboratomobile.ui.screens.share
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.elaboratomobile.data.database.Genere
 import com.example.elaboratomobile.data.database.Libro
 import com.example.elaboratomobile.data.database.Piacere
 import com.example.elaboratomobile.data.repositories.BooksRepository
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 //Classe che contiene i dati di libro e se gli è stato messo like dall'utente loggato
 data class BookLike(
     val book: Libro,
+    val genere: Genere,
     val isLiked: Boolean
 )
 
@@ -43,6 +45,7 @@ class BooksViewModel(
                 books.map { book ->
                     BookLike(
                         book = book,
+                        genere = repository.getGenere(book.id_genere),
                         isLiked = repository.isLiked(book.id_libro, username).first()
                     )
                 }
@@ -69,6 +72,7 @@ class BooksViewModel(
                 books.map { book ->
                     BookLike(
                         book = book,
+                        genere = repository.getGenere(book.id_genere),
                         isLiked = repository.isLiked(book.id_libro, username).first()
                     )
                 }

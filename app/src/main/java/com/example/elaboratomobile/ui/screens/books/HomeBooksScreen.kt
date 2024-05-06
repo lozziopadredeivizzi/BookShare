@@ -128,7 +128,7 @@ fun BookItem(
                 ) {
                     Text(text = book.book.titolo)
                     Text(text = book.book.autore)
-                    Text(text = book.book.genere)
+                    Text(text = book.genere.nome)
                     RatingBarNoClick(rating = book.book.recensione)
                 }
             }
