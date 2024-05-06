@@ -23,6 +23,18 @@ interface LibroDAO {
 }
 
 @Dao
+interface GenereDAO {
+    @Upsert
+    suspend fun upsert(genere: Genere)
+
+    @Delete
+    suspend fun delete(genere: Genere)
+
+    @Query("SELECT * FROM GENERE WHERE id_genere = :idGenere")
+    suspend fun getGenere(idGenere: Int): Genere
+}
+
+@Dao
 interface BibliotecaDAO {
     @Upsert
     suspend fun upsert(library: Biblioteca)

@@ -117,7 +117,16 @@ data class Utente(
 )
 
 
-@Entity(tableName = "LIBRO")
+@Entity(
+    tableName = "LIBRO",
+    foreignKeys = [
+        androidx.room.ForeignKey(
+            entity = Genere::class,
+            parentColumns = kotlin.arrayOf("id_genere"),
+            childColumns = kotlin.arrayOf("id_genere")
+        )
+    ]
+)
 data class Libro(
     @PrimaryKey(autoGenerate = true)
     val id_libro: Int,
@@ -128,8 +137,7 @@ data class Libro(
     @ColumnInfo
     var autore: String,
 
-    @ColumnInfo
-    var genere: String,
+    val id_genere: Int,
 
     @ColumnInfo
     var recensione: Double,
@@ -141,6 +149,13 @@ data class Libro(
     var trama: String
 )
 
+@Entity(tableName = "GENERE")
+data class Genere(
+    @PrimaryKey(autoGenerate = true)
+    val id_genere: Int,
+    @ColumnInfo
+    var nome: String
+)
 
 @Entity(
     tableName = "LIBRO_POSSEDUTO",
