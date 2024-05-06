@@ -21,6 +21,7 @@ import com.example.elaboratomobile.ui.screens.modificaEmail.ModificaEmailScreen
 import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloScreen
 import com.example.elaboratomobile.ui.screens.modificaUsername.ModificaUsernameScreen
 import com.example.elaboratomobile.ui.screens.profile.ProfileScreen
+import com.example.elaboratomobile.ui.screens.profile.ProfileViewModel
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneScreen
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneViewModel
 import com.example.elaboratomobile.ui.screens.settings.SettingsScreen
@@ -154,7 +155,14 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.Profile) {
             composable(route) {
-                ProfileScreen(navHostController = navController)
+                val profileVm = koinViewModel<ProfileViewModel>()
+                val state by profileVm.user.collectAsStateWithLifecycle()
+                val num by profileVm.num.collectAsStateWithLifecycle()
+                ProfileScreen(
+                    user = state,
+                    num,
+                    navHostController = navController
+                )
             }
         }
         with(BookShareRoute.Settings) {

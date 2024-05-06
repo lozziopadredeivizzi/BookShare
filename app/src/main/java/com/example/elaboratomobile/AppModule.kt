@@ -10,6 +10,7 @@ import com.example.elaboratomobile.data.repositories.UsernameRepository
 import com.example.elaboratomobile.data.repositories.UtenteRepository
 import com.example.elaboratomobile.ui.screens.aspetto.AspettoViewModel
 import com.example.elaboratomobile.ui.screens.login.LoginViewModel
+import com.example.elaboratomobile.ui.screens.profile.ProfileViewModel
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneViewModel
 import com.example.elaboratomobile.ui.screens.share.BooksViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -47,4 +48,6 @@ val appModule = module {
     viewModel { BooksViewModel(get(), get()) }
 
     viewModel { RegistrazioneViewModel(get(), get())}
+
+    viewModel{ ProfileViewModel(get(), get()) }
 }

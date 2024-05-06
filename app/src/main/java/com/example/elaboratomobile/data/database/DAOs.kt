@@ -44,6 +44,12 @@ interface UtenteDAO {
 
     @Query("SELECT * FROM UTENTE WHERE username = :username")
     suspend fun checkUsername(username: String): Utente?
+
+    @Query("SELECT * FROM UTENTE WHERE username = :username")
+    fun getFromUsername(username: String): Flow<Utente?>
+
+    @Query("SELECT COUNT(*) as count FROM LIBRO_PRESTITO WHERE username = :username")
+    fun getBookTotalNumber(username: String) : Flow<Int>
 }
 
 @Dao

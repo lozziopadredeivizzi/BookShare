@@ -30,9 +30,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.elaboratomobile.data.database.Utente
 
 @Composable
-fun ProfileScreen(navHostController: NavHostController) {
+fun ProfileScreen(
+    user: Utente?,
+    num: Int,
+    navHostController: NavHostController
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -65,7 +70,7 @@ fun ProfileScreen(navHostController: NavHostController) {
 
         Spacer(modifier = Modifier.size(10.dp))
         Text(
-            "Nome Cognome",
+            user?.let { it.nome + " " + it.cognome }?: run { "/" },
             style = TextStyle(
                 fontSize = 30.sp,
             )
@@ -85,13 +90,15 @@ fun ProfileScreen(navHostController: NavHostController) {
                 )
                 Spacer(modifier = Modifier.size(10.dp))
                 Text(
-                    "Username attuale",
+                    user?.username ?: run { "/" },
                     style = TextStyle(
                         color = Color.Gray,
                         fontSize = 19.sp,
                         textAlign = TextAlign.End
                     ),
-                    modifier = Modifier.padding(vertical = 3.dp).width(400.dp)
+                    modifier = Modifier
+                        .padding(vertical = 3.dp)
+                        .width(400.dp)
                 )
             }
             Spacer(modifier = Modifier.size(25.dp))
@@ -104,13 +111,15 @@ fun ProfileScreen(navHostController: NavHostController) {
                 )
                 Spacer(modifier = Modifier.size(10.dp))
                 Text(
-                    "DD-MM-YYYY",
+                    user?.data_nascita ?: run { "/" },
                     style = TextStyle(
                         color = Color.Gray,
                         fontSize = 19.sp,
                         textAlign = TextAlign.End
                     ),
-                    modifier = Modifier.padding(vertical = 3.dp).width(400.dp)
+                    modifier = Modifier
+                        .padding(vertical = 3.dp)
+                        .width(400.dp)
                 )
             }
             Spacer(modifier = Modifier.size(25.dp))
@@ -123,13 +132,15 @@ fun ProfileScreen(navHostController: NavHostController) {
                 )
                 Spacer(modifier = Modifier.size(10.dp))
                 Text(
-                    "n",
+                    num.toString(),
                     style = TextStyle(
                         color = Color.Gray,
                         fontSize = 19.sp,
                         textAlign = TextAlign.End
                     ),
-                    modifier = Modifier.padding(vertical = 3.dp).width(400.dp)
+                    modifier = Modifier
+                        .padding(vertical = 3.dp)
+                        .width(400.dp)
                 )
             }
         }

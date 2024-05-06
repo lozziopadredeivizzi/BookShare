@@ -2,6 +2,7 @@ package com.example.elaboratomobile.data.repositories
 
 import com.example.elaboratomobile.data.database.Utente
 import com.example.elaboratomobile.data.database.UtenteDAO
+import kotlinx.coroutines.flow.Flow
 
 class UtenteRepository (private val utenteDAO: UtenteDAO) {
 
@@ -16,4 +17,14 @@ class UtenteRepository (private val utenteDAO: UtenteDAO) {
     suspend fun addUser(user: Utente){
         return utenteDAO.upsert(user)
     }
+
+    fun getFromUsername(username: String): Flow<Utente?>{
+        return utenteDAO.getFromUsername(username)
+    }
+
+    fun getBookTotalNumber(username: String) : Flow<Int>{
+        return utenteDAO.getBookTotalNumber(username)
+    }
+
+
 }
