@@ -22,6 +22,7 @@ import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloScr
 import com.example.elaboratomobile.ui.screens.modificaUsername.ModificaUsernameScreen
 import com.example.elaboratomobile.ui.screens.profile.ProfileScreen
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneScreen
+import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneViewModel
 import com.example.elaboratomobile.ui.screens.settings.SettingsScreen
 import org.koin.androidx.compose.koinViewModel
 
@@ -87,7 +88,10 @@ sealed class BookShareRoute(
 
 @Composable
 fun BookShareNavGraph(
-    navController: NavHostController, modifier: Modifier = Modifier, themeState: ThemeState, onThemeSelected: (theme: Theme) -> Unit
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    themeState: ThemeState,
+    onThemeSelected: (theme: Theme) -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -108,7 +112,14 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.Registrazione) {
             composable(route) {
-                RegistrazioneScreen(navController)
+                val signUpVm = koinViewModel<RegistrazioneViewModel>()
+                val state by signUpVm.state.collectAsStateWithLifecycle()
+                RegistrazioneScreen(
+                    state = state,
+                    actions = signUpVm.actions,
+                    onSubmit = { signUpVm.signUp() },
+                    navController = navController
+                )
             }
         }
         with(BookShareRoute.HomeBooks) {

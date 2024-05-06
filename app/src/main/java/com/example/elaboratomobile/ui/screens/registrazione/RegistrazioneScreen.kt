@@ -35,7 +35,11 @@ import androidx.navigation.NavHostController
 import com.example.elaboratomobile.ui.BookShareRoute
 
 @Composable
-fun RegistrazioneScreen(navController: NavHostController) {
+fun RegistrazioneScreen(
+    state: AddUserState,
+    actions: AddUserActions,
+    onSubmit: () -> Unit, navController: NavHostController
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -52,6 +56,12 @@ fun RegistrazioneScreen(navController: NavHostController) {
             )
         )
         Spacer(modifier = Modifier.size(6.dp))
+
+        if (state.errorMessage != null) {
+            Text(text = state.errorMessage, color = Color.Red, style = TextStyle(fontSize = 15.sp))
+            Spacer(modifier = Modifier.size(2.dp))
+        }
+
         Box {
             Image(
                 Icons.Outlined.AccountBox,
@@ -76,51 +86,57 @@ fun RegistrazioneScreen(navController: NavHostController) {
         }
         Spacer(modifier = Modifier.size(6.dp))
         OutlinedTextField(
-            value = "",
-            onValueChange = { /*TODO*/ },
+            value = state.nome,
+            onValueChange = actions::setName,
             label = { Text("Nome") }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
-            value = "",
-            onValueChange = {/*TODO*/ },
+            value = state.cognome,
+            onValueChange = actions::setSurname,
             label = { Text(text = "Cognome") }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
-            value = "",
-            onValueChange = { /*TODO*/ },
+            value = state.data_nascita,
+            onValueChange = actions::setDate,
             label = { Text("Data Di Nascita") }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
-            value = "",
-            onValueChange = { /*TODO*/ },
+            value = state.email,
+            onValueChange = actions::setEmail,
             label = { Text("E-mail") }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
-            value = "",
-            onValueChange = { /*TODO*/ },
+            value = state.username,
+            onValueChange = actions::setUsername,
             label = { Text("Username") }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
-            value = "",
-            onValueChange = { /*TODO*/ },
+            value = state.password,
+            onValueChange = actions::setPassword,
             label = { Text("Password") }
         )
-        Spacer(modifier = Modifier.size(36.dp))
+        Spacer(modifier = Modifier.size(28.dp))
         Button(
-            onClick = { navController.navigate(BookShareRoute.HomeBooks.route) },
-            modifier = Modifier
-                .width(150.dp),
-            border = BorderStroke(1.dp, Color.Blue)
-        ) {
-            Text(
-                text = "Registrati",
-                color = Color.Black
-            )
-        }
+            onClick = {
+                if (!state.canSubmit) return@Button
+                onSubmit()
+                if (state.signUpSuccess == true) {
+                    navController.navigate(BookShareRoute.HomeBooks.route)
+                }
+            },
+                modifier = Modifier
+                    .width(150.dp),
+                border = BorderStroke(1.dp, Color.Blue)
+                ) {
+                Text(
+                    text = "Registrati",
+                    color = Color.Black
+                )
+            }
+            }
     }
-}
