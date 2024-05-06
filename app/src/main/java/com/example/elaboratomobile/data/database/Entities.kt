@@ -26,8 +26,7 @@ data class Biblioteca(
         ForeignKey(
             entity = Biblioteca::class,
             parentColumns = arrayOf("id_biblioteca"),
-            childColumns = arrayOf("id_biblioteca"),
-            onDelete = ForeignKey.CASCADE
+            childColumns = arrayOf("id_biblioteca")
         )
     ]
 )
@@ -47,7 +46,6 @@ data class Evento(
     @ColumnInfo
     var descrizione: String,
 
-    @ColumnInfo
     var id_biblioteca: Int
 )
 
@@ -58,14 +56,12 @@ data class Evento(
         ForeignKey(
             entity = Utente::class,
             parentColumns = arrayOf("username"),
-            childColumns = arrayOf("username"),
-            onDelete = ForeignKey.CASCADE
+            childColumns = arrayOf("username")
         ),
         ForeignKey(
             entity = Evento::class,
             parentColumns = arrayOf("id_evento"),
-            childColumns = arrayOf("id_evento"),
-            onDelete = ForeignKey.CASCADE
+            childColumns = arrayOf("id_evento")
         )
     ]
 )
@@ -82,14 +78,12 @@ data class Interazione(
         ForeignKey(
             entity = Utente::class,
             parentColumns = ["username"],
-            childColumns = ["username"],
-            onDelete = ForeignKey.CASCADE
+            childColumns = ["username"]
         ),
         ForeignKey(
             entity = Libro::class,
             parentColumns = ["id_libro"],
-            childColumns = ["id_libro"],
-            onDelete = ForeignKey.CASCADE
+            childColumns = ["id_libro"]
         )
     ]
 )
@@ -153,14 +147,12 @@ data class Libro(
         ForeignKey(
             entity = Libro::class,
             parentColumns = arrayOf("id_libro"),
-            childColumns = arrayOf("id_libro"),
-            onDelete = ForeignKey.CASCADE
+            childColumns = arrayOf("id_libro")
         ),
         ForeignKey(
             entity = Biblioteca::class,
             parentColumns = arrayOf("id_biblioteca"),
-            childColumns = arrayOf("id_biblioteca"),
-            onDelete = ForeignKey.CASCADE
+            childColumns = arrayOf("id_biblioteca")
         )
     ]
 )
@@ -185,14 +177,12 @@ data class LibroPosseduto(
         ForeignKey(
             entity = Utente::class,
             parentColumns = arrayOf("username"),
-            childColumns = arrayOf("username"),
-            onDelete = ForeignKey.CASCADE
+            childColumns = arrayOf("username")
         ),
         ForeignKey(
             entity = LibroPosseduto::class,
             parentColumns = arrayOf("id_possesso"),
-            childColumns = arrayOf("id_possesso"),
-            onDelete = ForeignKey.CASCADE
+            childColumns = arrayOf("id_possesso")
         )
     ]
 )
