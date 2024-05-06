@@ -28,7 +28,7 @@ val appModule = module {
             get(),
             ElaboratoMobileDatabase::class.java,
             "book-share"
-        ).build()
+        ).fallbackToDestructiveMigration().createFromAsset("database/book-share.db").build()
     }
 
     single { UsernameRepository(get()) }

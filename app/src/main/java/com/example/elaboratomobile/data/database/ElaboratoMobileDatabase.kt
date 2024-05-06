@@ -16,7 +16,7 @@ import java.util.Locale
         Interazione::class,
         LibroPrestito::class,
         LibroPosseduto::class,
-        Piacere::class], version = 1
+        Piacere::class], version = 2
 )
 @TypeConverters(Converters::class)
 abstract class ElaboratoMobileDatabase : RoomDatabase() {
