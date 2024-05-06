@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.Image
@@ -29,6 +30,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -88,36 +91,60 @@ fun RegistrazioneScreen(
         OutlinedTextField(
             value = state.nome,
             onValueChange = actions::setName,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done // Impedisce il ritorno a capo
+            ),
             label = { Text("Nome") }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
             value = state.cognome,
             onValueChange = actions::setSurname,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done // Impedisce il ritorno a capo
+            ),
             label = { Text(text = "Cognome") }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
             value = state.data_nascita,
             onValueChange = actions::setDate,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done // Impedisce il ritorno a capo
+            ),
             label = { Text("Data Di Nascita") }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
             value = state.email,
             onValueChange = actions::setEmail,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done // Impedisce il ritorno a capo
+            ),
             label = { Text("E-mail") }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
             value = state.username,
             onValueChange = actions::setUsername,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done // Impedisce il ritorno a capo
+            ),
             label = { Text("Username") }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
             value = state.password,
             onValueChange = actions::setPassword,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done // Impedisce il ritorno a capo
+            ),
             label = { Text("Password") }
         )
         Spacer(modifier = Modifier.size(28.dp))
