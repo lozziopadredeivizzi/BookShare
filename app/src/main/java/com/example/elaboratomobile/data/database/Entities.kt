@@ -141,6 +141,7 @@ data class Libro(
     var trama: String
 )
 
+
 @Entity(
     tableName = "LIBRO_POSSEDUTO",
     foreignKeys = [

@@ -48,15 +48,16 @@ import androidx.navigation.NavHostController
 import com.example.elaboratomobile.R
 import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.ui.composables.RatingBarNoClick
+import com.example.elaboratomobile.ui.screens.share.BookLike
 
 @Composable
 fun HomeBooksScreen(
     navController: NavHostController,
-    list: List<Int>,
+    list: List<BookLike>,
     filter: Boolean,
-    nextRoute: BookShareRoute
+    nextRoute: BookShareRoute,
+    like: (Int) -> Unit
 ) {
-    val lista = list
     Column(modifier = Modifier.fillMaxSize()) {
         if (filter) {
             ComboBox()
@@ -67,10 +68,12 @@ fun HomeBooksScreen(
             contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 80.dp),
             modifier = Modifier.padding()
         ) {
-            items(lista) {
-                BookItem(item = it, onClick = {
-                    navController.navigate(nextRoute.route)
-                })
+            items(list) { bookLike ->
+                BookItem(book = bookLike,
+                    onClick = {
+                        navController.navigate(nextRoute.route)
+                    }, onLikeClicked = like
+                )
             }
         }
     }
@@ -78,7 +81,11 @@ fun HomeBooksScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookItem(item: Int, onClick: () -> Unit) {
+fun BookItem(
+    book: BookLike,
+    onClick: () -> Unit,
+    onLikeClicked: (Int) -> Unit
+) {
     Card(
         onClick = onClick,
         modifier = Modifier
@@ -119,16 +126,16 @@ fun BookItem(item: Int, onClick: () -> Unit) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "Titolo")
-                    Text(text = "Autore")
-                    Text(text = "Genere")
-                    RatingBarNoClick(rating = 3.5)
+                    Text(text = book.book.titolo)
+                    Text(text = book.book.autore)
+                    Text(text = book.book.genere)
+                    RatingBarNoClick(rating = book.book.recensione)
                 }
             }
             Spacer(modifier = Modifier.size(8.dp))
             // Posizionamento dell'IconButton
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick = { onLikeClicked(book.book.id_libro) },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .size(25.dp)
@@ -137,7 +144,7 @@ fun BookItem(item: Int, onClick: () -> Unit) {
                 Icon(
                     imageVector = Icons.Outlined.Favorite,
                     contentDescription = "Preferito",
-                    tint = Color.Red
+                    tint = if (book.isLiked) Color.Red else Color.Gray
                 )
             }
         }

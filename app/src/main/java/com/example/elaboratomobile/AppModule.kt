@@ -30,14 +30,14 @@ val appModule = module {
             get(),
             ElaboratoMobileDatabase::class.java,
             "book-share"
-        ).fallbackToDestructiveMigration().createFromAsset("database/book-share.db").build()
+        ).createFromAsset("database/book-share.db").build()
     }
 
     single { UsernameRepository(get()) }
 
     single { UtenteRepository(get<ElaboratoMobileDatabase>().utenteDAO()) }
 
-    single { BooksRepository(get<ElaboratoMobileDatabase>().libroDAO()) }
+    single { BooksRepository(get<ElaboratoMobileDatabase>().libroDAO(), get<ElaboratoMobileDatabase>().piacereDAO()) }
 
     single { AspettoRepository(get()) }
 

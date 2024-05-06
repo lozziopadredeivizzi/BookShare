@@ -3,6 +3,7 @@ package com.example.elaboratomobile.ui.screens.share
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.elaboratomobile.data.database.Libro
+import com.example.elaboratomobile.data.database.Piacere
 import com.example.elaboratomobile.data.repositories.BooksRepository
 import com.example.elaboratomobile.data.repositories.UsernameRepository
 import kotlinx.coroutines.flow.Flow
@@ -55,16 +56,25 @@ class BooksViewModel(
     //dopo che è stata chiamata la query per aggiungere o eliminare l'associazione in piacere
     fun updateLikeStatus(bookId: Int) {
         viewModelScope.launch {
-            val isLiked = repository.isLiked(bookId, usernameRepository.username.first()).first()
-            //Scorro tutta la lista di libri nello stato e per ognuno controllo
-            // se il suo id corrisponde a quello che
-            //che cerco copio l'oggetto e gli imposto il nuovo valore di like altrimenti
-            // non faccio niente
-            val updateBooks = _booksState.value.books.map { bookLike ->
-                if (bookLike.book.id_libro == bookId) bookLike.copy(isLiked = isLiked)
-                else bookLike
+            val currentUsername = usernameRepository.username.first()
+
+            val currentlyLiked = repository.isLiked(bookId, currentUsername).first()
+            val piacere = Piacere(id_libro = bookId, currentUsername)
+            if (currentlyLiked) {
+                repository.delete(piacere)
+            } else {
+                repository.upsert(piacere)
             }
-            _booksState.update { it.copy(books = updateBooks) }
+            repository.books.combine(usernameRepository.username) { books, username ->
+                books.map { book ->
+                    BookLike(
+                        book = book,
+                        isLiked = repository.isLiked(book.id_libro, username).first()
+                    )
+                }
+            }.collect { booksLike ->
+                _booksState.update { it.copy(books = booksLike) }
+            }
         }
     }
 }

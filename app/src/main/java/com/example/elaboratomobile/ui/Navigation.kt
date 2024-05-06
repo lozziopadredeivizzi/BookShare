@@ -25,6 +25,7 @@ import com.example.elaboratomobile.ui.screens.profile.ProfileViewModel
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneScreen
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneViewModel
 import com.example.elaboratomobile.ui.screens.settings.SettingsScreen
+import com.example.elaboratomobile.ui.screens.share.BooksViewModel
 import org.koin.androidx.compose.koinViewModel
 
 sealed class BookShareRoute(
@@ -94,6 +95,9 @@ fun BookShareNavGraph(
     themeState: ThemeState,
     onThemeSelected: (theme: Theme) -> Unit
 ) {
+    val homebookVm = koinViewModel<BooksViewModel>()
+    val bookHomeState by homebookVm.booksState.collectAsStateWithLifecycle()
+
     NavHost(
         navController = navController,
         startDestination = BookShareRoute.Login.route,
@@ -127,9 +131,10 @@ fun BookShareNavGraph(
             composable(route) {
                 HomeBooksScreen(
                     navController,
-                    (1..20).toList(),
+                    bookHomeState.books,
                     filter = true,
-                    nextRoute = BookShareRoute.BookDetails
+                    nextRoute = BookShareRoute.BookDetails,
+                    like = { bookId -> homebookVm.updateLikeStatus(bookId)}
                 )
             }
         }
@@ -147,9 +152,10 @@ fun BookShareNavGraph(
             composable(route) {
                 HomeBooksScreen(
                     navController = navController,
-                    (1..5).toList(),
+                    bookHomeState.books,
                     filter = false,
-                    nextRoute = BookShareRoute.BookDetails
+                    nextRoute = BookShareRoute.BookDetails,
+                    like = { bookId -> homebookVm.updateLikeStatus(bookId)}
                 )
             }
         }
@@ -179,9 +185,10 @@ fun BookShareNavGraph(
             composable(route) {
                 HomeBooksScreen(
                     navController = navController,
-                    list = (1..6).toList(),
+                    bookHomeState.books,
                     filter = false,
-                    nextRoute = BookShareRoute.ChronologyDetails
+                    nextRoute = BookShareRoute.ChronologyDetails,
+                    like = { bookId -> homebookVm.updateLikeStatus(bookId)}
                 )
             }
         }
