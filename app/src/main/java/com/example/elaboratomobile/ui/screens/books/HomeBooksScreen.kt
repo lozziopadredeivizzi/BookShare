@@ -129,16 +129,16 @@ fun BookItem(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = book.book.titolo)
-                    Text(text = book.book.autore)
-                    Text(text = book.genere.nome)
-                    RatingBarNoClick(rating = book.book.recensione)
+                    Text(text = book.titolo)
+                    Text(text = book.autore)
+                    Text(text = book.genereNome)
+                    RatingBarNoClick(rating = book.recensione)
                 }
             }
             Spacer(modifier = Modifier.size(8.dp))
             // Posizionamento dell'IconButton
             IconButton(
-                onClick = { onLikeClicked(book.book.id_libro) },
+                onClick = { onLikeClicked(book.id_libro) },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .size(25.dp)

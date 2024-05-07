@@ -19,14 +19,15 @@ import kotlinx.coroutines.launch
 
 //Classe che contiene i dati di libro e se gli è stato messo like dall'utente loggato
 data class BookLike(
-    val book: Libro,
-    val genere: Genere,
+    val id_libro: Int,
+    val titolo: String,
+    val autore: String,
+    val recensione: Double,
+    val copertina: String,
+    val trama: String,
+    val id_genere: Int,
+    val genereNome: String,
     val isLiked: Boolean
-)
-
-//Lista di tutti i libri con i rispettivi valori di like
-data class BooksState(
-    val books: List<BookLike>
 )
 
 data class GeneriState(
@@ -38,7 +39,7 @@ class BooksViewModel(
     private val usernameRepository: UsernameRepository
 ) : ViewModel() {
 
-    private val _booksState = MutableStateFlow(BooksState(emptyList()))
+    private val _booksState = MutableStateFlow<List<BookLike>>(emptyList())
     val booksState = _booksState.asStateFlow()
 
     // Stato per tenere traccia del genere selezionato
@@ -63,30 +64,9 @@ class BooksViewModel(
 
     fun loadBook() {
         viewModelScope.launch {
-            if(selectedGenre.value == 0) {
-                repository.books.combine(usernameRepository.username) { books, username ->
-                    books.map { book ->
-                        BookLike(
-                            book = book,
-                            genere = repository.getGenere(book.id_genere),
-                            isLiked = repository.isLiked(book.id_libro, username).first()
-                        )
-                    }
-                }.collect { booksLike ->
-                    _booksState.update { it.copy(books = booksLike) }
-                }
-            }else{
-                repository.getBooksFromGenere(selectedGenre.value).combine(usernameRepository.username) { books, username ->
-                    books.map { book ->
-                        BookLike(
-                            book = book,
-                            genere = repository.getGenere(book.id_genere),
-                            isLiked = repository.isLiked(book.id_libro, username).first()
-                        )
-                    }
-                }.collect { booksLike ->
-                    _booksState.update { it.copy(books = booksLike) }
-                }
+            val username = usernameRepository.username.first()
+            repository.getAllBooks(username, selectedGenre.value).collect { booksLike ->
+                _booksState.update { booksLike }
             }
         }
     }
@@ -104,30 +84,9 @@ class BooksViewModel(
             } else {
                 repository.upsert(piacere)
             }
-            if(selectedGenre.value == 0) {
-                repository.books.combine(usernameRepository.username) { books, username ->
-                    books.map { book ->
-                        BookLike(
-                            book = book,
-                            genere = repository.getGenere(book.id_genere),
-                            isLiked = repository.isLiked(book.id_libro, username).first()
-                        )
-                    }
-                }.collect { booksLike ->
-                    _booksState.update { it.copy(books = booksLike) }
-                }
-            }else{
-                repository.getBooksFromGenere(selectedGenre.value).combine(usernameRepository.username) { books, username ->
-                    books.map { book ->
-                        BookLike(
-                            book = book,
-                            genere = repository.getGenere(book.id_genere),
-                            isLiked = repository.isLiked(book.id_libro, username).first()
-                        )
-                    }
-                }.collect { booksLike ->
-                    _booksState.update { it.copy(books = booksLike) }
-                }
+
+            repository.getAllBooks(currentUsername, selectedGenre.value).collect { booksLike ->
+                _booksState.update { booksLike }
             }
         }
 

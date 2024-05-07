@@ -26,6 +26,7 @@ import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneScreen
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneViewModel
 import com.example.elaboratomobile.ui.screens.settings.SettingsScreen
 import com.example.elaboratomobile.ui.screens.books.BooksViewModel
+import com.example.elaboratomobile.ui.screens.books.FavoriteBookViewModel
 import org.koin.androidx.compose.koinViewModel
 
 sealed class BookShareRoute(
@@ -95,12 +96,6 @@ fun BookShareNavGraph(
     themeState: ThemeState,
     onThemeSelected: (theme: Theme) -> Unit
 ) {
-    val homebookVm = koinViewModel<BooksViewModel>()
-    val bookHomeState by homebookVm.booksState.collectAsStateWithLifecycle()
-    val generiState by homebookVm.generiState.collectAsStateWithLifecycle()
-    val currentState by homebookVm.selectedGenre.collectAsStateWithLifecycle()
-
-
     NavHost(
         navController = navController,
         startDestination = BookShareRoute.Login.route,
@@ -132,10 +127,13 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.HomeBooks) {
             composable(route) {
-
+                val homebookVm = koinViewModel<BooksViewModel>()
+                val bookHomeState by homebookVm.booksState.collectAsStateWithLifecycle()
+                val generiState by homebookVm.generiState.collectAsStateWithLifecycle()
+                val currentState by homebookVm.selectedGenre.collectAsStateWithLifecycle()
                 HomeBooksScreen(
                     navController,
-                    bookHomeState.books,
+                    bookHomeState,
                     generiState.generi,
                     nextRoute = BookShareRoute.BookDetails,
                     like = { bookId -> homebookVm.updateLikeStatus(bookId)},
@@ -156,14 +154,18 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.FavoriteBooks) {
             composable(route) {
+                val favoriteVm = koinViewModel<FavoriteBookViewModel>()
+                val bookFavoriteState by favoriteVm.booksState.collectAsStateWithLifecycle()
+                val generiFavoriteState by favoriteVm.generiState.collectAsStateWithLifecycle()
+                val currentFavoriteState by favoriteVm.selectedGenre.collectAsStateWithLifecycle()
                 HomeBooksScreen(
                     navController = navController,
-                    bookHomeState.books,
-                    generiState.generi,
+                    bookFavoriteState,
+                    generiFavoriteState.generi,
                     nextRoute = BookShareRoute.BookDetails,
-                    like = { bookId -> homebookVm.updateLikeStatus(bookId)},
-                    comboAction = {genereId -> homebookVm.setSelectedGenre(genereId)},
-                    currentIdGenere = currentState
+                    like = { bookId -> favoriteVm.updateLikeStatus(bookId)},
+                    comboAction = {genereId -> favoriteVm.setSelectedGenre(genereId)},
+                    currentIdGenere = currentFavoriteState
                 )
             }
         }
@@ -191,7 +193,7 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.Chronology) {
             composable(route) {
-                HomeBooksScreen(
+                /*HomeBooksScreen(
                     navController = navController,
                     bookHomeState.books,
                     generiState.generi,
@@ -199,7 +201,7 @@ fun BookShareNavGraph(
                     like = { bookId -> homebookVm.updateLikeStatus(bookId)},
                     comboAction = {genereId -> homebookVm.setSelectedGenre(genereId)},
                     currentIdGenere = currentState
-                )
+                )*/
             }
         }
         with(BookShareRoute.ChronologyDetails) {
