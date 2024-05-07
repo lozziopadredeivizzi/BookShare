@@ -6,9 +6,11 @@ import androidx.room.Room
 import com.example.elaboratomobile.data.database.ElaboratoMobileDatabase
 import com.example.elaboratomobile.data.repositories.AspettoRepository
 import com.example.elaboratomobile.data.repositories.BooksRepository
+import com.example.elaboratomobile.data.repositories.EventsRepository
 import com.example.elaboratomobile.data.repositories.UsernameRepository
 import com.example.elaboratomobile.data.repositories.UtenteRepository
 import com.example.elaboratomobile.ui.screens.aspetto.AspettoViewModel
+import com.example.elaboratomobile.ui.screens.events.EventsViewModel
 import com.example.elaboratomobile.ui.screens.login.LoginViewModel
 import com.example.elaboratomobile.ui.screens.profile.ProfileViewModel
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneViewModel
@@ -48,6 +50,10 @@ val appModule = module {
 
     single { AspettoRepository(get()) }
 
+    single{ EventsRepository(
+        get<ElaboratoMobileDatabase>().eventoDAO()
+    ) }
+
     viewModel { AspettoViewModel(get()) }
 
     viewModel { LoginViewModel(get(), get()) }
@@ -57,4 +63,6 @@ val appModule = module {
     viewModel { RegistrazioneViewModel(get(), get()) }
 
     viewModel { ProfileViewModel(get(), get()) }
+
+    viewModel { EventsViewModel(get())}
 }

@@ -47,18 +47,21 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import com.example.elaboratomobile.R
+import com.example.elaboratomobile.data.database.Evento
 
 @Composable
-fun EventScreen(navHostController: NavHostController) {
-    val lista = (1..10).toList()
+fun EventScreen(
+    navHostController: NavHostController,
+    list: List<EventState>
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(1),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 80.dp),
         modifier = Modifier.padding()
     ) {
-        items(lista) {
-            EventCard(item = it)
+        items(list) {event->
+            EventCard(event = event)
         }
     }
 }
@@ -81,7 +84,7 @@ fun MinimalDialog(onDismissRequest: () -> Unit, content: @Composable () -> Unit)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EventCard(item: Int) {
+fun EventCard(event: EventState) {
     var dialogOpen = remember {
         mutableStateOf(false)
     }
@@ -100,7 +103,7 @@ fun EventCard(item: Int) {
                 .fillMaxSize()
         ) {
             Text(
-                text = "Biblioteca Malatestiana",
+                text = event.nomeBiblioteca,
                 style = TextStyle(
                     fontSize = 20.sp,
                     textAlign = TextAlign.Justify
@@ -151,13 +154,13 @@ fun EventCard(item: Int) {
                 Row {
                     Text(text = "Evento:")
                     Spacer(modifier = Modifier.size(10.dp))
-                    Text(text = "Titolo dell'evento")
+                    Text(text = event.titolo)
                 }
                 Spacer(modifier = Modifier.size(5.dp))
                 Row {
                     Text(text = "Data:")
                     Spacer(modifier = Modifier.size(10.dp))
-                    Text(text = "DD/MM/YYYY")
+                    Text(text = event.dataOra_evento)
                 }
                 Spacer(modifier = Modifier.size(5.dp))
                 Row {
@@ -171,7 +174,7 @@ fun EventCard(item: Int) {
                 Row {
                     Text(text = "Presso:")
                     Spacer(modifier = Modifier.size(10.dp))
-                    Text(text = "Luogo Biblioteca")
+                    Text(text = event.indirizzoBiblio)
                 }
             }
             Row(
@@ -200,7 +203,7 @@ fun EventCard(item: Int) {
                             .fillMaxSize()
                     ) {
                         Text(
-                            "Nome Evento",
+                            event.titolo,
                             style = TextStyle(
                                 color = Color.Black,
                                 textAlign = TextAlign.Center,
@@ -225,7 +228,7 @@ fun EventCard(item: Int) {
                             Row {
                                 Text(text = "Aula:")
                                 Spacer(modifier = Modifier.size(10.dp))
-                                Text(text = "Aula dell'evento nella biblioteca")
+                                Text(text = event.aula ?: run { "/" },)
                             }
                             Spacer(modifier = Modifier.size(8.dp))
                             Row {
@@ -240,12 +243,7 @@ fun EventCard(item: Int) {
                                         .fillMaxHeight(0.1f)
                                 ) {
                                     Text(
-                                        text = "Chapters 1 to 4 provide an introduction to the main concepts of the \uD83E\uDD17 Transformers library. By the end of this part of the course, you will be familiar with how Transformer models work and will know how to use a model from the Hugging Face Hub, fine-tune it on a dataset, and share your results on the Hub!\n" +
-                                                "Chapters 5 to 8 teach the basics of \uD83E\uDD17 Datasets and \uD83E\uDD17 Tokenizers before diving into classic NLP tasks. By the end of this part, you will be able to tackle the most common NLP problems by yourself.\n" +
-                                                "Chapters 9 to 12 go beyond NLP, and explore how Transformer models can be used to tackle tasks in speech processing and computer vision. Along the way, you’ll learn how to build and share demos of your models, and optimize them for production environments. By the end of this part, you will be ready to apply \uD83E\uDD17 Transformers to (almost) any machine learning problem!" +
-                                                "Chapters 1 to 4 provide an introduction to the main concepts of the \uD83E\uDD17 Transformers library. By the end of this part of the course, you will be familiar with how Transformer models work and will know how to use a model from the Hugging Face Hub, fine-tune it on a dataset, and share your results on the Hub!\n" +
-                                                "Chapters 5 to 8 teach the basics of \uD83E\uDD17 Datasets and \uD83E\uDD17 Tokenizers before diving into classic NLP tasks. By the end of this part, you will be able to tackle the most common NLP problems by yourself.\n" +
-                                                "Chapters 9 to 12 go beyond NLP, and explore how Transformer models can be used to tackle tasks in speech processing and computer vision. Along the way, you’ll learn how to build and share demos of your models, and optimize them for production environments. By the end of this part, you will be ready to apply \uD83E\uDD17 Transformers to (almost) any machine learning problem!"
+                                        text = event.descrizione
                                     )
                                 }
                             }

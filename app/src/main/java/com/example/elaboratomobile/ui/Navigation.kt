@@ -16,6 +16,7 @@ import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsScreen
 import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetails
 import com.example.elaboratomobile.ui.screens.login.LoginScreen
 import com.example.elaboratomobile.ui.screens.events.EventScreen
+import com.example.elaboratomobile.ui.screens.events.EventsViewModel
 import com.example.elaboratomobile.ui.screens.login.LoginViewModel
 import com.example.elaboratomobile.ui.screens.modificaEmail.ModificaEmailScreen
 import com.example.elaboratomobile.ui.screens.modificaPassword.ModificaPasswordScreen
@@ -147,7 +148,12 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.Events) {
             composable(route) {
-                EventScreen(navHostController = navController)
+                val eventVm = koinViewModel<EventsViewModel>()
+                val eventsState by eventVm.eventsState.collectAsStateWithLifecycle()
+                EventScreen(
+                    navHostController = navController,
+                    eventsState
+                )
             }
         }
         with(BookShareRoute.BookDetails) {

@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
+import com.example.elaboratomobile.ui.screens.events.EventState
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -12,6 +13,7 @@ interface LibroDAO {
 
     @Query("SELECT * FROM LIBRO")
     fun getAll(): Flow<List<Libro>>
+
     @Upsert
     suspend fun upsert(book: Libro)
 
@@ -22,7 +24,7 @@ interface LibroDAO {
     fun isLikedByUser(idLibro: Int, username: String): Flow<Boolean>
 
     @Query("SELECT * FROM LIBRO WHERE id_genere = :idGenere")
-    fun getBookFromGenere(idGenere: Int) : Flow<List<Libro>>
+    fun getBookFromGenere(idGenere: Int): Flow<List<Libro>>
 }
 
 @Dao
@@ -37,7 +39,7 @@ interface GenereDAO {
     suspend fun getGenere(idGenere: Int): Genere
 
     @Query("SELECT * FROM GENERE")
-    fun getAll() : Flow<List<Genere>>
+    fun getAll(): Flow<List<Genere>>
 
 }
 
@@ -68,7 +70,7 @@ interface UtenteDAO {
     fun getFromUsername(username: String): Flow<Utente?>
 
     @Query("SELECT COUNT(*) as count FROM LIBRO_PRESTITO WHERE username = :username")
-    fun getBookTotalNumber(username: String) : Flow<Int>
+    fun getBookTotalNumber(username: String): Flow<Int>
 }
 
 @Dao
@@ -78,6 +80,9 @@ interface EventoDAO {
 
     @Delete
     suspend fun delete(item: Evento)
+
+    @Query("SELECT e.*, b.nome AS nomeBiblioteca, b.indirizzo AS indirizzoBiblio FROM EVENTO e JOIN BIBLIOTECA b ON e.id_biblioteca= b.id_biblioteca ")
+    fun getAll(): Flow<List<EventState>>
 }
 
 @Dao
