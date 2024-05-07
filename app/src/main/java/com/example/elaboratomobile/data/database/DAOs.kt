@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface LibroDAO {
 
-    @Query("SELECT * FROM libro")
+    @Query("SELECT * FROM LIBRO")
     fun getAll(): Flow<List<Libro>>
     @Upsert
     suspend fun upsert(book: Libro)
@@ -20,6 +20,9 @@ interface LibroDAO {
 
     @Query("SELECT EXISTS(SELECT 1 FROM PIACERE WHERE id_libro = :idLibro AND username = :username)")
     fun isLikedByUser(idLibro: Int, username: String): Flow<Boolean>
+
+    @Query("SELECT * FROM LIBRO WHERE id_genere = :idGenere")
+    fun getBookFromGenere(idGenere: Int) : Flow<List<Libro>>
 }
 
 @Dao
@@ -32,6 +35,10 @@ interface GenereDAO {
 
     @Query("SELECT * FROM GENERE WHERE id_genere = :idGenere")
     suspend fun getGenere(idGenere: Int): Genere
+
+    @Query("SELECT * FROM GENERE")
+    fun getAll() : Flow<List<Genere>>
+
 }
 
 @Dao
