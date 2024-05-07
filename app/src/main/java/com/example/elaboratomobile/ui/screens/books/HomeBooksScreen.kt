@@ -46,20 +46,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavHostController
 import com.example.elaboratomobile.R
+import com.example.elaboratomobile.data.database.Genere
 import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.ui.composables.RatingBarNoClick
+import com.example.elaboratomobile.ui.screens.share.BookLike
 
 @Composable
 fun HomeBooksScreen(
     navController: NavHostController,
-    list: List<Int>,
+    list: List<BookLike>,
+    listGeneri: List<Genere>,
+    currentIdGenere: Int,
     filter: Boolean,
-    nextRoute: BookShareRoute
+    nextRoute: BookShareRoute,
+    like: (Int) -> Unit,
+    comboAction: (Int) -> Unit
 ) {
-    val lista = list
     Column(modifier = Modifier.fillMaxSize()) {
         if (filter) {
-            ComboBox()
+            ComboBox(comboAction, listGeneri, currentIdGenere)
         }
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),
@@ -67,10 +72,12 @@ fun HomeBooksScreen(
             contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 80.dp),
             modifier = Modifier.padding()
         ) {
-            items(lista) {
-                BookItem(item = it, onClick = {
-                    navController.navigate(nextRoute.route)
-                })
+            items(list) { bookLike ->
+                BookItem(book = bookLike,
+                    onClick = {
+                        navController.navigate(nextRoute.route)
+                    }, onLikeClicked = like
+                )
             }
         }
     }
@@ -78,7 +85,11 @@ fun HomeBooksScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookItem(item: Int, onClick: () -> Unit) {
+fun BookItem(
+    book: BookLike,
+    onClick: () -> Unit,
+    onLikeClicked: (Int) -> Unit
+) {
     Card(
         onClick = onClick,
         modifier = Modifier
@@ -119,16 +130,16 @@ fun BookItem(item: Int, onClick: () -> Unit) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "Titolo")
-                    Text(text = "Autore")
-                    Text(text = "Genere")
-                    RatingBarNoClick(rating = 3.5)
+                    Text(text = book.book.titolo)
+                    Text(text = book.book.autore)
+                    Text(text = book.genere.nome)
+                    RatingBarNoClick(rating = book.book.recensione)
                 }
             }
             Spacer(modifier = Modifier.size(8.dp))
             // Posizionamento dell'IconButton
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick = { onLikeClicked(book.book.id_libro) },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .size(25.dp)
@@ -137,7 +148,7 @@ fun BookItem(item: Int, onClick: () -> Unit) {
                 Icon(
                     imageVector = Icons.Outlined.Favorite,
                     contentDescription = "Preferito",
-                    tint = Color.Red
+                    tint = if (book.isLiked) Color.Red else Color.Gray
                 )
             }
         }
@@ -146,10 +157,11 @@ fun BookItem(item: Int, onClick: () -> Unit) {
 }
 
 @Composable
-fun ComboBox() {
+fun ComboBox(comboAction: (Int) -> Unit, listGeneri: List<Genere>, currentIdGenere: Int) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf<String?>(null) }
-    val options = listOf("Option 1", "Option 2", "Option 3")
+    var selectedGenreId by remember { mutableStateOf<Int?>(currentIdGenere) }
+
+    val options = listOf(Genere(0, "Tutti i generi")) + listGeneri
 
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
@@ -162,8 +174,9 @@ fun ComboBox() {
                 .padding(10.dp)
         ) {
             Text(
-                text = selectedOption ?: "Filtra per genere",
-                color = if (selectedOption == null) Color.Gray else Color.Black,
+
+                text = options.first { it.id_genere == selectedGenreId }.nome,
+                color = Color.Black,
                 modifier = Modifier.fillMaxWidth()
             )
             Icon(
@@ -180,11 +193,12 @@ fun ComboBox() {
             onDismissRequest = { expanded = false },
             properties = PopupProperties(focusable = false)
         ) {
-            options.forEach { option ->
+            options.forEach { genere ->
                 DropdownMenuItem(
-                    text = { Text(option) },
+                    text = { Text(genere.nome) },
                     onClick = {
-                        selectedOption = option
+                        selectedGenreId = genere.id_genere
+                        comboAction(genere.id_genere)
                         expanded = false
                     }
                 )

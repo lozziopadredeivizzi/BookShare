@@ -1,10 +1,14 @@
 package com.example.elaboratomobile.data.repositories
 
+import com.example.elaboratomobile.data.database.Genere
+import com.example.elaboratomobile.data.database.GenereDAO
 import com.example.elaboratomobile.data.database.Libro
 import com.example.elaboratomobile.data.database.LibroDAO
+import com.example.elaboratomobile.data.database.Piacere
+import com.example.elaboratomobile.data.database.PiacereDAO
 import kotlinx.coroutines.flow.Flow
 
-class BooksRepository(private val libroDAO: LibroDAO) {
+class BooksRepository(private val libroDAO: LibroDAO, private val piacereDAO: PiacereDAO, private val genereDAO: GenereDAO) {
 
     val books: Flow<List<Libro>> = libroDAO.getAll()
 
@@ -12,5 +16,15 @@ class BooksRepository(private val libroDAO: LibroDAO) {
 
     suspend fun delete(item: Libro) = libroDAO.delete(item)
 
+    fun getBooksFromGenere(idGenere: Int) : Flow<List<Libro>> = libroDAO.getBookFromGenere(idGenere)
+
     fun isLiked(idLibro: Int, username: String): Flow<Boolean> = libroDAO.isLikedByUser(idLibro, username)
+
+    suspend fun upsert(like: Piacere) = piacereDAO.upsert(like)
+
+    suspend fun delete(like: Piacere) = piacereDAO.delete(like)
+
+    suspend fun getGenere(idGenere: Int) : Genere = genereDAO.getGenere(idGenere)
+
+    val generi: Flow<List<Genere>> = genereDAO.getAll()
 }

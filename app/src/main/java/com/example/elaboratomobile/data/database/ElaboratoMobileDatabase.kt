@@ -16,7 +16,8 @@ import java.util.Locale
         Interazione::class,
         LibroPrestito::class,
         LibroPosseduto::class,
-        Piacere::class], version = 2
+        Piacere::class,
+        Genere::class], version = 6
 )
 @TypeConverters(Converters::class)
 abstract class ElaboratoMobileDatabase : RoomDatabase() {
@@ -35,6 +36,8 @@ abstract class ElaboratoMobileDatabase : RoomDatabase() {
     abstract fun libroPossedutoDAO(): LibroPossedutoDAO
 
     abstract fun piacereDAO(): PiacereDAO
+
+    abstract fun genereDAO() : GenereDAO
 }
 
 class Converters {

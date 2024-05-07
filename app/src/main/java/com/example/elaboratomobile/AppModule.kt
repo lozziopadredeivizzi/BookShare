@@ -30,14 +30,21 @@ val appModule = module {
             get(),
             ElaboratoMobileDatabase::class.java,
             "book-share"
-        ).fallbackToDestructiveMigration().createFromAsset("database/book-share.db").build()
+        ).createFromAsset("database/book-share.db").build()
+        //.fallbackToDestructiveMigration() per cancellare il db e tenere solo il precompilato
     }
 
     single { UsernameRepository(get()) }
 
     single { UtenteRepository(get<ElaboratoMobileDatabase>().utenteDAO()) }
 
-    single { BooksRepository(get<ElaboratoMobileDatabase>().libroDAO()) }
+    single {
+        BooksRepository(
+            get<ElaboratoMobileDatabase>().libroDAO(),
+            get<ElaboratoMobileDatabase>().piacereDAO(),
+            get<ElaboratoMobileDatabase>().genereDAO()
+        )
+    }
 
     single { AspettoRepository(get()) }
 
@@ -47,7 +54,7 @@ val appModule = module {
 
     viewModel { BooksViewModel(get(), get()) }
 
-    viewModel { RegistrazioneViewModel(get(), get())}
+    viewModel { RegistrazioneViewModel(get(), get()) }
 
-    viewModel{ ProfileViewModel(get(), get()) }
+    viewModel { ProfileViewModel(get(), get()) }
 }
