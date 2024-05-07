@@ -1,4 +1,4 @@
-package com.example.elaboratomobile.ui.screens.share
+package com.example.elaboratomobile.ui.screens.books
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,11 +7,9 @@ import com.example.elaboratomobile.data.database.Libro
 import com.example.elaboratomobile.data.database.Piacere
 import com.example.elaboratomobile.data.repositories.BooksRepository
 import com.example.elaboratomobile.data.repositories.UsernameRepository
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
