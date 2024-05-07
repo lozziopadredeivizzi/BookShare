@@ -25,7 +25,7 @@ import com.example.elaboratomobile.ui.screens.profile.ProfileViewModel
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneScreen
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneViewModel
 import com.example.elaboratomobile.ui.screens.settings.SettingsScreen
-import com.example.elaboratomobile.ui.screens.share.BooksViewModel
+import com.example.elaboratomobile.ui.screens.books.BooksViewModel
 import org.koin.androidx.compose.koinViewModel
 
 sealed class BookShareRoute(
@@ -137,7 +137,6 @@ fun BookShareNavGraph(
                     navController,
                     bookHomeState.books,
                     generiState.generi,
-                    filter = true,
                     nextRoute = BookShareRoute.BookDetails,
                     like = { bookId -> homebookVm.updateLikeStatus(bookId)},
                     comboAction = {genereId -> homebookVm.setSelectedGenre(genereId)},
@@ -161,7 +160,6 @@ fun BookShareNavGraph(
                     navController = navController,
                     bookHomeState.books,
                     generiState.generi,
-                    filter = false,
                     nextRoute = BookShareRoute.BookDetails,
                     like = { bookId -> homebookVm.updateLikeStatus(bookId)},
                     comboAction = {genereId -> homebookVm.setSelectedGenre(genereId)},
@@ -197,7 +195,6 @@ fun BookShareNavGraph(
                     navController = navController,
                     bookHomeState.books,
                     generiState.generi,
-                    filter = false,
                     nextRoute = BookShareRoute.ChronologyDetails,
                     like = { bookId -> homebookVm.updateLikeStatus(bookId)},
                     comboAction = {genereId -> homebookVm.setSelectedGenre(genereId)},
