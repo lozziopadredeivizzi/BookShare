@@ -2,43 +2,20 @@ package com.example.elaboratomobile.ui.screens.books
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.elaboratomobile.data.database.Genere
-import com.example.elaboratomobile.data.database.Libro
 import com.example.elaboratomobile.data.database.Piacere
 import com.example.elaboratomobile.data.repositories.BooksRepository
 import com.example.elaboratomobile.data.repositories.UsernameRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
-//Classe che contiene i dati di libro e se gli è stato messo like dall'utente loggato
-data class BookLike(
-    val id_libro: Int,
-    val titolo: String,
-    val autore: String,
-    val recensione: Double,
-    val copertina: String,
-    val trama: String,
-    val id_genere: Int,
-    val genereNome: String,
-    val isLiked: Boolean
-)
-
-data class GeneriState(
-    val generi: List<Genere>
-)
-
-class BooksViewModel(
+class FavoriteBookViewModel(
     private val repository: BooksRepository,
     private val usernameRepository: UsernameRepository
 ) : ViewModel() {
@@ -66,12 +43,11 @@ class BooksViewModel(
         loadBook()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     fun loadBook() {
         viewModelScope.launch {
             usernameRepository.username.flatMapLatest { username ->
                 selectedGenre.flatMapLatest { genreId ->
-                    repository.getAllBooks(username, genreId)
+                    repository.getAllFavoriteBooks(username, genreId)
                 }
             }.collect { booksLike ->
                 _booksState.value = booksLike
@@ -83,7 +59,6 @@ class BooksViewModel(
     //dopo che è stata chiamata la query per aggiungere o eliminare l'associazione in piacere
     fun updateLikeStatus(bookId: Int) {
         viewModelScope.launch {
-
             val currentUsername = usernameRepository.username.first()
 
             val currentlyLiked = repository.isLiked(bookId, currentUsername).first()
