@@ -112,8 +112,8 @@ fun RegistrazioneScreen(
             value = state.data_nascita,
             onValueChange = actions::setDate,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done // Impedisce il ritorno a capo
+                keyboardType = KeyboardType.Decimal,
+                imeAction = ImeAction.Done
             ),
             label = { Text("Data Di Nascita") }
         )
@@ -122,7 +122,7 @@ fun RegistrazioneScreen(
             value = state.email,
             onValueChange = actions::setEmail,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
+                keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Done // Impedisce il ritorno a capo
             ),
             label = { Text("E-mail") }
