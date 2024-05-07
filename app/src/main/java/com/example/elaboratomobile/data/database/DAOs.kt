@@ -6,14 +6,11 @@ import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
 import com.example.elaboratomobile.ui.screens.events.EventState
+import com.example.elaboratomobile.ui.screens.books.BookLike
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LibroDAO {
-
-    @Query("SELECT * FROM LIBRO")
-    fun getAll(): Flow<List<Libro>>
-
     @Upsert
     suspend fun upsert(book: Libro)
 
@@ -23,8 +20,27 @@ interface LibroDAO {
     @Query("SELECT EXISTS(SELECT 1 FROM PIACERE WHERE id_libro = :idLibro AND username = :username)")
     fun isLikedByUser(idLibro: Int, username: String): Flow<Boolean>
 
-    @Query("SELECT * FROM LIBRO WHERE id_genere = :idGenere")
-    fun getBookFromGenere(idGenere: Int): Flow<List<Libro>>
+    @Query(
+        """
+    SELECT L.*, G.nome as genereNome, 
+        EXISTS(SELECT 1 FROM PIACERE WHERE id_libro = L.id_libro AND username = :username) AS isLiked
+    FROM LIBRO L
+    JOIN GENERE G ON L.id_genere = G.id_genere
+    WHERE L.id_genere = :idGenere OR :idGenere = 0
+"""
+    )
+    fun getBooksAndLikesByGenere(idGenere: Int, username: String): Flow<List<BookLike>>
+
+    @Query("""
+    SELECT L.*, G.nome as genereNome, 
+           EXISTS(SELECT 1 FROM PIACERE P WHERE P.id_libro = L.id_libro AND P.username = :username) AS isLiked
+    FROM LIBRO L
+    JOIN GENERE G ON L.id_genere = G.id_genere
+    JOIN PIACERE P ON L.id_libro = P.id_libro
+    WHERE (L.id_genere = :idGenere OR :idGenere = 0) AND P.username = :username
+""")
+    fun getLikedBooksByGenere(idGenere: Int, username: String): Flow<List<BookLike>>
+
 }
 
 @Dao

@@ -14,7 +14,8 @@ import com.example.elaboratomobile.ui.screens.events.EventsViewModel
 import com.example.elaboratomobile.ui.screens.login.LoginViewModel
 import com.example.elaboratomobile.ui.screens.profile.ProfileViewModel
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneViewModel
-import com.example.elaboratomobile.ui.screens.share.BooksViewModel
+import com.example.elaboratomobile.ui.screens.books.BooksViewModel
+import com.example.elaboratomobile.ui.screens.books.FavoriteBookViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -65,4 +66,6 @@ val appModule = module {
     viewModel { ProfileViewModel(get(), get()) }
 
     viewModel { EventsViewModel(get())}
+
+    viewModel { FavoriteBookViewModel(get(), get())}
 }
