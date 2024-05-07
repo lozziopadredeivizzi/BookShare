@@ -49,7 +49,6 @@ import com.example.elaboratomobile.R
 import com.example.elaboratomobile.data.database.Genere
 import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.ui.composables.RatingBarNoClick
-import com.example.elaboratomobile.ui.screens.share.BookLike
 
 @Composable
 fun HomeBooksScreen(
@@ -57,15 +56,14 @@ fun HomeBooksScreen(
     list: List<BookLike>,
     listGeneri: List<Genere>,
     currentIdGenere: Int,
-    filter: Boolean,
     nextRoute: BookShareRoute,
     like: (Int) -> Unit,
     comboAction: (Int) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
-        if (filter) {
-            ComboBox(comboAction, listGeneri, currentIdGenere)
-        }
+
+        ComboBox(comboAction, listGeneri, currentIdGenere)
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -73,7 +71,8 @@ fun HomeBooksScreen(
             modifier = Modifier.padding()
         ) {
             items(list) { bookLike ->
-                BookItem(book = bookLike,
+                BookItem(
+                    book = bookLike,
                     onClick = {
                         navController.navigate(nextRoute.route)
                     }, onLikeClicked = like
@@ -130,16 +129,16 @@ fun BookItem(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = book.book.titolo)
-                    Text(text = book.book.autore)
-                    Text(text = book.genere.nome)
-                    RatingBarNoClick(rating = book.book.recensione)
+                    Text(text = book.titolo)
+                    Text(text = book.autore)
+                    Text(text = book.genereNome)
+                    RatingBarNoClick(rating = book.recensione)
                 }
             }
             Spacer(modifier = Modifier.size(8.dp))
             // Posizionamento dell'IconButton
             IconButton(
-                onClick = { onLikeClicked(book.book.id_libro) },
+                onClick = { onLikeClicked(book.id_libro) },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .size(25.dp)
