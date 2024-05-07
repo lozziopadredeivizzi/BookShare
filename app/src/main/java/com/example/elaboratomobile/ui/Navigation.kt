@@ -97,6 +97,9 @@ fun BookShareNavGraph(
 ) {
     val homebookVm = koinViewModel<BooksViewModel>()
     val bookHomeState by homebookVm.booksState.collectAsStateWithLifecycle()
+    val generiState by homebookVm.generiState.collectAsStateWithLifecycle()
+    val currentState by homebookVm.selectedGenre.collectAsStateWithLifecycle()
+
 
     NavHost(
         navController = navController,
@@ -129,12 +132,16 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.HomeBooks) {
             composable(route) {
+
                 HomeBooksScreen(
                     navController,
                     bookHomeState.books,
+                    generiState.generi,
                     filter = true,
                     nextRoute = BookShareRoute.BookDetails,
-                    like = { bookId -> homebookVm.updateLikeStatus(bookId)}
+                    like = { bookId -> homebookVm.updateLikeStatus(bookId)},
+                    comboAction = {genereId -> homebookVm.setSelectedGenre(genereId)},
+                    currentIdGenere = currentState
                 )
             }
         }
@@ -153,9 +160,12 @@ fun BookShareNavGraph(
                 HomeBooksScreen(
                     navController = navController,
                     bookHomeState.books,
+                    generiState.generi,
                     filter = false,
                     nextRoute = BookShareRoute.BookDetails,
-                    like = { bookId -> homebookVm.updateLikeStatus(bookId)}
+                    like = { bookId -> homebookVm.updateLikeStatus(bookId)},
+                    comboAction = {genereId -> homebookVm.setSelectedGenre(genereId)},
+                    currentIdGenere = currentState
                 )
             }
         }
@@ -186,9 +196,12 @@ fun BookShareNavGraph(
                 HomeBooksScreen(
                     navController = navController,
                     bookHomeState.books,
+                    generiState.generi,
                     filter = false,
                     nextRoute = BookShareRoute.ChronologyDetails,
-                    like = { bookId -> homebookVm.updateLikeStatus(bookId)}
+                    like = { bookId -> homebookVm.updateLikeStatus(bookId)},
+                    comboAction = {genereId -> homebookVm.setSelectedGenre(genereId)},
+                    currentIdGenere = currentState
                 )
             }
         }

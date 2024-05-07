@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavHostController
 import com.example.elaboratomobile.R
+import com.example.elaboratomobile.data.database.Genere
 import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.ui.composables.RatingBarNoClick
 import com.example.elaboratomobile.ui.screens.share.BookLike
@@ -54,13 +55,16 @@ import com.example.elaboratomobile.ui.screens.share.BookLike
 fun HomeBooksScreen(
     navController: NavHostController,
     list: List<BookLike>,
+    listGeneri: List<Genere>,
+    currentIdGenere: Int,
     filter: Boolean,
     nextRoute: BookShareRoute,
-    like: (Int) -> Unit
+    like: (Int) -> Unit,
+    comboAction: (Int) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         if (filter) {
-            ComboBox()
+            ComboBox(comboAction, listGeneri, currentIdGenere)
         }
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),
@@ -153,10 +157,11 @@ fun BookItem(
 }
 
 @Composable
-fun ComboBox() {
+fun ComboBox(comboAction: (Int) -> Unit, listGeneri: List<Genere>, currentIdGenere: Int) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf<String?>(null) }
-    val options = listOf("Option 1", "Option 2", "Option 3")
+    var selectedGenreId by remember { mutableStateOf<Int?>(currentIdGenere) }
+
+    val options = listOf(Genere(0, "Tutti i generi")) + listGeneri
 
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
@@ -169,8 +174,9 @@ fun ComboBox() {
                 .padding(10.dp)
         ) {
             Text(
-                text = selectedOption ?: "Filtra per genere",
-                color = if (selectedOption == null) Color.Gray else Color.Black,
+
+                text = options.first { it.id_genere == selectedGenreId }.nome,
+                color = Color.Black,
                 modifier = Modifier.fillMaxWidth()
             )
             Icon(
@@ -187,11 +193,12 @@ fun ComboBox() {
             onDismissRequest = { expanded = false },
             properties = PopupProperties(focusable = false)
         ) {
-            options.forEach { option ->
+            options.forEach { genere ->
                 DropdownMenuItem(
-                    text = { Text(option) },
+                    text = { Text(genere.nome) },
                     onClick = {
-                        selectedOption = option
+                        selectedGenreId = genere.id_genere
+                        comboAction(genere.id_genere)
                         expanded = false
                     }
                 )

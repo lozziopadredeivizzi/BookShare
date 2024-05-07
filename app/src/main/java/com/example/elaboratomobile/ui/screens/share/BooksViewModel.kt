@@ -31,6 +31,10 @@ data class BooksState(
     val books: List<BookLike>
 )
 
+data class GeneriState(
+    val generi: List<Genere>
+)
+
 class BooksViewModel(
     private val repository: BooksRepository,
     private val usernameRepository: UsernameRepository
@@ -39,18 +43,52 @@ class BooksViewModel(
     private val _booksState = MutableStateFlow(BooksState(emptyList()))
     val booksState = _booksState.asStateFlow()
 
+    // Stato per tenere traccia del genere selezionato
+    private val _selectedGenre = MutableStateFlow<Int>(0) // Per dire tutti i generi -> 0
+    val selectedGenre = _selectedGenre.asStateFlow()
+
+    val generiState = repository.generi.map { GeneriState(generi = it) }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = GeneriState(emptyList())
+    )
+
+    // Metodo per impostare il genere selezionato dall'esterno
+    fun setSelectedGenre(genreId: Int) {
+        _selectedGenre.value = genreId
+        loadBook() // Ricarica i libri in base al nuovo genere selezionato
+    }
+
     init {
+        loadBook()
+    }
+
+    fun loadBook() {
         viewModelScope.launch {
-            repository.books.combine(usernameRepository.username) { books, username ->
-                books.map { book ->
-                    BookLike(
-                        book = book,
-                        genere = repository.getGenere(book.id_genere),
-                        isLiked = repository.isLiked(book.id_libro, username).first()
-                    )
+            if(selectedGenre.value == 0) {
+                repository.books.combine(usernameRepository.username) { books, username ->
+                    books.map { book ->
+                        BookLike(
+                            book = book,
+                            genere = repository.getGenere(book.id_genere),
+                            isLiked = repository.isLiked(book.id_libro, username).first()
+                        )
+                    }
+                }.collect { booksLike ->
+                    _booksState.update { it.copy(books = booksLike) }
                 }
-            }.collect { booksLike ->
-                _booksState.update { it.copy(books = booksLike) }
+            }else{
+                repository.getBooksFromGenere(selectedGenre.value).combine(usernameRepository.username) { books, username ->
+                    books.map { book ->
+                        BookLike(
+                            book = book,
+                            genere = repository.getGenere(book.id_genere),
+                            isLiked = repository.isLiked(book.id_libro, username).first()
+                        )
+                    }
+                }.collect { booksLike ->
+                    _booksState.update { it.copy(books = booksLike) }
+                }
             }
         }
     }
@@ -68,17 +106,32 @@ class BooksViewModel(
             } else {
                 repository.upsert(piacere)
             }
-            repository.books.combine(usernameRepository.username) { books, username ->
-                books.map { book ->
-                    BookLike(
-                        book = book,
-                        genere = repository.getGenere(book.id_genere),
-                        isLiked = repository.isLiked(book.id_libro, username).first()
-                    )
+            if(selectedGenre.value == 0) {
+                repository.books.combine(usernameRepository.username) { books, username ->
+                    books.map { book ->
+                        BookLike(
+                            book = book,
+                            genere = repository.getGenere(book.id_genere),
+                            isLiked = repository.isLiked(book.id_libro, username).first()
+                        )
+                    }
+                }.collect { booksLike ->
+                    _booksState.update { it.copy(books = booksLike) }
                 }
-            }.collect { booksLike ->
-                _booksState.update { it.copy(books = booksLike) }
+            }else{
+                repository.getBooksFromGenere(selectedGenre.value).combine(usernameRepository.username) { books, username ->
+                    books.map { book ->
+                        BookLike(
+                            book = book,
+                            genere = repository.getGenere(book.id_genere),
+                            isLiked = repository.isLiked(book.id_libro, username).first()
+                        )
+                    }
+                }.collect { booksLike ->
+                    _booksState.update { it.copy(books = booksLike) }
+                }
             }
         }
+
     }
 }
