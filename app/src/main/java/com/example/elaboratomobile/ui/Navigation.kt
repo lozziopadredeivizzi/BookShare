@@ -18,8 +18,8 @@ import com.example.elaboratomobile.ui.screens.login.LoginScreen
 import com.example.elaboratomobile.ui.screens.events.EventScreen
 import com.example.elaboratomobile.ui.screens.login.LoginViewModel
 import com.example.elaboratomobile.ui.screens.modificaEmail.ModificaEmailScreen
+import com.example.elaboratomobile.ui.screens.modificaPassword.ModificaPasswordScreen
 import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloScreen
-import com.example.elaboratomobile.ui.screens.modificaUsername.ModificaUsernameScreen
 import com.example.elaboratomobile.ui.screens.profile.ProfileScreen
 import com.example.elaboratomobile.ui.screens.profile.ProfileViewModel
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneScreen
@@ -40,7 +40,7 @@ sealed class BookShareRoute(
     data object Aspetto : BookShareRoute("aspetto", "Aspetto")
     data object Chronology : BookShareRoute("cronologia", "Cronologia")
     data object ModificaProfilo : BookShareRoute("modificaProfilo", "Modifica Profilo")
-    data object ModificaUsername : BookShareRoute("modificaUsername", "Modifica Username")
+    data object ModificaPassword : BookShareRoute("modificaPassword", "Modifica Password")
     data object ModificaEmail : BookShareRoute("modificaEmail", "Modifica E-mail")
 
     data object BookDetails : BookShareRoute(
@@ -66,7 +66,7 @@ sealed class BookShareRoute(
             Chronology,
             ChronologyDetails,
             ModificaProfilo,
-            ModificaUsername,
+            ModificaPassword,
             ModificaEmail
         )
         val noAppBar = setOf(Login, Registrazione)
@@ -80,7 +80,7 @@ sealed class BookShareRoute(
             Chronology,
             ChronologyDetails,
             ModificaProfilo,
-            ModificaUsername,
+            ModificaPassword,
             ModificaEmail
         )
     }
@@ -195,9 +195,9 @@ fun BookShareNavGraph(
                 ModificaProfiloScreen(navHostController = navController)
             }
         }
-        with(BookShareRoute.ModificaUsername) {
+        with(BookShareRoute.ModificaPassword) {
             composable(route) {
-                ModificaUsernameScreen(navHostController = navController)
+                ModificaPasswordScreen(navHostController = navController)
             }
         }
         with(BookShareRoute.ModificaEmail) {

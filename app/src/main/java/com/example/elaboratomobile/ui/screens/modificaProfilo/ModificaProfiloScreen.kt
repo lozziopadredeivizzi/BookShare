@@ -38,13 +38,13 @@ fun ModificaProfiloScreen(navHostController: NavHostController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { navHostController.navigate(BookShareRoute.ModificaUsername.route) }
+                .clickable { navHostController.navigate(BookShareRoute.ModificaPassword.route) }
                 .padding(horizontal = 20.dp, vertical = 10.dp)
         ) {
             Column {
                 Row {
                     Text(
-                        "Username",
+                        "Password",
                         style = TextStyle(
                             fontSize = 19.sp,
                             textAlign = TextAlign.Start
@@ -60,7 +60,7 @@ fun ModificaProfiloScreen(navHostController: NavHostController) {
                     )
                 }
                 Text(
-                    "Username attuale",
+                    "Modifica la tua password attuale",
                     style = TextStyle(
                         fontSize = 16.sp,
                         color = Color.Gray
