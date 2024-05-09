@@ -56,7 +56,6 @@ fun HomeBooksScreen(
     list: List<BookLike>,
     listGeneri: List<Genere>,
     currentIdGenere: Int,
-    nextRoute: BookShareRoute,
     like: (Int) -> Unit,
     comboAction: (Int) -> Unit
 ) {
