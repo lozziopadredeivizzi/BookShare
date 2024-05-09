@@ -15,8 +15,10 @@ import com.example.elaboratomobile.ui.screens.login.LoginViewModel
 import com.example.elaboratomobile.ui.screens.profile.ProfileViewModel
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneViewModel
 import com.example.elaboratomobile.ui.screens.books.BooksViewModel
+import com.example.elaboratomobile.ui.screens.chronology.ChronologyBookViewModel
 import com.example.elaboratomobile.ui.screens.books.FavoriteBookViewModel
 import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsViewModel
+import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetailsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -55,9 +57,11 @@ val appModule = module {
 
     single { AspettoRepository(get()) }
 
-    single{ EventsRepository(
-        get<ElaboratoMobileDatabase>().eventoDAO()
-    ) }
+    single {
+        EventsRepository(
+            get<ElaboratoMobileDatabase>().eventoDAO()
+        )
+    }
 
     viewModel { AspettoViewModel(get()) }
 
@@ -69,9 +73,13 @@ val appModule = module {
 
     viewModel { ProfileViewModel(get(), get()) }
 
-    viewModel { EventsViewModel(get())}
+    viewModel { EventsViewModel(get()) }
 
-    viewModel { FavoriteBookViewModel(get(), get())}
+    viewModel { FavoriteBookViewModel(get(), get()) }
 
-    viewModel { BookDetailsViewModel(get(), get())}
+    viewModel { BookDetailsViewModel(get(), get()) }
+
+    viewModel { ChronologyBookViewModel(get(), get()) }
+
+    viewModel { ChronologyDetailsViewModel(get()) }
 }
