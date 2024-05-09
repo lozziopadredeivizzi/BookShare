@@ -160,15 +160,13 @@ fun EventCard(event: EventState) {
                 Row {
                     Text(text = "Data:")
                     Spacer(modifier = Modifier.size(10.dp))
-                    Text(text = event.dataOra_evento)
+                    Text(text = event.data)
                 }
                 Spacer(modifier = Modifier.size(5.dp))
                 Row {
                     Text(text = "Ora:")
                     Spacer(modifier = Modifier.size(10.dp))
-                    Text(text = "hh:mm")
-                    Spacer(modifier = Modifier.size(10.dp))
-                    Text(text = "hh:mm")
+                    Text(text = event.ora)
                 }
                 Spacer(modifier = Modifier.size(5.dp))
                 Row {

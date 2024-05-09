@@ -39,7 +39,10 @@ data class Evento(
     var titolo: String,
 
     @ColumnInfo
-    var dataOra_evento: String,
+    var data: String,
+
+    @ColumnInfo
+    var ora: String,
 
     @ColumnInfo
     var aula: String?,

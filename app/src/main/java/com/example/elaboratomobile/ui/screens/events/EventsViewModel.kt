@@ -15,7 +15,8 @@ import kotlinx.coroutines.launch
 data class EventState(
     var titolo: String,
     var id_evento: Int,
-    var dataOra_evento: String,
+    var data: String,
+    var ora: String,
     var aula: String?,
     var descrizione: String,
     var id_biblioteca: Int,
