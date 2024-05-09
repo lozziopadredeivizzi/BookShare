@@ -16,6 +16,7 @@ import com.example.elaboratomobile.ui.screens.profile.ProfileViewModel
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneViewModel
 import com.example.elaboratomobile.ui.screens.books.BooksViewModel
 import com.example.elaboratomobile.ui.screens.books.FavoriteBookViewModel
+import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -45,7 +46,10 @@ val appModule = module {
         BooksRepository(
             get<ElaboratoMobileDatabase>().libroDAO(),
             get<ElaboratoMobileDatabase>().piacereDAO(),
-            get<ElaboratoMobileDatabase>().genereDAO()
+            get<ElaboratoMobileDatabase>().genereDAO(),
+            get<ElaboratoMobileDatabase>().bibliotecaDAO(),
+            get<ElaboratoMobileDatabase>().libroPossedutoDAO(),
+            get<ElaboratoMobileDatabase>().libroPrestitoDAO()
         )
     }
 
@@ -68,4 +72,6 @@ val appModule = module {
     viewModel { EventsViewModel(get())}
 
     viewModel { FavoriteBookViewModel(get(), get())}
+
+    viewModel { BookDetailsViewModel(get(), get())}
 }
