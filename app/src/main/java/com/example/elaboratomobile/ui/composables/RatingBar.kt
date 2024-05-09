@@ -42,7 +42,6 @@ fun RatingBarNoClick(
 
 @Composable
 fun RatingBar(rating: Double = 0.0, onRatingChange: (Double) -> Unit) {
-    var isHalfStar = (rating % 1) != 0.0
 
     Row() {
         for (index in 1..5) {
@@ -50,14 +49,10 @@ fun RatingBar(rating: Double = 0.0, onRatingChange: (Double) -> Unit) {
                 modifier = Modifier.size(45.dp).clickable{onRatingChange(index.toDouble())},
                 contentDescription = null,
                 tint = Color.Blue,
-                imageVector = if (index <= rating) Icons.Rounded.Star
-                else {
-                    if (isHalfStar) {
-                        isHalfStar = false
-                        Icons.Rounded.StarHalf
-                    } else {
-                        Icons.Rounded.StarOutline
-                    }
+                imageVector = when {
+                    index <= rating -> Icons.Rounded.Star
+                    index - 0.5 == rating -> Icons.Rounded.StarHalf
+                    else -> Icons.Rounded.StarOutline
                 }
             )
         }
