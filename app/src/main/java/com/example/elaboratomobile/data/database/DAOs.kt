@@ -7,6 +7,8 @@ import androidx.room.Query
 import androidx.room.Upsert
 import com.example.elaboratomobile.ui.screens.events.EventState
 import com.example.elaboratomobile.ui.screens.books.BookLike
+import com.example.elaboratomobile.ui.screens.booksDetails.BooKGenere
+import com.example.elaboratomobile.ui.screens.booksDetails.PossessoState
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,6 +18,16 @@ interface LibroDAO {
 
     @Delete
     suspend fun delete(item: Libro)
+
+    @Query(
+        """
+    SELECT L.*, G.nome as genereNome
+    FROM LIBRO L
+    JOIN GENERE G ON L.id_genere = G.id_genere
+    WHERE L.id_libro = :idLibro
+    """
+    )
+    fun getBookById(idLibro: Int): Flow<BooKGenere>
 
     @Query("SELECT EXISTS(SELECT 1 FROM PIACERE WHERE id_libro = :idLibro AND username = :username)")
     fun isLikedByUser(idLibro: Int, username: String): Flow<Boolean>
@@ -66,6 +78,14 @@ interface BibliotecaDAO {
 
     @Delete
     suspend fun delete(item: Biblioteca)
+
+    @Query("""
+        SELECT b.*, lp.id_possesso as idPossesso
+        FROM LIBRO_POSSEDUTO lp
+        JOIN BIBLIOTECA b ON lp.id_biblioteca = b.id_biblioteca
+        WHERE lp.id_libro = :idLibro AND lp.statoPrenotazione = 'Libero'
+    """)
+    fun getLibrariesWithFreeBook(idLibro: Int) : Flow<List<PossessoState>>
 }
 
 @Dao
@@ -126,6 +146,9 @@ interface LibroPossedutoDAO {
 
     @Delete
     suspend fun delete(item: LibroPosseduto)
+
+    @Query("UPDATE LIBRO_POSSEDUTO SET statoPrenotazione = 'Occupato' WHERE id_possesso = :idPossesso")
+    suspend fun updateStatoPrenotazione(idPossesso: Int)
 }
 
 @Dao

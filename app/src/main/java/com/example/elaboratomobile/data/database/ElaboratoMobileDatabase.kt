@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import java.text.ParseException
 import java.util.Date
 import java.util.Locale
 
@@ -17,7 +18,7 @@ import java.util.Locale
         LibroPrestito::class,
         LibroPosseduto::class,
         Piacere::class,
-        Genere::class], version = 6
+        Genere::class], version = 7
 )
 @TypeConverters(Converters::class)
 abstract class ElaboratoMobileDatabase : RoomDatabase() {
@@ -41,21 +42,21 @@ abstract class ElaboratoMobileDatabase : RoomDatabase() {
 }
 
 class Converters {
-    private val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     @TypeConverter
-    fun fromDate(date: Date?): String? {
-        return date?.let { dateFormat.format(it) }
-    }
-
-    @TypeConverter
-    fun toDate(dateString: String?): Date? {
-        return dateString?.let {
+    fun fromStringToDate(value: String?): Date? {
+        return value?.let {
             try {
                 dateFormat.parse(it)
-            } catch (e: Exception) {
+            } catch (e: ParseException) {
                 null
             }
         }
+    }
+
+    @TypeConverter
+    fun fromDateToString(date: Date?): String? {
+        return date?.let { dateFormat.format(it) }
     }
 }

@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.util.Date
 
 @Entity(tableName = "BIBLIOTECA")
 data class Biblioteca(
@@ -205,10 +206,10 @@ data class LibroPosseduto(
 data class LibroPrestito(
     var username: String,
     var id_possesso: Int,
-    var data_inizio: String,
+    var data_inizio: Date,
 
     @ColumnInfo
-    var data_fine: String,
+    var data_fine: Date,
 
     @ColumnInfo
     var recensione: Int?
