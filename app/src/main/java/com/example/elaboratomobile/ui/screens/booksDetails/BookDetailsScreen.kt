@@ -18,11 +18,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -44,7 +42,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -53,8 +50,12 @@ import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.ui.composables.RatingBarNoClick
 
 @Composable
-fun BookDetailsScreen(navController: NavHostController) {
-    val lista = (1..10).toList()
+fun BookDetailsScreen(
+    navController: NavHostController,
+    bookState: BooKGenere?,
+    librariesState: List<PossessoState>,
+    onSubmit: (Int) -> Unit
+) {
     var selectedItem by remember { mutableStateOf<Int?>(null) }
     val scrollState = rememberScrollState()
     Column(
@@ -94,10 +95,11 @@ fun BookDetailsScreen(navController: NavHostController) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "Titolo")
-                    Text(text = "Autore")
-                    Text(text = "Genere")
-                    RatingBarNoClick(rating = 3.5)
+                    Text(text = bookState?.titolo ?: run { "Titolo" })
+                    Text(text = bookState?.autore ?: run { "Autore" })
+                    Text(text = bookState?.genereNome ?: run { "Genere" })
+                    if (bookState != null)
+                        RatingBarNoClick(rating = bookState.recensione)
                 }
             }
 
@@ -112,9 +114,7 @@ fun BookDetailsScreen(navController: NavHostController) {
             ) {
                 Text(
                     fontSize = 13.sp,
-                    text = "Lorem ipsum dolor sit amet consectetur adipisicing elit.  " + "Et odit optio reprehend quas nihil."
-                            + "Lorem ipsum dolor sit amet consectetur adipisicing elit.  " + "Et odit optio reprehend quas nihil."
-                            + "Lorem ipsum dolor sit amet consectetur adipisicing elit.  " + "Et odit optio reprehend quas nihil."
+                    text = bookState?.trama ?: run { "Trama" }
                 )
 
             }
@@ -142,14 +142,14 @@ fun BookDetailsScreen(navController: NavHostController) {
                         .fillMaxHeight(0.4f)
                         .padding()
                 ) {
-                    items(lista) {
+                    items(librariesState) {library->
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable { selectedItem = it }
-                                .background(if (it == selectedItem) Color.Cyan else Color.Transparent) // Change color if selected
+                                .clickable { selectedItem = library.idPossesso }
+                                .background(if (library.idPossesso == selectedItem) Color.Cyan else Color.Transparent) // Change color if selected
                         ) {
-                            Text(text = it.toString(), modifier = Modifier.padding(8.dp))
+                            Text(text = library.nome, modifier = Modifier.padding(8.dp))
                         }
                     }
                 }
@@ -178,7 +178,12 @@ fun BookDetailsScreen(navController: NavHostController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = { navController.navigate(BookShareRoute.HomeBooks.route) },
+                    onClick = {
+                        selectedItem?.let {
+                            onSubmit(it)
+                            navController.navigate(BookShareRoute.HomeBooks.route)
+                        }
+                    },
                     modifier = Modifier.width(200.dp),
                     border = BorderStroke(1.dp, Color.Blue)
                 ) {
