@@ -10,9 +10,11 @@ import com.example.elaboratomobile.data.database.LibroPrestito
 import com.example.elaboratomobile.data.database.LibroPrestitoDAO
 import com.example.elaboratomobile.data.database.Piacere
 import com.example.elaboratomobile.data.database.PiacereDAO
+import com.example.elaboratomobile.ui.screens.chronology.BookChrono
 import com.example.elaboratomobile.ui.screens.books.BookLike
 import com.example.elaboratomobile.ui.screens.booksDetails.BooKGenere
 import com.example.elaboratomobile.ui.screens.booksDetails.PossessoState
+import com.example.elaboratomobile.ui.screens.chronologyDetails.BookPrestito
 import kotlinx.coroutines.flow.Flow
 
 class BooksRepository(
@@ -21,7 +23,7 @@ class BooksRepository(
     private val genereDAO: GenereDAO,
     private val bibliotecaDAO: BibliotecaDAO,
     private val libroPossedutoDAO: LibroPossedutoDAO,
-    private val libroPrestitoDAO: LibroPrestitoDAO
+    private val libroPrestitoDAO: LibroPrestitoDAO,
 ) {
 
     fun getAllBooks(username: String, idGenere: Int): Flow<List<BookLike>> =
@@ -52,4 +54,16 @@ class BooksRepository(
         libroPossedutoDAO.updateStatoPrenotazione(id_possesso)
 
     suspend fun upsert(prestito: LibroPrestito) = libroPrestitoDAO.upsert(prestito)
+
+    fun getChronologyBooksByUser(username: String, idGenere: Int): Flow<List<BookChrono>> =
+        libroDAO.getChronologyBooksByUser(username, idGenere)
+
+    fun getChronologyDetails(idPrestito: Int): Flow<BookPrestito?> =
+        libroPrestitoDAO.getDettagliPrestito(idPrestito)
+
+    suspend fun updateRecensionePrestito(idPrestito: Int, recensione: Int) =
+        libroPrestitoDAO.updateRecensione(idPrestito, recensione)
+
+    suspend fun updateLibroRecensioneMedia(idLibro: Int) =
+        libroDAO.updateLibroRecensioneMedia(idLibro)
 }

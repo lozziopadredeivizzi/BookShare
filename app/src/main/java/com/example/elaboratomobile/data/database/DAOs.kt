@@ -1,14 +1,15 @@
 package com.example.elaboratomobile.data.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
+import com.example.elaboratomobile.ui.screens.chronology.BookChrono
 import com.example.elaboratomobile.ui.screens.events.EventState
 import com.example.elaboratomobile.ui.screens.books.BookLike
 import com.example.elaboratomobile.ui.screens.booksDetails.BooKGenere
 import com.example.elaboratomobile.ui.screens.booksDetails.PossessoState
+import com.example.elaboratomobile.ui.screens.chronologyDetails.BookPrestito
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -52,6 +53,29 @@ interface LibroDAO {
     WHERE (L.id_genere = :idGenere OR :idGenere = 0) AND P.username = :username
 """)
     fun getLikedBooksByGenere(idGenere: Int, username: String): Flow<List<BookLike>>
+
+    @Query("""
+        SELECT l.*, g.nome as genereNome, lp.id_possesso as idPrestito
+        FROM LIBRO_PRESTITO lp
+        INNER JOIN LIBRO_POSSEDUTO lpos ON lp.id_possesso = lpos.id_possesso
+        INNER JOIN LIBRO l ON lpos.id_libro = l.id_libro
+        INNER JOIN GENERE g ON l.id_genere = g.id_genere
+        WHERE lp.username = :username AND (l.id_genere = :idGenere OR :idGenere = 0)
+    """)
+    fun getChronologyBooksByUser(username: String, idGenere: Int): Flow<List<BookChrono>>
+
+    @Query("""
+        WITH AverageRating AS (
+            SELECT AVG(LP.recensione) as mediaRecensione
+            FROM LIBRO_PRESTITO LP
+            JOIN LIBRO_POSSEDUTO LPOS ON LP.id_possesso = LPOS.id_possesso
+            WHERE LPOS.id_libro = :idLibro
+        )
+        UPDATE LIBRO
+        SET recensione = (SELECT mediaRecensione FROM AverageRating)
+        WHERE id_libro = :idLibro;
+    """)
+    suspend fun updateLibroRecensioneMedia(idLibro: Int)
 
 }
 
@@ -137,6 +161,28 @@ interface LibroPrestitoDAO {
 
     @Delete
     suspend fun delete(item: LibroPrestito)
+
+    @Query("""
+        SELECT 
+            LP.data_inizio, 
+            LP.data_fine, 
+            LP.recensione as recensionePrestito,
+            LP.id_possesso as idPrestito,
+            L.*, 
+            G.nome as genereNome,
+            B.nome as nomeBiblioteca,
+            B.citta as cittaBiblioteca
+        FROM LIBRO_PRESTITO LP
+        INNER JOIN LIBRO_POSSEDUTO LP2 ON LP.id_possesso = LP2.id_possesso
+        INNER JOIN LIBRO L ON LP2.id_libro = L.id_libro
+        INNER JOIN BIBLIOTECA B ON LP2.id_biblioteca = B.id_biblioteca
+        INNER JOIN GENERE G ON L.id_genere = G.id_genere
+        WHERE LP.id_possesso = :idPossesso
+    """)
+    fun getDettagliPrestito(idPossesso: Int): Flow<BookPrestito?>
+
+    @Query("UPDATE LIBRO_PRESTITO SET recensione = :recensione WHERE id_possesso = :idPossesso")
+    suspend fun updateRecensione(idPossesso: Int, recensione: Int)
 }
 
 @Dao
