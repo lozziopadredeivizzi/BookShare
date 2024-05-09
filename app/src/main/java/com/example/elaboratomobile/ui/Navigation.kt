@@ -29,8 +29,11 @@ import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneScreen
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneViewModel
 import com.example.elaboratomobile.ui.screens.settings.SettingsScreen
 import com.example.elaboratomobile.ui.screens.books.BooksViewModel
+import com.example.elaboratomobile.ui.screens.chronology.ChronologyBookViewModel
 import com.example.elaboratomobile.ui.screens.books.FavoriteBookViewModel
 import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsViewModel
+import com.example.elaboratomobile.ui.screens.chronology.ChronologyBookScreen
+import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetailsViewModel
 import org.koin.androidx.compose.koinViewModel
 
 sealed class BookShareRoute(
@@ -58,8 +61,11 @@ sealed class BookShareRoute(
 
     data object ChronologyDetails :
         BookShareRoute(
-            "cronologiaDettagli{bookId}", "Valuta Libro"
-        )
+            "cronologiaDettagli/{prestitoId}", "Valuta Libro",
+            listOf(navArgument("prestitoId") { type = NavType.IntType })
+        ) {
+        fun buildRoute(prestitoId: Int) = "cronologiaDettagli/$prestitoId"
+    }
 
     companion object {
         val routes = setOf(
@@ -142,7 +148,6 @@ fun BookShareNavGraph(
                     navController,
                     bookHomeState,
                     generiState.generi,
-                    nextRoute = BookShareRoute.BookDetails,
                     like = { bookId -> homebookVm.updateLikeStatus(bookId) },
                     comboAction = { genereId -> homebookVm.setSelectedGenre(genereId) },
                     currentIdGenere = currentState
@@ -172,7 +177,7 @@ fun BookShareNavGraph(
                     navController = navController,
                     bookState = bookState,
                     librariesState = librariesState,
-                    onSubmit = {id_possesso -> detailsVm.addPrestito(id_possesso) }
+                    onSubmit = { id_possesso -> detailsVm.addPrestito(id_possesso) }
                 )
             }
         }
@@ -186,7 +191,6 @@ fun BookShareNavGraph(
                     navController = navController,
                     bookFavoriteState,
                     generiFavoriteState.generi,
-                    nextRoute = BookShareRoute.BookDetails,
                     like = { bookId -> favoriteVm.updateLikeStatus(bookId) },
                     comboAction = { genereId -> favoriteVm.setSelectedGenre(genereId) },
                     currentIdGenere = currentFavoriteState
@@ -217,20 +221,29 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.Chronology) {
             composable(route) {
-                /*HomeBooksScreen(
-                    navController = navController,
-                    bookHomeState.books,
-                    generiState.generi,
-                    nextRoute = BookShareRoute.ChronologyDetails,
-                    like = { bookId -> homebookVm.updateLikeStatus(bookId)},
-                    comboAction = {genereId -> homebookVm.setSelectedGenre(genereId)},
-                    currentIdGenere = currentState
-                )*/
+                val chronologyVm = koinViewModel<ChronologyBookViewModel>()
+                val bookChronoState by chronologyVm.booksState.collectAsStateWithLifecycle()
+                ChronologyBookScreen(navController = navController, list = bookChronoState)
             }
         }
         with(BookShareRoute.ChronologyDetails) {
-            composable(route) {
-                ChronologyDetails(navController = navController)
+            composable(route, arguments) { backStackEntry ->
+                val detailsChronoVm = koinViewModel<ChronologyDetailsViewModel>()
+                val bookState by detailsChronoVm.booksState.collectAsStateWithLifecycle()
+                val idprestito = backStackEntry.arguments?.getInt("prestitoId")
+                if (idprestito != null) {
+                    detailsChronoVm.loadPrestitoDetails(idPrestito = idprestito)
+                }
+                ChronologyDetails(
+                    navController = navController,
+                    bookState,
+                    onSubmit = { idPrestito, recensione, idLibro ->
+                        detailsChronoVm.addRecensione(
+                            idPrestito = idPrestito,
+                            recensione = recensione,
+                            idLibro = idLibro
+                        )
+                    })
             }
         }
         with(BookShareRoute.ModificaProfilo) {
