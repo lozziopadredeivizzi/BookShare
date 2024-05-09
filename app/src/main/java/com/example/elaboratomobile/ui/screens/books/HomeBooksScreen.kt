@@ -74,7 +74,7 @@ fun HomeBooksScreen(
                 BookItem(
                     book = bookLike,
                     onClick = {
-                        navController.navigate(nextRoute.route)
+                        navController.navigate(BookShareRoute.BookDetails.buildRoute(bookLike.id_libro))
                     }, onLikeClicked = like
                 )
             }

@@ -6,8 +6,10 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.elaboratomobile.data.models.Theme
 import com.example.elaboratomobile.ui.screens.aspetto.AspettoScreen
 import com.example.elaboratomobile.ui.screens.aspetto.ThemeState
@@ -28,6 +30,7 @@ import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneViewMod
 import com.example.elaboratomobile.ui.screens.settings.SettingsScreen
 import com.example.elaboratomobile.ui.screens.books.BooksViewModel
 import com.example.elaboratomobile.ui.screens.books.FavoriteBookViewModel
+import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsViewModel
 import org.koin.androidx.compose.koinViewModel
 
 sealed class BookShareRoute(
@@ -47,8 +50,11 @@ sealed class BookShareRoute(
     data object ModificaEmail : BookShareRoute("modificaEmail", "Modifica E-mail")
 
     data object BookDetails : BookShareRoute(
-        "libriDettagli{bookId}", "Libri Dettagli"
-    )
+        "libriDettagli/{bookId}", "Dettaglio Libro",
+        listOf(navArgument("bookId") { type = NavType.IntType })
+    ) {
+        fun buildRoute(bookId: Int) = "libriDettagli/$bookId"
+    }
 
     data object ChronologyDetails :
         BookShareRoute(
@@ -137,8 +143,8 @@ fun BookShareNavGraph(
                     bookHomeState,
                     generiState.generi,
                     nextRoute = BookShareRoute.BookDetails,
-                    like = { bookId -> homebookVm.updateLikeStatus(bookId)},
-                    comboAction = {genereId -> homebookVm.setSelectedGenre(genereId)},
+                    like = { bookId -> homebookVm.updateLikeStatus(bookId) },
+                    comboAction = { genereId -> homebookVm.setSelectedGenre(genereId) },
                     currentIdGenere = currentState
                 )
             }
@@ -154,8 +160,20 @@ fun BookShareNavGraph(
             }
         }
         with(BookShareRoute.BookDetails) {
-            composable(route) {
-                BookDetailsScreen(navController = navController)
+            composable(route, arguments) { backStackEntry ->
+                val detailsVm = koinViewModel<BookDetailsViewModel>()
+                val bookState by detailsVm.booksState.collectAsStateWithLifecycle()
+                val librariesState by detailsVm.librariesState.collectAsStateWithLifecycle()
+                val idBook = backStackEntry.arguments?.getInt("bookId")
+                if (idBook != null) {
+                    detailsVm.loadBookAndLibraries(idBook)
+                }
+                BookDetailsScreen(
+                    navController = navController,
+                    bookState = bookState,
+                    librariesState = librariesState,
+                    onSubmit = {id_possesso -> detailsVm.addPrestito(id_possesso) }
+                )
             }
         }
         with(BookShareRoute.FavoriteBooks) {
@@ -169,8 +187,8 @@ fun BookShareNavGraph(
                     bookFavoriteState,
                     generiFavoriteState.generi,
                     nextRoute = BookShareRoute.BookDetails,
-                    like = { bookId -> favoriteVm.updateLikeStatus(bookId)},
-                    comboAction = {genereId -> favoriteVm.setSelectedGenre(genereId)},
+                    like = { bookId -> favoriteVm.updateLikeStatus(bookId) },
+                    comboAction = { genereId -> favoriteVm.setSelectedGenre(genereId) },
                     currentIdGenere = currentFavoriteState
                 )
             }
