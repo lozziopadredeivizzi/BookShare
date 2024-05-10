@@ -131,6 +131,9 @@ interface UtenteDAO {
 
     @Query("SELECT COUNT(*) as count FROM LIBRO_PRESTITO WHERE username = :username")
     fun getBookTotalNumber(username: String): Flow<Int>
+
+    @Query("UPDATE UTENTE SET e_mail = :email WHERE username = :username")
+    fun editEmail(email: String, username: String)
 }
 
 @Dao

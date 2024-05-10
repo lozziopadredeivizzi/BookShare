@@ -26,5 +26,9 @@ class UtenteRepository (private val utenteDAO: UtenteDAO) {
         return utenteDAO.getBookTotalNumber(username)
     }
 
+    fun editEmail(emial: String, username: String){
+        return utenteDAO.editEmail(emial, username)
+    }
+
 
 }

@@ -22,7 +22,12 @@ import androidx.navigation.NavHostController
 import com.example.elaboratomobile.ui.BookShareRoute
 
 @Composable
-fun ModificaEmailScreen(navHostController: NavHostController) {
+fun ModificaEmailScreen(
+    state: EditEmailState,
+    action: EditEmailAction,
+    onSubmit: () -> Unit,
+    navHostController: NavHostController
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -30,16 +35,20 @@ fun ModificaEmailScreen(navHostController: NavHostController) {
             .fillMaxSize()
     ) {
         Spacer(modifier = Modifier.size(20.dp))
-        OutlinedTextField(value = "E-mail Corrente",
-            onValueChange = {/*TODO*/ },
+        OutlinedTextField(value = state.email,
+            onValueChange = action::setEmail,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
+                keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Done // Impedisce il ritorno a capo
             ),
             label = { Text(text = "E-mail") })
         Spacer(modifier = Modifier.size(10.dp))
         Button(
-            onClick = { navHostController.navigate(BookShareRoute.ModificaProfilo.route) },
+            onClick = {
+                if (!state.canSubmit) return@Button
+                onSubmit()
+                navHostController.navigate(BookShareRoute.ModificaProfilo.route)
+            },
             modifier = Modifier.width(150.dp),
             border = BorderStroke(1.dp, Color.Blue)
         ) {

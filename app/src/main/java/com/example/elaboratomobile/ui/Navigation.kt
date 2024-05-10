@@ -34,6 +34,7 @@ import com.example.elaboratomobile.ui.screens.books.FavoriteBookViewModel
 import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsViewModel
 import com.example.elaboratomobile.ui.screens.chronology.ChronologyBookScreen
 import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetailsViewModel
+import com.example.elaboratomobile.ui.screens.modificaEmail.ModificaEmailViewModel
 import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -261,7 +262,14 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.ModificaEmail) {
             composable(route) {
-                ModificaEmailScreen(navHostController = navController)
+                val modifyEmailVm = koinViewModel<ModificaEmailViewModel>()
+                val state by modifyEmailVm.state.collectAsStateWithLifecycle()
+                ModificaEmailScreen(
+                    state = state,
+                    action = modifyEmailVm.actions,
+                    onSubmit = { modifyEmailVm.editEmail() },
+                    navHostController = navController
+                )
             }
         }
     }
