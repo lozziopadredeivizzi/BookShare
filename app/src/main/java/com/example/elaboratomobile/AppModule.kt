@@ -19,6 +19,7 @@ import com.example.elaboratomobile.ui.screens.chronology.ChronologyBookViewModel
 import com.example.elaboratomobile.ui.screens.books.FavoriteBookViewModel
 import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsViewModel
 import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetailsViewModel
+import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -82,4 +83,6 @@ val appModule = module {
     viewModel { ChronologyBookViewModel(get(), get()) }
 
     viewModel { ChronologyDetailsViewModel(get()) }
+    
+    viewModel { ModificaProfiloViewModel(get(), get()) }
 }

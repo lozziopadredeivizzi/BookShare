@@ -15,9 +15,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 data class UsernameState(val username: String)
-data class TakenBooks(
-    val numBooks: Int
-)
 
 class ProfileViewModel(
     private val utenteRepo: UtenteRepository,

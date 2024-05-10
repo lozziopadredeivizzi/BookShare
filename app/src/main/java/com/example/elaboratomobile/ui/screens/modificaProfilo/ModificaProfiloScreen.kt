@@ -27,7 +27,10 @@ import androidx.navigation.NavHostController
 import com.example.elaboratomobile.ui.BookShareRoute
 
 @Composable
-fun ModificaProfiloScreen(navHostController: NavHostController) {
+fun ModificaProfiloScreen(
+    email: String,
+    navHostController: NavHostController
+) {
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
@@ -96,7 +99,7 @@ fun ModificaProfiloScreen(navHostController: NavHostController) {
                     )
                 }
                 Text(
-                    "E-mail attuale",
+                    email,
                     style = TextStyle(
                         fontSize = 16.sp,
                         color = Color.Gray

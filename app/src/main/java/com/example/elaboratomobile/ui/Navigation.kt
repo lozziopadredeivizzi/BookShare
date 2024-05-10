@@ -34,6 +34,7 @@ import com.example.elaboratomobile.ui.screens.books.FavoriteBookViewModel
 import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsViewModel
 import com.example.elaboratomobile.ui.screens.chronology.ChronologyBookScreen
 import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetailsViewModel
+import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloViewModel
 import org.koin.androidx.compose.koinViewModel
 
 sealed class BookShareRoute(
@@ -248,7 +249,9 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.ModificaProfilo) {
             composable(route) {
-                ModificaProfiloScreen(navHostController = navController)
+                val modifyProfileVm = koinViewModel<ModificaProfiloViewModel>()
+                val email by modifyProfileVm.email.collectAsStateWithLifecycle()
+                ModificaProfiloScreen(email,navHostController = navController)
             }
         }
         with(BookShareRoute.ModificaPassword) {
