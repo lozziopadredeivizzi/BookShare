@@ -134,6 +134,12 @@ interface UtenteDAO {
 
     @Query("UPDATE UTENTE SET e_mail = :email WHERE username = :username")
     fun editEmail(email: String, username: String)
+
+    @Query("SELECT password FROM UTENTE WHERE username = :username")
+    fun getCurrentPasswordFromUsername(username: String): String
+
+    @Query("UPDATE UTENTE SET password = :password WHERE username = :username")
+    fun editPassword(password: String, username: String)
 }
 
 @Dao

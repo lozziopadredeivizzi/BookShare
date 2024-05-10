@@ -93,7 +93,7 @@ fun LoginScreen(
             visualTransformation = PasswordVisualTransformation(),
             onValueChange = actions::setPassword,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
+                keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done // Impedisce il ritorno a capo
             ),
             label = { Text("Password") }

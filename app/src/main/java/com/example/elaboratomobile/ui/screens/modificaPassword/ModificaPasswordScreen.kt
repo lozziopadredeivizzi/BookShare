@@ -15,14 +15,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.elaboratomobile.ui.BookShareRoute
 
 @Composable
-fun ModificaPasswordScreen(navHostController: NavHostController) {
+fun ModificaPasswordScreen(
+    state: EditPasswordState,
+    action: EditPasswordAction,
+    onSubmit: () -> Unit,
+    navHostController: NavHostController
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -30,28 +38,42 @@ fun ModificaPasswordScreen(navHostController: NavHostController) {
             .fillMaxSize()
     ) {
         Spacer(modifier = Modifier.size(20.dp))
+
+        if (state.message != null) {
+            Text(text = state.message!!, color = Color.Red, style = TextStyle(fontSize = 15.sp))
+            Spacer(modifier = Modifier.size(2.dp))
+        }
+
         OutlinedTextField(
-            value = "Password Attuale",
-            onValueChange = {/*TODO*/ },
+            value = state.oldPassword,
+            onValueChange = action::setOldPassword,
+            visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
+                keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done // Impedisce il ritorno a capo
             ),
             label = { Text(text = "Password Attuale") }
         )
         Spacer(modifier = Modifier.size(10.dp))
         OutlinedTextField(
-            value = "Nuova Password",
-            onValueChange = {/*TODO*/ },
+            value = state.newPassword,
+            onValueChange = action::setNewPassword,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
+                keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done // Impedisce il ritorno a capo
             ),
             label = { Text(text = "Nuova Password") }
         )
         Spacer(modifier = Modifier.size(10.dp))
         Button(
-            onClick = { navHostController.navigate(BookShareRoute.ModificaProfilo.route) },
+            onClick = {
+                if (!state.canSubmit) return@Button
+                onSubmit()
+                if (state.success == true) {
+                    navHostController.navigate(BookShareRoute.ModificaProfilo.route)
+                }
+
+            },
             modifier = Modifier
                 .width(150.dp),
             border = BorderStroke(1.dp, Color.Blue)

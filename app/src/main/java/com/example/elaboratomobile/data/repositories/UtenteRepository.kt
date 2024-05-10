@@ -30,5 +30,11 @@ class UtenteRepository (private val utenteDAO: UtenteDAO) {
         return utenteDAO.editEmail(emial, username)
     }
 
+    fun getCurrentPasswordFromUsername(username: String): String{
+        return utenteDAO.getCurrentPasswordFromUsername(username)
+    }
 
+    fun editPassword(password: String, username: String){
+        return utenteDAO.editPassword(password, username)
+    }
 }
