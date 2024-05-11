@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
                         derivedStateOf {
                             BookShareRoute.routes.find {
                                 it.route == backStackEntry?.destination?.route
-                            } ?: BookShareRoute.Login
+                            } ?: BookShareRoute.Loading
                         }
                     }
                     Scaffold (
