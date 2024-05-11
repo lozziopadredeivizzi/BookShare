@@ -31,7 +31,7 @@ import androidx.navigation.NavHostController
 import com.example.elaboratomobile.ui.BookShareRoute
 
 @Composable
-fun SettingsScreen(navHostController: NavHostController) {
+fun SettingsScreen(navHostController: NavHostController, logOut: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
@@ -67,7 +67,7 @@ fun SettingsScreen(navHostController: NavHostController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable {navHostController.navigate(BookShareRoute.ModificaProfilo.route) }
+                .clickable { navHostController.navigate(BookShareRoute.ModificaProfilo.route) }
                 .padding(horizontal = 20.dp, vertical = 10.dp)
         ) {
             Row {
@@ -103,9 +103,7 @@ fun SettingsScreen(navHostController: NavHostController) {
             ClickableText(
                 text = AnnotatedString("Logout"),
                 onClick = {
-                    navHostController.navigate(
-                        BookShareRoute.Login.route
-                    )
+                    logOut()
                 },
                 style = TextStyle(
                     fontSize = 20.sp,
