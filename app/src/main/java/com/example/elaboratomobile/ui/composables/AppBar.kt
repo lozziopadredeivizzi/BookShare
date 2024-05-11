@@ -49,8 +49,11 @@ fun AppBar(
                     currentRoute.route == BookShareRoute.ModificaEmail.route
                 ) {
                     IconButton(onClick = {
-                        if (currentRoute.route != BookShareRoute.Chronology.route) navController.navigateUp()
-                        else navController.navigate(BookShareRoute.Profile.route)
+                        if (currentRoute.route == BookShareRoute.Chronology.route) navController.navigate(BookShareRoute.Profile.route)
+                        else if(currentRoute.route == BookShareRoute.ModificaProfilo.route) navController.navigate(BookShareRoute.Settings.route)
+                        else if(currentRoute.route == BookShareRoute.Settings.route) navController.navigate(BookShareRoute.Profile.route)
+                        else navController.navigateUp()
+
                     }) {
                         Icon(
                             imageVector = Icons.Outlined.ArrowBack,
