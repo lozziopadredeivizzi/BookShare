@@ -107,9 +107,6 @@ fun LoginScreen(
             onClick = {
                 if (!state.canSubmit) return@Button
                 onSubmit()
-                if (state.loginSuccess == true) {
-                    navController.navigate(BookShareRoute.HomeBooks.route)
-                }
             },
             modifier = Modifier.width(150.dp),
             border = BorderStroke(1.dp, Color.Blue)

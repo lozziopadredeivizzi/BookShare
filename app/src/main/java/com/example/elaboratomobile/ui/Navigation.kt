@@ -150,7 +150,11 @@ fun BookShareNavGraph(
                 LoginScreen(
                     state = state,
                     actions = loginVm.actions,
-                    onSubmit = { loginVm.login() },
+                    onSubmit = { loginVm.login{success->
+                        if(success) {
+                            navController.navigate(BookShareRoute.HomeBooks.route)
+                        }
+                    } },
                     navController = navController
                 )
             }
