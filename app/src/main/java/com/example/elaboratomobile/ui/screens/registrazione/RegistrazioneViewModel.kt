@@ -77,13 +77,14 @@ class RegistrazioneViewModel(
             _state.update { it.copy(email = email, errorMessage = null) }
     }
 
-    fun signUp() {
+    fun signUp(callback: (Boolean) -> Unit) {
         viewModelScope.launch {
             val utente = utenteRepository.checkUsername(_state.value.username)
             if (utente == null) {
                 usernameRepository.setCurrentUsername(_state.value.username)
                 _state.update { it.copy(signUpSuccess = true) }
                 utenteRepository.addUser(_state.value.toUser())
+                callback(true)
             } else {
                 _state.update {
                     it.copy(
@@ -91,6 +92,7 @@ class RegistrazioneViewModel(
                         errorMessage = "Questo Username esiste già. Inserisci un altro Username."
                     )
                 }
+                callback(false)
             }
         }
     }

@@ -48,7 +48,7 @@ fun BottomBar(
                 title = "Mappa",
                 selectedIcon = Icons.Filled.LocationOn,
                 unselectedIcon = Icons.Outlined.LocationOn,
-                nextRoute = BookShareRoute.Login // Mettere la rotta a cui devo andare quindi mappa
+                nextRoute = BookShareRoute.Map // Mettere la rotta a cui devo andare quindi mappa
             ), BottomBarIcon(
                 title = "Profilo",
                 selectedIcon = Icons.Filled.AccountBox,

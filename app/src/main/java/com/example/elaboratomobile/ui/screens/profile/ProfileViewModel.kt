@@ -32,22 +32,18 @@ class ProfileViewModel(
     init {
         viewModelScope.launch {
             state = UsernameState(usernameRepo.username.first())
-        }
-    }
 
-    init {
-        viewModelScope.launch {
-            utenteRepo.getBookTotalNumber(state.username).collect { count ->
-                _num.value = count
+            launch {
+                utenteRepo.getBookTotalNumber(state.username).collect { count ->
+                    _num.value = count
+                }
             }
-        }
-    }
+            launch {
+                utenteRepo.getFromUsername(state.username).collect { currentUser ->
+                    _user.value = currentUser
+                }
+            }
 
-    init {
-        viewModelScope.launch {
-            utenteRepo.getFromUsername(state.username).collect { currentUser ->
-                _user.value = currentUser
-            }
         }
     }
 

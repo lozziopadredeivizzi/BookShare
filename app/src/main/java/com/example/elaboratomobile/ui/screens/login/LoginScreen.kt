@@ -19,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.elaboratomobile.ui.BookShareRoute
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -100,14 +102,11 @@ fun LoginScreen(
 
         )
         Spacer(modifier = Modifier.size(65.dp))
-
+        val scope = rememberCoroutineScope()
         Button(
             onClick = {
                 if (!state.canSubmit) return@Button
                 onSubmit()
-                if (state.loginSuccess == true) {
-                    navController.navigate(BookShareRoute.HomeBooks.route)
-                }
             },
             modifier = Modifier.width(150.dp),
             border = BorderStroke(1.dp, Color.Blue)

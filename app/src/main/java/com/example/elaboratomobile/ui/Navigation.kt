@@ -34,9 +34,14 @@ import com.example.elaboratomobile.ui.screens.books.FavoriteBookViewModel
 import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsViewModel
 import com.example.elaboratomobile.ui.screens.chronology.ChronologyBookScreen
 import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetailsViewModel
+import com.example.elaboratomobile.ui.screens.loading.LoadingScreen
+import com.example.elaboratomobile.ui.screens.loading.LoadingViewModel
+import com.example.elaboratomobile.ui.screens.map.MapScreen
+import com.example.elaboratomobile.ui.screens.map.MapViewModel
 import com.example.elaboratomobile.ui.screens.modificaEmail.ModificaEmailViewModel
 import com.example.elaboratomobile.ui.screens.modificaPassword.ModificaPasswordViewModel
 import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloViewModel
+import com.example.elaboratomobile.ui.screens.settings.SettingsViewModel
 import org.koin.androidx.compose.koinViewModel
 
 sealed class BookShareRoute(
@@ -54,6 +59,9 @@ sealed class BookShareRoute(
     data object ModificaProfilo : BookShareRoute("modificaProfilo", "Modifica Profilo")
     data object ModificaPassword : BookShareRoute("modificaPassword", "Modifica Password")
     data object ModificaEmail : BookShareRoute("modificaEmail", "Modifica E-mail")
+    data object Loading : BookShareRoute("loading", "loading")
+
+    data object Map: BookShareRoute("map", "Mappa")
 
     data object BookDetails : BookShareRoute(
         "libriDettagli/{bookId}", "Dettaglio Libro",
@@ -85,9 +93,11 @@ sealed class BookShareRoute(
             ChronologyDetails,
             ModificaProfilo,
             ModificaPassword,
-            ModificaEmail
+            ModificaEmail,
+            Loading,
+            Map
         )
-        val noAppBar = setOf(Login, Registrazione)
+        val noAppBar = setOf(Login, Registrazione, Loading)
         val noBottomBar = setOf(
             Login,
             Registrazione,
@@ -99,7 +109,8 @@ sealed class BookShareRoute(
             ChronologyDetails,
             ModificaProfilo,
             ModificaPassword,
-            ModificaEmail
+            ModificaEmail,
+            Loading
         )
     }
 
@@ -114,9 +125,24 @@ fun BookShareNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = BookShareRoute.Login.route,
+        startDestination = BookShareRoute.Loading.route,
         modifier = modifier
     ) {
+        with(BookShareRoute.Loading) {
+            composable(route) {
+                val loadingVm = koinViewModel<LoadingViewModel>()
+                LoadingScreen(loading = {
+                    loadingVm.loading { present ->
+                        if (present) {
+                            navController.navigate(BookShareRoute.HomeBooks.route)
+                        }
+                        else {
+                            navController.navigate(BookShareRoute.Login.route)
+                        }
+                    }
+                })
+            }
+        }
         with(BookShareRoute.Login) {
             composable(route) {
                 val loginVm = koinViewModel<LoginViewModel>()
@@ -124,7 +150,11 @@ fun BookShareNavGraph(
                 LoginScreen(
                     state = state,
                     actions = loginVm.actions,
-                    onSubmit = { loginVm.login() },
+                    onSubmit = { loginVm.login{success->
+                        if(success) {
+                            navController.navigate(BookShareRoute.HomeBooks.route)
+                        }
+                    } },
                     navController = navController
                 )
             }
@@ -136,9 +166,20 @@ fun BookShareNavGraph(
                 RegistrazioneScreen(
                     state = state,
                     actions = signUpVm.actions,
-                    onSubmit = { signUpVm.signUp() },
+                    onSubmit = { signUpVm.signUp{success->
+                        if(success) {
+                            navController.navigate(BookShareRoute.HomeBooks.route)
+                        }
+                    } },
                     navController = navController
                 )
+            }
+        }
+        with(BookShareRoute.Map) {
+            composable(route) {
+                val mapVm = koinViewModel<MapViewModel>()
+                val state by mapVm.state.collectAsStateWithLifecycle()
+                MapScreen(state = state, actions = mapVm.actions)
             }
         }
         with(BookShareRoute.HomeBooks) {
@@ -172,6 +213,7 @@ fun BookShareNavGraph(
                 val detailsVm = koinViewModel<BookDetailsViewModel>()
                 val bookState by detailsVm.booksState.collectAsStateWithLifecycle()
                 val librariesState by detailsVm.librariesState.collectAsStateWithLifecycle()
+                val recensioniList by detailsVm.recensioniForLibro.collectAsStateWithLifecycle()
                 val idBook = backStackEntry.arguments?.getInt("bookId")
                 if (idBook != null) {
                     detailsVm.loadBookAndLibraries(idBook)
@@ -180,7 +222,8 @@ fun BookShareNavGraph(
                     navController = navController,
                     bookState = bookState,
                     librariesState = librariesState,
-                    onSubmit = { id_possesso -> detailsVm.addPrestito(id_possesso) }
+                    onSubmit = { id_possesso -> detailsVm.addPrestito(id_possesso) },
+                    recensioniList = recensioniList
                 )
             }
         }
@@ -214,7 +257,17 @@ fun BookShareNavGraph(
         }
         with(BookShareRoute.Settings) {
             composable(route) {
-                SettingsScreen(navHostController = navController)
+                val settingsVm = koinViewModel<SettingsViewModel>()
+                SettingsScreen(
+                    navHostController = navController,
+                    logOut = {
+                        settingsVm.logOut { success ->
+                            if (success) {
+                                navController.navigate(BookShareRoute.Login.route)
+                            }
+                        }
+                    }
+                )
             }
         }
         with(BookShareRoute.Aspetto) {
@@ -253,7 +306,7 @@ fun BookShareNavGraph(
             composable(route) {
                 val modifyProfileVm = koinViewModel<ModificaProfiloViewModel>()
                 val email by modifyProfileVm.email.collectAsStateWithLifecycle()
-                ModificaProfiloScreen(email,navHostController = navController)
+                ModificaProfiloScreen(email, navHostController = navController)
             }
         }
         with(BookShareRoute.ModificaPassword) {
@@ -263,7 +316,7 @@ fun BookShareNavGraph(
                 ModificaPasswordScreen(
                     state = state,
                     action = modifyPassVm.actions,
-                    onSubmit = {modifyPassVm.editPassword()},
+                    onSubmit = { modifyPassVm.editPassword() },
                     navHostController = navController
                 )
             }

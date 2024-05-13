@@ -19,9 +19,13 @@ import com.example.elaboratomobile.ui.screens.chronology.ChronologyBookViewModel
 import com.example.elaboratomobile.ui.screens.books.FavoriteBookViewModel
 import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsViewModel
 import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetailsViewModel
+import com.example.elaboratomobile.ui.screens.loading.LoadingViewModel
+import com.example.elaboratomobile.ui.screens.map.MapViewModel
 import com.example.elaboratomobile.ui.screens.modificaEmail.ModificaEmailViewModel
 import com.example.elaboratomobile.ui.screens.modificaPassword.ModificaPasswordViewModel
 import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloViewModel
+import com.example.elaboratomobile.ui.screens.settings.SettingsViewModel
+import com.example.elaboratomobile.utils.LocationService
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -44,6 +48,8 @@ val appModule = module {
     }
 
     single { UsernameRepository(get()) }
+
+    single { LocationService(get()) }
 
     single { UtenteRepository(get<ElaboratoMobileDatabase>().utenteDAO()) }
 
@@ -90,5 +96,11 @@ val appModule = module {
 
     viewModel { ModificaEmailViewModel(get(), get()) }
 
-    viewModel{ ModificaPasswordViewModel(get(), get()) }
+    viewModel { ModificaPasswordViewModel(get(), get()) }
+
+    viewModel { SettingsViewModel(get()) }
+
+    viewModel { LoadingViewModel(get()) }
+
+    viewModel { MapViewModel() }
 }

@@ -22,21 +22,21 @@ enum class PermissionStatus {
 }
 
 interface PermissionHandler {
-    val permission: String
-    val status: PermissionStatus
-    fun launchPermissionRequest()
+    val permission: String //Permesso da richiedere
+    val status: PermissionStatus //Lo stato del permesso
+    fun launchPermissionRequest() //Funzione per richiedere il permesso
 }
 
 @Composable
 fun rememberPermission(
-    permission: String,
-    onResult: (status: PermissionStatus) -> Unit = {}
+    permission: String, //Permesso da richiedere
+    onResult: (status: PermissionStatus) -> Unit = {} // Funzione da eseguire al cambiamento di stato
 ): PermissionHandler {
     var status by remember { mutableStateOf(PermissionStatus.Unknown) }
 
     val activity = (LocalContext.current as ComponentActivity)
 
-    val permissionLauncher = rememberLauncherForActivityResult(
+    val permissionLauncher = rememberLauncherForActivityResult( //Richiesta del permesso
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         status = when {
@@ -46,7 +46,11 @@ fun rememberPermission(
         }
         onResult(status)
     }
-
+    //Con remember + derivedStateOf,
+    //PermissionHandler viene ricreato
+    //solo se le sue dipendenze
+    //cambiano (permission, status,
+    //permissionLauncher)
     val permissionHandler by remember {
         derivedStateOf {
             object : PermissionHandler {

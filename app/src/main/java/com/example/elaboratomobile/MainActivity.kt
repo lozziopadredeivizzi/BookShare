@@ -28,12 +28,18 @@ import com.example.elaboratomobile.ui.composables.AppBar
 import com.example.elaboratomobile.ui.composables.BottomBar
 import com.example.elaboratomobile.ui.screens.aspetto.AspettoViewModel
 import com.example.elaboratomobile.ui.theme.ElaboratoMobileTheme
+import com.example.elaboratomobile.utils.LocationService
+import org.koin.android.ext.android.get
 import org.koin.androidx.compose.koinViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
+    private lateinit var locationService: LocationService
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        locationService = get<LocationService>()
+
         setContent {
             val themeViewModel = koinViewModel<AspettoViewModel>()
             val themeState by themeViewModel.state.collectAsStateWithLifecycle()
@@ -56,7 +62,7 @@ class MainActivity : ComponentActivity() {
                         derivedStateOf {
                             BookShareRoute.routes.find {
                                 it.route == backStackEntry?.destination?.route
-                            } ?: BookShareRoute.Login
+                            } ?: BookShareRoute.Loading
                         }
                     }
                     Scaffold (
@@ -75,5 +81,14 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+    override fun onPause() {
+        super.onPause()
+        locationService.pauseLocationRequest()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        locationService.resumeLocationRequest()
     }
 }

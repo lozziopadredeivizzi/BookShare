@@ -41,12 +41,13 @@ class LoginViewModel(
         }
     }
 
-    fun login() {
+    fun login(callback: (Boolean) -> Unit) {
         viewModelScope.launch {
             val utente = utenteRepository.checkLogin(_state.value.username, _state.value.password)
             if (utente != null) {
                 usernameRepository.setCurrentUsername(_state.value.username)
                 _state.update { it.copy(loginSuccess = true) }
+                callback(true)
             } else {
                 _state.update {
                     it.copy(
@@ -54,6 +55,7 @@ class LoginViewModel(
                         errorMessage = "Controllare le credenziali inserite."
                     )
                 }
+                callback(false)
             }
         }
     }
