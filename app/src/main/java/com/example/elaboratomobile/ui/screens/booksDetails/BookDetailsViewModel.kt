@@ -43,6 +43,9 @@ class BookDetailsViewModel(
     private val _librariesState = MutableStateFlow<List<PossessoState>>(emptyList())
     val librariesState = _librariesState.asStateFlow()
 
+    private val _recensioniForLibro = MutableStateFlow<List<Pair<Int, Int>>>(emptyList())
+    val recensioniForLibro = _recensioniForLibro.asStateFlow()
+
     // Funzione si può richiamare tutte le volte che finiamo nella rotta dei dettagli passandogli l'idLibro
     fun loadBookAndLibraries(id_libro: Int) {
         viewModelScope.launch {
@@ -58,6 +61,10 @@ class BookDetailsViewModel(
                 repository.getBookFromID(id_libro).collect { book ->
                     _booksState.value = book
                 }
+            }
+            launch {
+                val recensioni = repository.getRecensioniForLibro(id_libro)
+                _recensioniForLibro.value = recensioni
             }
 
         }

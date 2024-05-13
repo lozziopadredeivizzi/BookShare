@@ -213,6 +213,7 @@ fun BookShareNavGraph(
                 val detailsVm = koinViewModel<BookDetailsViewModel>()
                 val bookState by detailsVm.booksState.collectAsStateWithLifecycle()
                 val librariesState by detailsVm.librariesState.collectAsStateWithLifecycle()
+                val recensioniList by detailsVm.recensioniForLibro.collectAsStateWithLifecycle()
                 val idBook = backStackEntry.arguments?.getInt("bookId")
                 if (idBook != null) {
                     detailsVm.loadBookAndLibraries(idBook)
@@ -221,7 +222,8 @@ fun BookShareNavGraph(
                     navController = navController,
                     bookState = bookState,
                     librariesState = librariesState,
-                    onSubmit = { id_possesso -> detailsVm.addPrestito(id_possesso) }
+                    onSubmit = { id_possesso -> detailsVm.addPrestito(id_possesso) },
+                    recensioniList = recensioniList
                 )
             }
         }
