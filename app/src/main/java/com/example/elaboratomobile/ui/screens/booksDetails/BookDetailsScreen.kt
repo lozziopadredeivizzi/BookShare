@@ -42,22 +42,30 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import com.example.elaboratomobile.R
 import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.ui.composables.RatingBarNoClick
+import com.example.elaboratomobile.ui.composables.RatingGraph
+import com.example.elaboratomobile.ui.screens.events.MinimalDialog
 
 @Composable
 fun BookDetailsScreen(
     navController: NavHostController,
     bookState: BooKGenere?,
     librariesState: List<PossessoState>,
+    recensioniList: List<Pair<Int, Int>>,
     onSubmit: (Int) -> Unit
 ) {
     var selectedItem by remember { mutableStateOf<Int?>(null) }
     val scrollState = rememberScrollState()
+    var dialogOpen = remember {
+        mutableStateOf(false)
+    }
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -98,8 +106,10 @@ fun BookDetailsScreen(
                     Text(text = bookState?.titolo ?: run { "Titolo" })
                     Text(text = bookState?.autore ?: run { "Autore" })
                     Text(text = bookState?.genereNome ?: run { "Genere" })
-                    if (bookState != null)
-                        RatingBarNoClick(rating = bookState.recensione)
+                    Box(modifier = Modifier.clickable { dialogOpen.value = true }) {
+                        if (bookState != null)
+                            RatingBarNoClick(rating = bookState.recensione)
+                    }
                 }
             }
 
@@ -118,7 +128,23 @@ fun BookDetailsScreen(
                 )
 
             }
+            if (dialogOpen.value) {
+                MinimalDialog(onDismissRequest = { dialogOpen.value = false }) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Column {
+                            Text(text = "Grafico delle recensioni:", fontWeight = FontWeight.Bold)
+                            Spacer(modifier = Modifier.size(30.dp))
+                            RatingGraph(data = recensioniList)
+                        }
 
+                    }
+                }
+            }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth()
@@ -131,7 +157,11 @@ fun BookDetailsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp) // Padding around the LazyColumn
-                    .border(2.dp, Color.Gray, RoundedCornerShape(8.dp)) // Border for the LazyColumn
+                    .border(
+                        2.dp,
+                        Color.Gray,
+                        RoundedCornerShape(8.dp)
+                    ) // Border for the LazyColumn
                     .background(Color.LightGray, RoundedCornerShape(8.dp))
             ) {
                 LazyVerticalGrid(
@@ -142,7 +172,7 @@ fun BookDetailsScreen(
                         .fillMaxHeight(0.4f)
                         .padding()
                 ) {
-                    items(librariesState) {library->
+                    items(librariesState) { library ->
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -192,6 +222,21 @@ fun BookDetailsScreen(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun MinimalDialog(onDismissRequest: () -> Unit, content: @Composable () -> Unit) {
+    Dialog(onDismissRequest = { onDismissRequest() }) {
+        Card(
+            modifier = Modifier
+                .height(300.dp)
+                .width(350.dp)
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
+        ) {
+            content() // Mostra il contenuto passato come parametro
         }
     }
 }
