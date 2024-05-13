@@ -46,13 +46,11 @@ class ModificaEmailViewModel(
     init {
         viewModelScope.launch {
             username = usernameRepo.username.first()
-        }
-    }
-    init {
-        viewModelScope.launch {
-            userRepo.getFromUsername(username).collect{currentUser->
-                if (currentUser != null) {
-                    _state.value.email = currentUser.e_mail
+            launch {
+                userRepo.getFromUsername(username).collect{currentUser->
+                    if (currentUser != null) {
+                        _state.value.email = currentUser.e_mail
+                    }
                 }
             }
         }

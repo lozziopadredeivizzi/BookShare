@@ -27,16 +27,15 @@ class ModificaProfiloViewModel(
     init {
         viewModelScope.launch {
             username = UsernameState(usernameRepo.username.first())
-        }
-    }
-    init {
-        viewModelScope.launch {
-            utenteRepo.getFromUsername(username.username).collect { currentUser ->
-                if (currentUser != null) {
-                    _email.value = currentUser.e_mail
-                }
-                else{
-                    _email.value = "/"
+
+            launch {
+                utenteRepo.getFromUsername(username.username).collect { currentUser ->
+                    if (currentUser != null) {
+                        _email.value = currentUser.e_mail
+                    }
+                    else{
+                        _email.value = "/"
+                    }
                 }
             }
         }
