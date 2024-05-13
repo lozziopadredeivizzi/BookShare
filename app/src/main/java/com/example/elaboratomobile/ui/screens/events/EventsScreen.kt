@@ -82,7 +82,6 @@ fun MinimalDialog(onDismissRequest: () -> Unit, content: @Composable () -> Unit)
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventCard(event: EventState) {
     var dialogOpen = remember {
