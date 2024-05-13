@@ -36,6 +36,8 @@ import com.example.elaboratomobile.ui.screens.chronology.ChronologyBookScreen
 import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetailsViewModel
 import com.example.elaboratomobile.ui.screens.loading.LoadingScreen
 import com.example.elaboratomobile.ui.screens.loading.LoadingViewModel
+import com.example.elaboratomobile.ui.screens.map.MapScreen
+import com.example.elaboratomobile.ui.screens.map.MapViewModel
 import com.example.elaboratomobile.ui.screens.modificaEmail.ModificaEmailViewModel
 import com.example.elaboratomobile.ui.screens.modificaPassword.ModificaPasswordViewModel
 import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloViewModel
@@ -58,6 +60,8 @@ sealed class BookShareRoute(
     data object ModificaPassword : BookShareRoute("modificaPassword", "Modifica Password")
     data object ModificaEmail : BookShareRoute("modificaEmail", "Modifica E-mail")
     data object Loading : BookShareRoute("loading", "loading")
+
+    data object Map: BookShareRoute("map", "Mappa")
 
     data object BookDetails : BookShareRoute(
         "libriDettagli/{bookId}", "Dettaglio Libro",
@@ -90,7 +94,8 @@ sealed class BookShareRoute(
             ModificaProfilo,
             ModificaPassword,
             ModificaEmail,
-            Loading
+            Loading,
+            Map
         )
         val noAppBar = setOf(Login, Registrazione, Loading)
         val noBottomBar = setOf(
@@ -160,6 +165,13 @@ fun BookShareNavGraph(
                     onSubmit = { signUpVm.signUp() },
                     navController = navController
                 )
+            }
+        }
+        with(BookShareRoute.Map) {
+            composable(route) {
+                val mapVm = koinViewModel<MapViewModel>()
+                val state by mapVm.state.collectAsStateWithLifecycle()
+                MapScreen(state = state, actions = mapVm.actions)
             }
         }
         with(BookShareRoute.HomeBooks) {
