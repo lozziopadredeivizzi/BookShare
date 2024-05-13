@@ -91,7 +91,7 @@ fun EventCard(event: EventState) {
     Card(
         modifier = Modifier
             .padding(horizontal = 10.dp, vertical = 8.dp)
-            .height(250.dp),
+            .height(260.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         border = BorderStroke(1.dp, Color.Gray)
     ) {
