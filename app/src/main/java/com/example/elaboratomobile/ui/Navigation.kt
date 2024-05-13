@@ -166,7 +166,11 @@ fun BookShareNavGraph(
                 RegistrazioneScreen(
                     state = state,
                     actions = signUpVm.actions,
-                    onSubmit = { signUpVm.signUp() },
+                    onSubmit = { signUpVm.signUp{success->
+                        if(success) {
+                            navController.navigate(BookShareRoute.HomeBooks.route)
+                        }
+                    } },
                     navController = navController
                 )
             }

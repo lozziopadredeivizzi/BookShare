@@ -41,7 +41,8 @@ import com.example.elaboratomobile.ui.BookShareRoute
 fun RegistrazioneScreen(
     state: AddUserState,
     actions: AddUserActions,
-    onSubmit: () -> Unit, navController: NavHostController
+    onSubmit: () -> Unit,
+    navController: NavHostController
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -152,9 +153,6 @@ fun RegistrazioneScreen(
             onClick = {
                 if (!state.canSubmit) return@Button
                 onSubmit()
-                if (state.signUpSuccess == true) {
-                    navController.navigate(BookShareRoute.HomeBooks.route)
-                }
             },
                 modifier = Modifier
                     .width(150.dp),
