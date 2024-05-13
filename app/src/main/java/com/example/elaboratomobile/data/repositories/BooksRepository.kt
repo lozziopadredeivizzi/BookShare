@@ -66,4 +66,23 @@ class BooksRepository(
 
     suspend fun updateLibroRecensioneMedia(idLibro: Int) =
         libroDAO.updateLibroRecensioneMedia(idLibro)
+
+    suspend fun getRecensioniForLibro(idLibro: Int): List<Pair<Int, Int>> {
+        val recensioni = libroPrestitoDAO.getRecensioniForBook(idLibro)
+        val recensioniAggregated = recensioni.groupingBy { it?: 0 }
+            .eachCount()
+            .toList()
+        // Aggiungi manualmente le coppie mancanti per le stelle da 1 a 5
+        val recensioniComplete = mutableListOf<Pair<Int, Int>>()
+        for (i in 1..5) {
+            val recensioniStella = recensioniAggregated.find { it.first == i }
+            if (recensioniStella != null) {
+                recensioniComplete.add(recensioniStella)
+            } else {
+                recensioniComplete.add(Pair(i, 0))
+            }
+        }
+
+        return recensioniComplete
+    }
 }

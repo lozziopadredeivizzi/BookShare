@@ -171,6 +171,10 @@ interface LibroPrestitoDAO {
     @Delete
     suspend fun delete(item: LibroPrestito)
 
+    @Query("SELECT recensione FROM LIBRO_PRESTITO WHERE id_possesso IN " +
+            "(SELECT id_possesso FROM LIBRO_POSSEDUTO WHERE id_libro = :idLibro)")
+    suspend fun getRecensioniForBook(idLibro: Int): List<Int?>
+
     @Query("""
         SELECT 
             LP.data_inizio, 
