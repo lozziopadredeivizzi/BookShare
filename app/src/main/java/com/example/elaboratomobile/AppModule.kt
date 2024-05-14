@@ -7,6 +7,7 @@ import com.example.elaboratomobile.data.database.ElaboratoMobileDatabase
 import com.example.elaboratomobile.data.repositories.AspettoRepository
 import com.example.elaboratomobile.data.repositories.BooksRepository
 import com.example.elaboratomobile.data.repositories.EventsRepository
+import com.example.elaboratomobile.data.repositories.NotificationRepository
 import com.example.elaboratomobile.data.repositories.UsernameRepository
 import com.example.elaboratomobile.data.repositories.UtenteRepository
 import com.example.elaboratomobile.ui.screens.aspetto.AspettoViewModel
@@ -24,6 +25,8 @@ import com.example.elaboratomobile.ui.screens.map.MapViewModel
 import com.example.elaboratomobile.ui.screens.modificaEmail.ModificaEmailViewModel
 import com.example.elaboratomobile.ui.screens.modificaPassword.ModificaPasswordViewModel
 import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloViewModel
+import com.example.elaboratomobile.ui.screens.notification.NotificViewModel
+import com.example.elaboratomobile.ui.screens.notification.NotificationViewModel
 import com.example.elaboratomobile.ui.screens.settings.SettingsViewModel
 import com.example.elaboratomobile.utils.LocationService
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -72,6 +75,8 @@ val appModule = module {
         )
     }
 
+    single { NotificationRepository(get<ElaboratoMobileDatabase>().libroPrestitoDAO()) }
+
     viewModel { AspettoViewModel(get()) }
 
     viewModel { LoginViewModel(get(), get()) }
@@ -103,4 +108,8 @@ val appModule = module {
     viewModel { LoadingViewModel(get()) }
 
     viewModel { MapViewModel() }
+
+    viewModel { NotificationViewModel(get(), get())}
+
+    viewModel { NotificViewModel(get(), get())}
 }

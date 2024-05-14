@@ -86,7 +86,8 @@ class BookDetailsViewModel(
                 username = usernameRepository.username.first(),
                 data_inizio = dataInizio,
                 data_fine = dataFine,
-                recensione = null
+                recensione = null,
+                visualizzato = "false"
             )
             repository.upsert(newPrestito)
         }

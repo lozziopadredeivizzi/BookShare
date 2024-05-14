@@ -41,6 +41,8 @@ import com.example.elaboratomobile.ui.screens.map.MapViewModel
 import com.example.elaboratomobile.ui.screens.modificaEmail.ModificaEmailViewModel
 import com.example.elaboratomobile.ui.screens.modificaPassword.ModificaPasswordViewModel
 import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloViewModel
+import com.example.elaboratomobile.ui.screens.notification.NotificViewModel
+import com.example.elaboratomobile.ui.screens.notification.NotificationScreen
 import com.example.elaboratomobile.ui.screens.settings.SettingsViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -60,7 +62,7 @@ sealed class BookShareRoute(
     data object ModificaPassword : BookShareRoute("modificaPassword", "Modifica Password")
     data object ModificaEmail : BookShareRoute("modificaEmail", "Modifica E-mail")
     data object Loading : BookShareRoute("loading", "loading")
-
+    data object Notification : BookShareRoute("notification", "Notifiche")
     data object Map: BookShareRoute("map", "Mappa")
 
     data object BookDetails : BookShareRoute(
@@ -95,7 +97,8 @@ sealed class BookShareRoute(
             ModificaPassword,
             ModificaEmail,
             Loading,
-            Map
+            Map,
+            Notification
         )
         val noAppBar = setOf(Login, Registrazione, Loading)
         val noBottomBar = setOf(
@@ -110,7 +113,8 @@ sealed class BookShareRoute(
             ModificaProfilo,
             ModificaPassword,
             ModificaEmail,
-            Loading
+            Loading,
+            Notification
         )
     }
 
@@ -173,6 +177,16 @@ fun BookShareNavGraph(
                     } },
                     navController = navController
                 )
+            }
+        }
+        with(BookShareRoute.Notification) {
+            composable(route) {
+                val notificVm = koinViewModel<NotificViewModel>()
+                val notifics by notificVm.notificState.collectAsStateWithLifecycle()
+                notifics.forEach{ notific ->
+                    notificVm.update(notific.idPossesso)
+                }
+                NotificationScreen(list = notifics)
             }
         }
         with(BookShareRoute.Map) {

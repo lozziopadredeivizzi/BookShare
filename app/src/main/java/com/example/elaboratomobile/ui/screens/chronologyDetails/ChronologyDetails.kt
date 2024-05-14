@@ -117,8 +117,6 @@ fun ChronologyDetails(
                     Row {
                         Text(text = "Presso:    ", fontWeight = FontWeight.Bold)
                         Text(text = bookState?.nomeBiblioteca ?: run { "Nome" })
-                        Spacer(modifier = Modifier.size(5.dp))
-                        Text(text = bookState?.cittaBiblioteca ?: run { "Città" })
                     }
                     Spacer(modifier = Modifier.size(15.dp))
                     Row {

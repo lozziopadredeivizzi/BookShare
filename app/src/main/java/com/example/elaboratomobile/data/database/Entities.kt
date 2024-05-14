@@ -215,5 +215,7 @@ data class LibroPrestito(
     var data_fine: Date,
 
     @ColumnInfo
-    var recensione: Int?
+    var recensione: Int?,
+
+    var visualizzato: String
 )

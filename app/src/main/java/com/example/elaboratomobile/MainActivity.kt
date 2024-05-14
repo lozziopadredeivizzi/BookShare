@@ -27,6 +27,7 @@ import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.ui.composables.AppBar
 import com.example.elaboratomobile.ui.composables.BottomBar
 import com.example.elaboratomobile.ui.screens.aspetto.AspettoViewModel
+import com.example.elaboratomobile.ui.screens.notification.NotificationViewModel
 import com.example.elaboratomobile.ui.theme.ElaboratoMobileTheme
 import com.example.elaboratomobile.utils.LocationService
 import org.koin.android.ext.android.get
@@ -43,9 +44,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             val themeViewModel = koinViewModel<AspettoViewModel>()
             val themeState by themeViewModel.state.collectAsStateWithLifecycle()
+            val notificationVm = koinViewModel<NotificationViewModel>()
+            val notificCount by notificationVm.unreadNotificationsCount.collectAsStateWithLifecycle()
 
             ElaboratoMobileTheme(
-                darkTheme = when(themeState.theme){
+                darkTheme = when (themeState.theme) {
                     Theme.Chiaro -> false
                     Theme.Scuro -> true
                     Theme.Sistema -> isSystemInDarkTheme()
@@ -65,10 +68,22 @@ class MainActivity : ComponentActivity() {
                             } ?: BookShareRoute.Loading
                         }
                     }
-                    Scaffold (
-                        topBar = { AppBar(navController = navController, currentRoute = currentRoute)},
-                        bottomBar = { BottomBar(navController = navController, currentRoute = currentRoute)}
-                    ) {contentPadding ->
+                    Scaffold(
+                        topBar = {
+                            AppBar(
+                                navController = navController,
+                                currentRoute = currentRoute,
+                                getCountNotific = { notificationVm.updataNotification() },
+                                countNotific = notificCount
+                            )
+                        },
+                        bottomBar = {
+                            BottomBar(
+                                navController = navController,
+                                currentRoute = currentRoute
+                            )
+                        }
+                    ) { contentPadding ->
                         BookShareNavGraph(
                             navController = navController,
                             modifier = Modifier.padding(contentPadding),
@@ -82,6 +97,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     override fun onPause() {
         super.onPause()
         locationService.pauseLocationRequest()
