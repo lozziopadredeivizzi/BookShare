@@ -1,9 +1,15 @@
 package com.example.elaboratomobile.ui.screens.profile
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Paint.Style
+import android.net.Uri
+import android.provider.MediaStore
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -45,7 +51,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.elaboratomobile.data.database.Utente
 import com.example.elaboratomobile.utils.rememberCameraLauncher
-import com.example.elaboratomobile.utils.rememberGalleryLauncher
 import com.example.elaboratomobile.utils.rememberPermission
 import com.example.elaboratomobile.utils.saveImageToStorage
 import com.example.elaboratomobile.utils.uriToBitmap
@@ -89,16 +94,21 @@ fun ProfileScreen(
     }
 
     //GALLERIA
-    val galleryLauncher = rememberGalleryLauncher { imageUri ->
-        saveImageToStorage(imageUri, context.applicationContext.contentResolver)
-        val bitmapImage = uriToBitmap(imageUri, context.applicationContext.contentResolver)
-        val resizedBitmap = bitmapImage.resize(500, 500)
-        editImage(resizedBitmap)
+    val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()){ result->
+        if(result.resultCode == Activity.RESULT_OK){
+            val data: Intent? = result.data
+            val selectedImageUri: Uri? = data?.data
+            if(selectedImageUri != null){
+                val bitmapImage = uriToBitmap(selectedImageUri, context.applicationContext.contentResolver)
+                val resizedBitmap = bitmapImage.resize(500, 500) // Imposta le dimensioni desiderate
+                editImage(resizedBitmap)
+            }
+        }
     }
 
     val galleryPermission = rememberPermission(Manifest.permission.READ_EXTERNAL_STORAGE) { status ->
         if (status.isGranted) {
-            galleryLauncher.pickImage()
+            galleryLauncher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
         } else {
             Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
         }
@@ -106,7 +116,7 @@ fun ProfileScreen(
 
     fun pickImage() {
         if (galleryPermission.status.isGranted) {
-            galleryLauncher.pickImage()
+            galleryLauncher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
         } else {
             galleryPermission.launchPermissionRequest()
         }
