@@ -1,6 +1,7 @@
 package com.example.elaboratomobile.ui.screens.profile
 
 import android.Manifest
+import android.graphics.Bitmap
 import android.graphics.Paint.Style
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -46,6 +47,7 @@ import com.example.elaboratomobile.utils.rememberCameraLauncher
 import com.example.elaboratomobile.utils.rememberGalleryLauncher
 import com.example.elaboratomobile.utils.rememberPermission
 import com.example.elaboratomobile.utils.saveImageToStorage
+import com.example.elaboratomobile.utils.uriToBitmap
 
 @Composable
 fun ProfileScreen(
@@ -53,6 +55,60 @@ fun ProfileScreen(
     num: Int,
     navHostController: NavHostController
 ) {
+    val context = LocalContext.current
+
+    fun Bitmap.resize(width: Int, height: Int): Bitmap {
+        return Bitmap.createScaledBitmap(this, width, height, true)
+    }
+
+    //CAMERA
+    val cameraLauncher = rememberCameraLauncher { imageUri ->
+        saveImageToStorage(imageUri, context.applicationContext.contentResolver)
+        val bitmapImage = uriToBitmap(imageUri, context.applicationContext.contentResolver)
+        val resizedBitmap = bitmapImage.resize(500, 500) // Imposta le dimensioni desiderate
+    }
+
+    val cameraPermission = rememberPermission(Manifest.permission.CAMERA) { status ->
+        if (status.isGranted) {
+            cameraLauncher.captureImage()
+        } else {
+            Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun takePicture() {
+        if (cameraPermission.status.isGranted) {
+            cameraLauncher.captureImage()
+        } else {
+            cameraPermission.launchPermissionRequest()
+        }
+    }
+
+    //GALLERIA
+    val galleryLauncher = rememberGalleryLauncher { imageUri ->
+        saveImageToStorage(imageUri, context.applicationContext.contentResolver)
+        val bitmapImage = uriToBitmap(imageUri, context.applicationContext.contentResolver)
+        val resizedBitmap = bitmapImage.resize(500, 500)
+    }
+
+    val galleryPermission = rememberPermission(Manifest.permission.READ_EXTERNAL_STORAGE) { status ->
+        if (status.isGranted) {
+            galleryLauncher.pickImage()
+        } else {
+            Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun pickImage() {
+        if (galleryPermission.status.isGranted) {
+            galleryLauncher.pickImage()
+        } else {
+            galleryPermission.launchPermissionRequest()
+        }
+    }
+
+    val showDialog = remember { mutableStateOf(false) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -80,7 +136,7 @@ fun ProfileScreen(
                 }
             }
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick = { showDialog.value = true },
                 modifier = Modifier
                     .size(35.dp)
                     .align(Alignment.BottomEnd) // Posiziona l'IconButton nell'angolo in basso a destra
@@ -170,5 +226,42 @@ fun ProfileScreen(
                 )
             }
         }
+    }
+    if (showDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showDialog.value = false },
+            title = { Text("Scegli la fonte dell'immagine") },
+            text = { Text("Da dove vuoi scegliere l'immagine?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        takePicture()
+                        showDialog.value = false
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.PhotoCamera,
+                        contentDescription = "fotocamera",
+                        tint = Color.Black
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("Fotocamera", color = Color.Black)
+                }
+            },
+            dismissButton = {
+                Button(onClick = {
+                    pickImage()
+                    showDialog.value = false
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Photo,
+                        contentDescription = "gallery",
+                        tint = Color.Black
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("Galleria", color = Color.Black)
+                }
+            }
+        )
     }
 }
