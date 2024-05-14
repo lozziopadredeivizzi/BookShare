@@ -265,6 +265,7 @@ fun BookShareNavGraph(
                 ProfileScreen(
                     user = state,
                     num,
+                    editImage = {image->profileVm.updatePfpImage(image)},
                     navHostController = navController
                 )
             }

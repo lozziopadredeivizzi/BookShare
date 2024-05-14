@@ -1,5 +1,6 @@
 package com.example.elaboratomobile.ui.screens.profile
 
+import android.graphics.Bitmap
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -47,5 +48,9 @@ class ProfileViewModel(
         }
     }
 
-
+    fun updatePfpImage(image: Bitmap){
+        viewModelScope.launch {
+            utenteRepo.updatePfp(immagine = image, state.username)
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.elaboratomobile.data.database
 
+import android.graphics.Bitmap
+import android.icu.text.AlphabeticIndex.ImmutableIndex
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
@@ -142,6 +144,9 @@ interface UtenteDAO {
 
     @Query("UPDATE UTENTE SET password = :password WHERE username = :username")
     fun editPassword(password: String, username: String)
+
+    @Query("UPDATE UTENTE SET immagineProfilo = :immagineProfilo WHERE username = :username")
+    suspend fun editPfp(immagineProfilo: Bitmap, username: String)
 }
 
 @Dao

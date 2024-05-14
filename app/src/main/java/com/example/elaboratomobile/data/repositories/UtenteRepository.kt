@@ -1,5 +1,6 @@
 package com.example.elaboratomobile.data.repositories
 
+import android.graphics.Bitmap
 import com.example.elaboratomobile.data.database.Utente
 import com.example.elaboratomobile.data.database.UtenteDAO
 import kotlinx.coroutines.flow.Flow
@@ -36,5 +37,9 @@ class UtenteRepository (private val utenteDAO: UtenteDAO) {
 
     fun editPassword(password: String, username: String){
         return utenteDAO.editPassword(password, username)
+    }
+
+    suspend fun updatePfp(immagine: Bitmap, username: String){
+        utenteDAO.editPfp(immagine, username)
     }
 }

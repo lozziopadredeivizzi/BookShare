@@ -53,6 +53,7 @@ import com.example.elaboratomobile.utils.uriToBitmap
 fun ProfileScreen(
     user: Utente?,
     num: Int,
+    editImage: (Bitmap) -> Unit,
     navHostController: NavHostController
 ) {
     val context = LocalContext.current
@@ -66,6 +67,8 @@ fun ProfileScreen(
         saveImageToStorage(imageUri, context.applicationContext.contentResolver)
         val bitmapImage = uriToBitmap(imageUri, context.applicationContext.contentResolver)
         val resizedBitmap = bitmapImage.resize(500, 500) // Imposta le dimensioni desiderate
+        editImage(resizedBitmap)
+
     }
 
     val cameraPermission = rememberPermission(Manifest.permission.CAMERA) { status ->
@@ -89,6 +92,7 @@ fun ProfileScreen(
         saveImageToStorage(imageUri, context.applicationContext.contentResolver)
         val bitmapImage = uriToBitmap(imageUri, context.applicationContext.contentResolver)
         val resizedBitmap = bitmapImage.resize(500, 500)
+        editImage(resizedBitmap)
     }
 
     val galleryPermission = rememberPermission(Manifest.permission.READ_EXTERNAL_STORAGE) { status ->
