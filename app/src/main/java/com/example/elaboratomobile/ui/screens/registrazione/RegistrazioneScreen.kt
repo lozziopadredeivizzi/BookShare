@@ -30,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -40,19 +39,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.elaboratomobile.ui.BookShareRoute
 import androidx.compose.material.icons.outlined.Photo
 import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import com.example.elaboratomobile.ui.composables.ImageWithPlaceholder
-import com.example.elaboratomobile.ui.composables.Size
 import com.example.elaboratomobile.utils.rememberCameraLauncher
 import com.example.elaboratomobile.utils.rememberGalleryLauncher
 import com.example.elaboratomobile.utils.rememberPermission
 import com.example.elaboratomobile.utils.saveImageToStorage
 import com.example.elaboratomobile.utils.uriToBitmap
-import okhttp3.internal.immutableListOf
 
 @Composable
 fun RegistrazioneScreen(
@@ -94,7 +89,9 @@ fun RegistrazioneScreen(
     //GALLERIA
     val galleryLauncher = rememberGalleryLauncher { imageUri ->
         saveImageToStorage(imageUri, context.applicationContext.contentResolver)
-
+        val bitmapImage = uriToBitmap(imageUri, context.applicationContext.contentResolver)
+        val resizedBitmap = bitmapImage.resize(500, 500)
+        actions.setPfp(resizedBitmap)
     }
 
     val galleryPermission = rememberPermission(Manifest.permission.READ_EXTERNAL_STORAGE) { status ->

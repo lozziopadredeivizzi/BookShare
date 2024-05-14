@@ -2,6 +2,7 @@ package com.example.elaboratomobile.utils
 
 import android.content.Intent
 import android.net.Uri
+import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
@@ -22,8 +23,8 @@ fun rememberGalleryLauncher(onImagePicked: (imageUri: Uri) -> Unit = {}): Galler
     var selectedImageUri by remember { mutableStateOf(Uri.EMPTY) }
     val galleryActivityLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { selectedImageUriFromGallery ->
-            if (selectedImageUriFromGallery != null) {
-                selectedImageUri = selectedImageUriFromGallery
+            selectedImageUriFromGallery?.let {
+                selectedImageUri = it
                 onImagePicked(selectedImageUri)
             }
         }
@@ -32,8 +33,8 @@ fun rememberGalleryLauncher(onImagePicked: (imageUri: Uri) -> Unit = {}): Galler
         derivedStateOf {
             object : GalleryLauncher {
                 override fun pickImage() {
-                    val galleryIntent = Intent(Intent.ACTION_PICK)
-                    galleryIntent.type = "image/*"
+                    val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    galleryIntent.type = "image/png, image/jpg"
                     galleryActivityLauncher.launch(galleryIntent.toString())
                 }
             }
