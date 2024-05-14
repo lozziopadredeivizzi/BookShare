@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.compose.material.icons.outlined.Photo
 import androidx.compose.material.icons.outlined.PhotoCamera
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import com.example.elaboratomobile.utils.rememberCameraLauncher
@@ -142,7 +143,7 @@ fun RegistrazioneScreen(
                     Image(
                         bitmap = imageBitmap,
                         contentDescription = null,
-                        modifier = Modifier.size(100.dp)
+                        modifier = Modifier.size(100.dp).clip(CircleShape)
                     )
                 }
             } else {
