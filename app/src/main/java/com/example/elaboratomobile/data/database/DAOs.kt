@@ -10,7 +10,9 @@ import com.example.elaboratomobile.ui.screens.books.BookLike
 import com.example.elaboratomobile.ui.screens.booksDetails.BooKGenere
 import com.example.elaboratomobile.ui.screens.booksDetails.PossessoState
 import com.example.elaboratomobile.ui.screens.chronologyDetails.BookPrestito
+import com.example.elaboratomobile.ui.screens.notification.Notification
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
 @Dao
 interface LibroDAO {
@@ -196,6 +198,21 @@ interface LibroPrestitoDAO {
 
     @Query("UPDATE LIBRO_PRESTITO SET recensione = :recensione WHERE id_possesso = :idPossesso")
     suspend fun updateRecensione(idPossesso: Int, recensione: Int)
+
+    @Query("SELECT COUNT(*) FROM LIBRO_PRESTITO WHERE username = :username AND data_fine = :today AND visualizzato = 'false'")
+    suspend fun getCountLibriPrestitiNonVisualizzati(username: String, today: Date): Int
+
+    @Query("SELECT LIBRO.titolo AS titoloLibro, BIBLIOTECA.nome AS nomeBiblioteca, LIBRO_PRESTITO.id_possesso AS idPossesso " +
+            "FROM LIBRO " +
+            "INNER JOIN LIBRO_POSSEDUTO ON LIBRO.id_libro = LIBRO_POSSEDUTO.id_libro " +
+            "INNER JOIN BIBLIOTECA ON LIBRO_POSSEDUTO.id_biblioteca = BIBLIOTECA.id_biblioteca " +
+            "INNER JOIN LIBRO_PRESTITO ON LIBRO_POSSEDUTO.id_possesso = LIBRO_PRESTITO.id_possesso " +
+            "WHERE LIBRO_PRESTITO.username = :username " +
+            "AND LIBRO_PRESTITO.data_fine = :today")
+    fun getNotificationsDetails(username: String, today: Date) :Flow<List<Notification>>
+
+    @Query("UPDATE LIBRO_PRESTITO SET visualizzato = 'true' WHERE id_possesso = :idPossesso")
+    suspend fun updateVisualizzatoForIdPossesso(idPossesso: Int)
 }
 
 @Dao
@@ -208,6 +225,7 @@ interface LibroPossedutoDAO {
 
     @Query("UPDATE LIBRO_POSSEDUTO SET statoPrenotazione = 'Occupato' WHERE id_possesso = :idPossesso")
     suspend fun updateStatoPrenotazione(idPossesso: Int)
+
 }
 
 @Dao
