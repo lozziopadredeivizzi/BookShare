@@ -1,8 +1,14 @@
 package com.example.elaboratomobile.ui.screens.registrazione
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.MediaStore
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -45,7 +51,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import com.example.elaboratomobile.utils.rememberCameraLauncher
-import com.example.elaboratomobile.utils.rememberGalleryLauncher
 import com.example.elaboratomobile.utils.rememberPermission
 import com.example.elaboratomobile.utils.saveImageToStorage
 import com.example.elaboratomobile.utils.uriToBitmap
@@ -88,16 +93,21 @@ fun RegistrazioneScreen(
     }
 
     //GALLERIA
-    val galleryLauncher = rememberGalleryLauncher { imageUri ->
-        saveImageToStorage(imageUri, context.applicationContext.contentResolver)
-        val bitmapImage = uriToBitmap(imageUri, context.applicationContext.contentResolver)
-        val resizedBitmap = bitmapImage.resize(500, 500)
-        actions.setPfp(resizedBitmap)
+    val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()){ result->
+        if(result.resultCode == Activity.RESULT_OK){
+            val data: Intent? = result.data
+            val selectedImageUri: Uri? = data?.data
+            if(selectedImageUri != null){
+                val bitmapImage = uriToBitmap(selectedImageUri, context.applicationContext.contentResolver)
+                val resizedBitmap = bitmapImage.resize(500, 500) // Imposta le dimensioni desiderate
+                actions.setPfp(resizedBitmap)
+            }
+        }
     }
 
     val galleryPermission = rememberPermission(Manifest.permission.READ_EXTERNAL_STORAGE) { status ->
         if (status.isGranted) {
-            galleryLauncher.pickImage()
+            galleryLauncher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
         } else {
             Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
         }
@@ -105,7 +115,7 @@ fun RegistrazioneScreen(
 
     fun pickImage() {
         if (galleryPermission.status.isGranted) {
-            galleryLauncher.pickImage()
+            galleryLauncher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
         } else {
             galleryPermission.launchPermissionRequest()
         }
@@ -143,7 +153,9 @@ fun RegistrazioneScreen(
                     Image(
                         bitmap = imageBitmap,
                         contentDescription = null,
-                        modifier = Modifier.size(100.dp).clip(CircleShape)
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(CircleShape)
                     )
                 }
             } else {
@@ -222,7 +234,7 @@ fun RegistrazioneScreen(
             value = state.password,
             onValueChange = actions::setPassword,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
+                keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done // Impedisce il ritorno a capo
             ),
             label = { Text("Password") }
