@@ -1,8 +1,10 @@
 package com.example.elaboratomobile.ui.screens.registrazione
 
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.elaboratomobile.R
 import com.example.elaboratomobile.data.database.Utente
 import com.example.elaboratomobile.data.repositories.UsernameRepository
 import com.example.elaboratomobile.data.repositories.UtenteRepository
@@ -18,7 +20,7 @@ data class AddUserState(
     val cognome: String = "",
     val email: String = "",
     val data_nascita: String = "",
-    val immagineProfilo: String = "",
+    val immagineProfilo: Bitmap? = null,
     val signUpSuccess: Boolean? = null,
     val errorMessage: String? = null
 ) {
@@ -41,7 +43,7 @@ interface AddUserActions {
     fun setUsername(title: String)
     fun setDate(date: String)
     fun setPassword(description: String)
-    fun setPfp(immagineProfilo: String)
+    fun setPfp(immagineProfilo: Bitmap?)
     fun setName(nome: String)
     fun setSurname(cognome: String)
     fun setEmail(email: String)
@@ -64,7 +66,7 @@ class RegistrazioneViewModel(
         override fun setPassword(password: String) =
             _state.update { it.copy(password = password, errorMessage = null) }
 
-        override fun setPfp(immagineProfilo: String) =
+        override fun setPfp(immagineProfilo: Bitmap?) =
             _state.update { it.copy(immagineProfilo = immagineProfilo, errorMessage = null) }
 
         override fun setName(nome: String) =

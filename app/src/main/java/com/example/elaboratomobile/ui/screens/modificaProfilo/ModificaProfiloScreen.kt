@@ -31,6 +31,7 @@ fun ModificaProfiloScreen(
     email: String,
     navHostController: NavHostController
 ) {
+
     Column(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier

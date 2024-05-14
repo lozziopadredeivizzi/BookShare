@@ -46,7 +46,7 @@ val appModule = module {
             get(),
             ElaboratoMobileDatabase::class.java,
             "book-share"
-        ).createFromAsset("database/book-share.db").build()
+        ).fallbackToDestructiveMigration().createFromAsset("database/book-share.db").build()
         //.fallbackToDestructiveMigration() per cancellare il db e tenere solo il precompilato
     }
 

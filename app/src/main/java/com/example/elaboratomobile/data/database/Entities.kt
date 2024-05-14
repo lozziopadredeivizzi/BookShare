@@ -1,5 +1,6 @@
 package com.example.elaboratomobile.data.database
 
+import android.graphics.Bitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -114,10 +115,10 @@ data class Utente(
     var e_mail: String,
 
     @ColumnInfo
-    var immagineProfilo: String,
+    var immagineProfilo: Bitmap?,
 
     @ColumnInfo
-    var data_nascita: String // Data 
+    var data_nascita: String // Data
 )
 
 
@@ -147,7 +148,7 @@ data class Libro(
     var recensione: Double,
 
     @ColumnInfo
-    var copertina: String,
+    var copertina: Bitmap?,
 
     @ColumnInfo
     var trama: String

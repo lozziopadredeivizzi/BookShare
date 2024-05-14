@@ -1,6 +1,7 @@
 package com.example.elaboratomobile.ui.screens.registrazione
 
 import android.Manifest
+import android.graphics.Bitmap
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -42,10 +43,16 @@ import androidx.navigation.NavHostController
 import com.example.elaboratomobile.ui.BookShareRoute
 import androidx.compose.material.icons.outlined.Photo
 import androidx.compose.material.icons.outlined.PhotoCamera
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import com.example.elaboratomobile.ui.composables.ImageWithPlaceholder
+import com.example.elaboratomobile.ui.composables.Size
 import com.example.elaboratomobile.utils.rememberCameraLauncher
 import com.example.elaboratomobile.utils.rememberGalleryLauncher
 import com.example.elaboratomobile.utils.rememberPermission
 import com.example.elaboratomobile.utils.saveImageToStorage
+import com.example.elaboratomobile.utils.uriToBitmap
+import okhttp3.internal.immutableListOf
 
 @Composable
 fun RegistrazioneScreen(
@@ -56,9 +63,16 @@ fun RegistrazioneScreen(
 ) {
     val context = LocalContext.current
 
+    fun Bitmap.resize(width: Int, height: Int): Bitmap {
+        return Bitmap.createScaledBitmap(this, width, height, true)
+    }
+
     //CAMERA
     val cameraLauncher = rememberCameraLauncher { imageUri ->
         saveImageToStorage(imageUri, context.applicationContext.contentResolver)
+        val bitmapImage = uriToBitmap(imageUri, context.applicationContext.contentResolver)
+        val resizedBitmap = bitmapImage.resize(500, 500) // Imposta le dimensioni desiderate
+        actions.setPfp(resizedBitmap)
     }
 
     val cameraPermission = rememberPermission(Manifest.permission.CAMERA) { status ->
@@ -80,6 +94,7 @@ fun RegistrazioneScreen(
     //GALLERIA
     val galleryLauncher = rememberGalleryLauncher { imageUri ->
         saveImageToStorage(imageUri, context.applicationContext.contentResolver)
+
     }
 
     val galleryPermission = rememberPermission(Manifest.permission.READ_EXTERNAL_STORAGE) { status ->
@@ -124,13 +139,11 @@ fun RegistrazioneScreen(
         }
 
         Box {
-            Image(
-                Icons.Outlined.AccountBox,
-                "pfp",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .size(100.dp)
-            )
+            state.immagineProfilo?.let { nonNullBitmap ->
+                val imageBitmap: ImageBitmap = nonNullBitmap.asImageBitmap()
+                Image(bitmap = imageBitmap, contentDescription = null, modifier = Modifier
+                    .size(100.dp))
+            }
             IconButton(
                 onClick = { showDialog.value = true },
                 modifier = Modifier

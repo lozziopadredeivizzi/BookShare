@@ -1,6 +1,8 @@
 package com.example.elaboratomobile.ui.screens.profile
 
+import android.Manifest
 import android.graphics.Paint.Style
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,20 +19,33 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.ModeEdit
+import androidx.compose.material.icons.outlined.Photo
+import androidx.compose.material.icons.outlined.PhotoCamera
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.elaboratomobile.data.database.Utente
+import com.example.elaboratomobile.utils.rememberCameraLauncher
+import com.example.elaboratomobile.utils.rememberGalleryLauncher
+import com.example.elaboratomobile.utils.rememberPermission
+import com.example.elaboratomobile.utils.saveImageToStorage
 
 @Composable
 fun ProfileScreen(
@@ -46,13 +61,24 @@ fun ProfileScreen(
     ) {
         Spacer(modifier = Modifier.size(20.dp))
         Box {
-            Image(
-                Icons.Outlined.AccountBox,
-                "pfp",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .size(130.dp)
-            )
+            if (user != null) {
+                if (user.immagineProfilo != null) {
+                    user.immagineProfilo?.let { nonNullBitmap ->
+                        val imageBitmap: ImageBitmap = nonNullBitmap.asImageBitmap()
+                        Image(
+                            bitmap = imageBitmap,
+                            contentDescription = null,
+                            modifier = Modifier.size(130.dp)
+                        )
+                    }
+                } else {
+                    Icon(
+                        imageVector = Icons.Outlined.AccountBox,
+                        contentDescription = "Icona del profilo",
+                        modifier = Modifier.size(130.dp)
+                    )
+                }
+            }
             IconButton(
                 onClick = { /*TODO*/ },
                 modifier = Modifier
