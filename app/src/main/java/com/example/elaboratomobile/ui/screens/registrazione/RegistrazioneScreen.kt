@@ -139,10 +139,21 @@ fun RegistrazioneScreen(
         }
 
         Box {
-            state.immagineProfilo?.let { nonNullBitmap ->
-                val imageBitmap: ImageBitmap = nonNullBitmap.asImageBitmap()
-                Image(bitmap = imageBitmap, contentDescription = null, modifier = Modifier
-                    .size(100.dp))
+            if (state.immagineProfilo != null) {
+                state.immagineProfilo.let { nonNullBitmap ->
+                    val imageBitmap: ImageBitmap = nonNullBitmap.asImageBitmap()
+                    Image(
+                        bitmap = imageBitmap,
+                        contentDescription = null,
+                        modifier = Modifier.size(100.dp)
+                    )
+                }
+            } else {
+                Icon(
+                    imageVector = Icons.Outlined.AccountBox,
+                    contentDescription = "Icona del profilo",
+                    modifier = Modifier.size(100.dp)
+                )
             }
             IconButton(
                 onClick = { showDialog.value = true },
