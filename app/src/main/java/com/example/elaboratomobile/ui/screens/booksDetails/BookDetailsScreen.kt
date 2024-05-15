@@ -45,7 +45,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import com.example.elaboratomobile.R
 import com.example.elaboratomobile.ui.BookShareRoute
@@ -222,21 +221,6 @@ fun BookDetailsScreen(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun MinimalDialog(onDismissRequest: () -> Unit, content: @Composable () -> Unit) {
-    Dialog(onDismissRequest = { onDismissRequest() }) {
-        Card(
-            modifier = Modifier
-                .height(300.dp)
-                .width(350.dp)
-                .padding(16.dp),
-            shape = RoundedCornerShape(16.dp),
-        ) {
-            content() // Mostra il contenuto passato come parametro
         }
     }
 }

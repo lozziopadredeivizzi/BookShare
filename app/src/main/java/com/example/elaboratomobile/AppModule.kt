@@ -7,6 +7,7 @@ import com.example.elaboratomobile.data.database.ElaboratoMobileDatabase
 import com.example.elaboratomobile.data.repositories.AspettoRepository
 import com.example.elaboratomobile.data.repositories.BooksRepository
 import com.example.elaboratomobile.data.repositories.EventsRepository
+import com.example.elaboratomobile.data.repositories.MapRepository
 import com.example.elaboratomobile.data.repositories.NotificationRepository
 import com.example.elaboratomobile.data.repositories.UsernameRepository
 import com.example.elaboratomobile.data.repositories.UtenteRepository
@@ -77,6 +78,8 @@ val appModule = module {
 
     single { NotificationRepository(get<ElaboratoMobileDatabase>().libroPrestitoDAO()) }
 
+    single { MapRepository(get<ElaboratoMobileDatabase>().bibliotecaDAO()) }
+
     viewModel { AspettoViewModel(get()) }
 
     viewModel { LoginViewModel(get(), get()) }
@@ -107,9 +110,9 @@ val appModule = module {
 
     viewModel { LoadingViewModel(get()) }
 
-    viewModel { MapViewModel() }
+    viewModel { MapViewModel(get()) }
 
-    viewModel { NotificationViewModel(get(), get())}
+    viewModel { NotificationViewModel(get(), get()) }
 
-    viewModel { NotificViewModel(get(), get())}
+    viewModel { NotificViewModel(get(), get()) }
 }

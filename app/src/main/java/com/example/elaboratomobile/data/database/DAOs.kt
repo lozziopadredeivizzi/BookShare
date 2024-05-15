@@ -1,17 +1,17 @@
 package com.example.elaboratomobile.data.database
 
 import android.graphics.Bitmap
-import android.icu.text.AlphabeticIndex.ImmutableIndex
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
-import com.example.elaboratomobile.ui.screens.chronology.BookChrono
-import com.example.elaboratomobile.ui.screens.events.EventState
 import com.example.elaboratomobile.ui.screens.books.BookLike
 import com.example.elaboratomobile.ui.screens.booksDetails.BooKGenere
 import com.example.elaboratomobile.ui.screens.booksDetails.PossessoState
+import com.example.elaboratomobile.ui.screens.chronology.BookChrono
 import com.example.elaboratomobile.ui.screens.chronologyDetails.BookPrestito
+import com.example.elaboratomobile.ui.screens.events.EventState
+import com.example.elaboratomobile.ui.screens.map.BibliotecheLocation
 import com.example.elaboratomobile.ui.screens.notification.Notification
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
@@ -114,6 +114,10 @@ interface BibliotecaDAO {
         WHERE lp.id_libro = :idLibro AND lp.statoPrenotazione = 'Libero'
     """)
     fun getLibrariesWithFreeBook(idLibro: Int) : Flow<List<PossessoState>>
+
+    @Query("SELECT id_biblioteca, nome, latitudine, longitudine FROM BIBLIOTECA")
+    fun getBibliotecaLocations(): Flow<List<BibliotecheLocation>>
+
 }
 
 @Dao

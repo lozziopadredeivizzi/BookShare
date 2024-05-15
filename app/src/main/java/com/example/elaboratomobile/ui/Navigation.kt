@@ -13,36 +13,36 @@ import androidx.navigation.navArgument
 import com.example.elaboratomobile.data.models.Theme
 import com.example.elaboratomobile.ui.screens.aspetto.AspettoScreen
 import com.example.elaboratomobile.ui.screens.aspetto.ThemeState
+import com.example.elaboratomobile.ui.screens.books.BooksViewModel
+import com.example.elaboratomobile.ui.screens.books.FavoriteBookViewModel
 import com.example.elaboratomobile.ui.screens.books.HomeBooksScreen
 import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsScreen
+import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsViewModel
+import com.example.elaboratomobile.ui.screens.chronology.ChronologyBookScreen
+import com.example.elaboratomobile.ui.screens.chronology.ChronologyBookViewModel
 import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetails
-import com.example.elaboratomobile.ui.screens.login.LoginScreen
+import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetailsViewModel
 import com.example.elaboratomobile.ui.screens.events.EventScreen
 import com.example.elaboratomobile.ui.screens.events.EventsViewModel
+import com.example.elaboratomobile.ui.screens.loading.LoadingScreen
+import com.example.elaboratomobile.ui.screens.loading.LoadingViewModel
+import com.example.elaboratomobile.ui.screens.login.LoginScreen
 import com.example.elaboratomobile.ui.screens.login.LoginViewModel
+import com.example.elaboratomobile.ui.screens.map.MapScreen
+import com.example.elaboratomobile.ui.screens.map.MapViewModel
 import com.example.elaboratomobile.ui.screens.modificaEmail.ModificaEmailScreen
+import com.example.elaboratomobile.ui.screens.modificaEmail.ModificaEmailViewModel
 import com.example.elaboratomobile.ui.screens.modificaPassword.ModificaPasswordScreen
+import com.example.elaboratomobile.ui.screens.modificaPassword.ModificaPasswordViewModel
 import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloScreen
+import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloViewModel
+import com.example.elaboratomobile.ui.screens.notification.NotificViewModel
+import com.example.elaboratomobile.ui.screens.notification.NotificationScreen
 import com.example.elaboratomobile.ui.screens.profile.ProfileScreen
 import com.example.elaboratomobile.ui.screens.profile.ProfileViewModel
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneScreen
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneViewModel
 import com.example.elaboratomobile.ui.screens.settings.SettingsScreen
-import com.example.elaboratomobile.ui.screens.books.BooksViewModel
-import com.example.elaboratomobile.ui.screens.chronology.ChronologyBookViewModel
-import com.example.elaboratomobile.ui.screens.books.FavoriteBookViewModel
-import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsViewModel
-import com.example.elaboratomobile.ui.screens.chronology.ChronologyBookScreen
-import com.example.elaboratomobile.ui.screens.chronologyDetails.ChronologyDetailsViewModel
-import com.example.elaboratomobile.ui.screens.loading.LoadingScreen
-import com.example.elaboratomobile.ui.screens.loading.LoadingViewModel
-import com.example.elaboratomobile.ui.screens.map.MapScreen
-import com.example.elaboratomobile.ui.screens.map.MapViewModel
-import com.example.elaboratomobile.ui.screens.modificaEmail.ModificaEmailViewModel
-import com.example.elaboratomobile.ui.screens.modificaPassword.ModificaPasswordViewModel
-import com.example.elaboratomobile.ui.screens.modificaProfilo.ModificaProfiloViewModel
-import com.example.elaboratomobile.ui.screens.notification.NotificViewModel
-import com.example.elaboratomobile.ui.screens.notification.NotificationScreen
 import com.example.elaboratomobile.ui.screens.settings.SettingsViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -63,7 +63,7 @@ sealed class BookShareRoute(
     data object ModificaEmail : BookShareRoute("modificaEmail", "Modifica E-mail")
     data object Loading : BookShareRoute("loading", "loading")
     data object Notification : BookShareRoute("notification", "Notifiche")
-    data object Map: BookShareRoute("map", "Mappa")
+    data object Map : BookShareRoute("map", "Mappa")
 
     data object BookDetails : BookShareRoute(
         "libriDettagli/{bookId}", "Dettaglio Libro",
@@ -139,8 +139,7 @@ fun BookShareNavGraph(
                     loadingVm.loading { present ->
                         if (present) {
                             navController.navigate(BookShareRoute.HomeBooks.route)
-                        }
-                        else {
+                        } else {
                             navController.navigate(BookShareRoute.Login.route)
                         }
                     }
@@ -154,11 +153,13 @@ fun BookShareNavGraph(
                 LoginScreen(
                     state = state,
                     actions = loginVm.actions,
-                    onSubmit = { loginVm.login{success->
-                        if(success) {
-                            navController.navigate(BookShareRoute.HomeBooks.route)
+                    onSubmit = {
+                        loginVm.login { success ->
+                            if (success) {
+                                navController.navigate(BookShareRoute.HomeBooks.route)
+                            }
                         }
-                    } },
+                    },
                     navController = navController
                 )
             }
@@ -170,11 +171,13 @@ fun BookShareNavGraph(
                 RegistrazioneScreen(
                     state = state,
                     actions = signUpVm.actions,
-                    onSubmit = { signUpVm.signUp{success->
-                        if(success) {
-                            navController.navigate(BookShareRoute.HomeBooks.route)
+                    onSubmit = {
+                        signUpVm.signUp { success ->
+                            if (success) {
+                                navController.navigate(BookShareRoute.HomeBooks.route)
+                            }
                         }
-                    } },
+                    },
                     navController = navController
                 )
             }
@@ -183,7 +186,7 @@ fun BookShareNavGraph(
             composable(route) {
                 val notificVm = koinViewModel<NotificViewModel>()
                 val notifics by notificVm.notificState.collectAsStateWithLifecycle()
-                notifics.forEach{ notific ->
+                notifics.forEach { notific ->
                     notificVm.update(notific.idPossesso)
                 }
                 NotificationScreen(list = notifics)
@@ -193,7 +196,8 @@ fun BookShareNavGraph(
             composable(route) {
                 val mapVm = koinViewModel<MapViewModel>()
                 val state by mapVm.state.collectAsStateWithLifecycle()
-                MapScreen(state = state, actions = mapVm.actions)
+                val libraries by mapVm.librariesState.collectAsStateWithLifecycle()
+                MapScreen(state = state, actions = mapVm.actions, libraries = libraries)
             }
         }
         with(BookShareRoute.HomeBooks) {
@@ -265,7 +269,7 @@ fun BookShareNavGraph(
                 ProfileScreen(
                     user = state,
                     num,
-                    editImage = {image->profileVm.updatePfpImage(image)},
+                    editImage = { image -> profileVm.updatePfpImage(image) },
                     navHostController = navController
                 )
             }

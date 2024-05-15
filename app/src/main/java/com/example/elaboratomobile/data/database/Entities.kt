@@ -19,7 +19,12 @@ data class Biblioteca(
     var indirizzo: String,
 
     @ColumnInfo
-    var citta: String
+    var citta: String,
+
+    var latitudine: Double?,
+
+    var longitudine: Double?
+
 )
 
 @Entity(

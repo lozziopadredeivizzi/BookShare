@@ -35,10 +35,11 @@ import org.koin.compose.koinInject
 @Composable
 fun MapScreen(
     state: MapState,
-    actions: MapStateActions
+    actions: MapStateActions,
+    libraries: List<BibliotecheLocation>
 ) {
     val ctx = LocalContext.current
-    var coordinates : Coordinates = Coordinates(0.0, 0.0)
+    var coordinates: Coordinates = Coordinates(0.0, 0.0)
 
     val locationService = koinInject<LocationService>()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -79,22 +80,21 @@ fun MapScreen(
 
     }
 
-    Column (
+    Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .padding(12.dp)
             .fillMaxSize()
-    ){
+    ) {
         Button(onClick = ::requestLocation) {
             Text(text = "Ricevi coordinate")
         }
         Spacer(modifier = Modifier.size(5.dp))
         val coordinate = locationService.coordinates
         if (coordinate != null) {
-            Map(lat = coordinate.latitude, long = coordinate.longitude)
-        }
-        else {
+            Map(lat = coordinate.latitude, long = coordinate.longitude, libraries = libraries)
+        } else {
             EmptyMap()
         }
     }
