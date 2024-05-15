@@ -16,7 +16,7 @@ fun Map(lat: Double, long: Double) {
     val location = LatLng(lat, long)
     val locationState = MarkerState(position = location)
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(location, 15f)
+        position = CameraPosition.fromLatLngZoom(location, 14f)
     }
 
     GoogleMap(
@@ -30,4 +30,20 @@ fun Map(lat: Double, long: Double) {
             title = "La tua posizione"
         )
     }
+}
+
+@Composable
+fun EmptyMap() {
+    val location = LatLng(41.9028, 12.4964) // Coordinate di Roma
+    val locationState = MarkerState(position = location)
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(location, 4f)
+    }
+
+    GoogleMap(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        cameraPositionState = cameraPositionState
+    )
 }

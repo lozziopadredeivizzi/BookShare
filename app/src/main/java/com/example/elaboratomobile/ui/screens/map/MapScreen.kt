@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.elaboratomobile.ui.composables.EmptyMap
 import com.example.elaboratomobile.ui.composables.Map
 import com.example.elaboratomobile.utils.Coordinates
 import com.example.elaboratomobile.utils.LocationService
@@ -94,6 +95,9 @@ fun MapScreen(
         val coordinate = locationService.coordinates
         if (coordinate != null) {
             Map(lat = coordinate.latitude, long = coordinate.longitude)
+        }
+        else {
+            EmptyMap()
         }
     }
 
