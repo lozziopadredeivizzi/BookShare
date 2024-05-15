@@ -37,7 +37,7 @@ fun EmptyMap() {
     val location = LatLng(41.9028, 12.4964) // Coordinate di Roma
     val locationState = MarkerState(position = location)
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(location, 4f)
+        position = CameraPosition.fromLatLngZoom(location, 5f)
     }
 
     GoogleMap(

@@ -90,8 +90,6 @@ fun MapScreen(
             Text(text = "Ricevi coordinate")
         }
         Spacer(modifier = Modifier.size(5.dp))
-        Text(text = "Latitude: ${locationService.coordinates?.latitude ?: "-"}")
-        Text(text = "Longitude: ${locationService.coordinates?.longitude ?: "-"}")
         val coordinate = locationService.coordinates
         if (coordinate != null) {
             Map(lat = coordinate.latitude, long = coordinate.longitude)
