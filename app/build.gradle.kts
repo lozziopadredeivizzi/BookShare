@@ -68,6 +68,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.2.0")
     implementation("io.insert-koin:koin-androidx-compose:3.5.3")
     implementation("io.coil-kt:coil-compose:2.3.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.maps.android:maps-compose:2.2.0")
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
