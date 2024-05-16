@@ -1,5 +1,9 @@
 package com.example.elaboratomobile.ui.screens.events
 
+import android.Manifest
+import android.content.Intent
+import android.provider.MediaStore
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.scrollable
@@ -39,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -48,6 +53,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import com.example.elaboratomobile.R
 import com.example.elaboratomobile.data.database.Evento
+import com.example.elaboratomobile.utils.aggiungiEventoAlCalendario
+import com.example.elaboratomobile.utils.rememberPermission
 
 @Composable
 fun EventScreen(
@@ -87,6 +94,25 @@ fun EventCard(event: EventState) {
     var dialogOpen = remember {
         mutableStateOf(false)
     }
+    val context = LocalContext.current
+
+    //CALENDARIO
+    val calendarPermission = rememberPermission(Manifest.permission.READ_CALENDAR) { status ->
+        if (status.isGranted) {
+            aggiungiEventoAlCalendario(context, event)
+        } else {
+            Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun addCalendar() {
+        if (calendarPermission.status.isGranted) {
+            aggiungiEventoAlCalendario(context, event)
+        } else {
+            calendarPermission.launchPermissionRequest()
+        }
+    }
+
     val scrollState = rememberScrollState()
     Card(
         modifier = Modifier
@@ -119,7 +145,7 @@ fun EventCard(event: EventState) {
                         .padding(horizontal = 10.dp)
                 )
                 Button(
-                    onClick = {/*TODO*/ },
+                    onClick = ::addCalendar,
                     modifier = Modifier
                         .width(130.dp)
                         .height(45.dp)
