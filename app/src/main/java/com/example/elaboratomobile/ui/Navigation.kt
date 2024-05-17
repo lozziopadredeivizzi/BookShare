@@ -297,6 +297,8 @@ fun BookShareNavGraph(
         with(BookShareRoute.Settings) {
             composable(route) {
                 val settingsVm = koinViewModel<SettingsViewModel>()
+                val hasBiometric by settingsVm.hasBiometric.collectAsStateWithLifecycle()
+                val anyone by settingsVm.anyone.collectAsStateWithLifecycle()
                 SettingsScreen(
                     navHostController = navController,
                     logOut = {
@@ -305,7 +307,11 @@ fun BookShareNavGraph(
                                 navController.navigate(BookShareRoute.Login.route)
                             }
                         }
-                    }
+                    },
+                    hasBiometric = hasBiometric,
+                    anyoneBiometric = anyone,
+                    addBiometric = { settingsVm.addBiometric() },
+                    removeBiometric = { settingsVm.removeBiometric() }
                 )
             }
         }
