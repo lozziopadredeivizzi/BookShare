@@ -71,7 +71,7 @@ fun LoginScreen(
             contentScale = ContentScale.Fit,
             colorFilter = ColorFilter.tint(Color.Black),
             modifier = Modifier
-                .padding(vertical = 16.dp)
+                .padding(vertical = 8.dp)
                 .fillMaxSize(0.3f)
 
         )
@@ -127,7 +127,8 @@ fun LoginScreen(
             label = { Text("Password") }
 
         )
-        Spacer(modifier = Modifier.size(60.dp))
+        if (impronta) Spacer(modifier = Modifier.size(30.dp))
+        else Spacer(modifier = Modifier.size(60.dp))
         val scope = rememberCoroutineScope()
         Button(
             onClick = {
@@ -142,13 +143,14 @@ fun LoginScreen(
                 color = Color.Black
             )
         }
-        Spacer(modifier = Modifier.size(36.dp))
+        if (impronta) Spacer(modifier = Modifier.size(20.dp))
+        else Spacer(modifier = Modifier.size(36.dp))
         if (impronta) {
             Button(
                 onClick = {
                     openBiometric()
                 },
-                modifier = Modifier.width(180.dp),
+                modifier = Modifier.width(160.dp),
                 border = BorderStroke(1.dp, Color.Blue)
             ) {
                 Text(
@@ -156,6 +158,7 @@ fun LoginScreen(
                     color = Color.Black
                 )
             }
+            Spacer(modifier = Modifier.size(20.dp))
         }
         Row(
             modifier = Modifier
