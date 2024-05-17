@@ -14,8 +14,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,18 +26,26 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.ModeEdit
+import androidx.compose.material.icons.outlined.Photo
+import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -45,11 +55,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.compose.material.icons.outlined.Photo
-import androidx.compose.material.icons.outlined.PhotoCamera
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import com.example.elaboratomobile.utils.rememberCameraLauncher
 import com.example.elaboratomobile.utils.rememberPermission
 import com.example.elaboratomobile.utils.saveImageToStorage
@@ -60,9 +65,13 @@ fun RegistrazioneScreen(
     state: AddUserState,
     actions: AddUserActions,
     onSubmit: () -> Unit,
-    navController: NavHostController
+    navController: NavHostController,
+    anyoneState: Boolean
 ) {
     val context = LocalContext.current
+    var isChecked by remember {
+        mutableStateOf(false)
+    }
 
     fun Bitmap.resize(width: Int, height: Int): Bitmap {
         return Bitmap.createScaledBitmap(this, width, height, true)
@@ -93,29 +102,43 @@ fun RegistrazioneScreen(
     }
 
     //GALLERIA
-    val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()){ result->
-        if(result.resultCode == Activity.RESULT_OK){
-            val data: Intent? = result.data
-            val selectedImageUri: Uri? = data?.data
-            if(selectedImageUri != null){
-                val bitmapImage = uriToBitmap(selectedImageUri, context.applicationContext.contentResolver)
-                val resizedBitmap = bitmapImage.resize(500, 500) // Imposta le dimensioni desiderate
-                actions.setPfp(resizedBitmap)
+    val galleryLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                val selectedImageUri: Uri? = data?.data
+                if (selectedImageUri != null) {
+                    val bitmapImage =
+                        uriToBitmap(selectedImageUri, context.applicationContext.contentResolver)
+                    val resizedBitmap =
+                        bitmapImage.resize(500, 500) // Imposta le dimensioni desiderate
+                    actions.setPfp(resizedBitmap)
+                }
             }
         }
-    }
 
-    val galleryPermission = rememberPermission(Manifest.permission.READ_EXTERNAL_STORAGE) { status ->
-        if (status.isGranted) {
-            galleryLauncher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
-        } else {
-            Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
+    val galleryPermission =
+        rememberPermission(Manifest.permission.READ_EXTERNAL_STORAGE) { status ->
+            if (status.isGranted) {
+                galleryLauncher.launch(
+                    Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    )
+                )
+            } else {
+                Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
 
     fun pickImage() {
         if (galleryPermission.status.isGranted) {
-            galleryLauncher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
+            galleryLauncher.launch(
+                Intent(
+                    Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                )
+            )
         } else {
             galleryPermission.launchPermissionRequest()
         }
@@ -130,7 +153,7 @@ fun RegistrazioneScreen(
             .padding(12.dp)
             .fillMaxSize()
     ) {
-        Spacer(modifier = Modifier.size(36.dp))
+        Spacer(modifier = Modifier.size(15.dp))
         Text(
             text = "BookShare",
             style = TextStyle(
@@ -179,7 +202,7 @@ fun RegistrazioneScreen(
                 )
             }
         }
-        Spacer(modifier = Modifier.size(6.dp))
+        Spacer(modifier = Modifier.size(4.dp))
         OutlinedTextField(
             value = state.nome,
             onValueChange = actions::setName,
@@ -239,7 +262,30 @@ fun RegistrazioneScreen(
             ),
             label = { Text("Password") }
         )
-        Spacer(modifier = Modifier.size(28.dp))
+
+        if (anyoneState) {
+            Spacer(modifier = Modifier.size(2.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Spacer(modifier = Modifier.size(9.dp))
+                Checkbox(
+                    checked = isChecked,
+                    onCheckedChange = {
+                        isChecked = it
+                        actions.setImpronta(if (isChecked) 1 else 0)
+                    }
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Attiva autenticazione biometrica")
+            }
+        }
+
+        if(anyoneState) Spacer(modifier = Modifier.size(3.dp))
+        else Spacer(modifier = Modifier.size(28.dp))
         Button(
             onClick = {
                 if (!state.canSubmit) return@Button

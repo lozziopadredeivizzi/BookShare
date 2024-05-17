@@ -188,6 +188,7 @@ fun BookShareNavGraph(
             composable(route) {
                 val signUpVm = koinViewModel<RegistrazioneViewModel>()
                 val state by signUpVm.state.collectAsStateWithLifecycle()
+                val anyoneState by signUpVm.stateAnyone.collectAsStateWithLifecycle()
                 RegistrazioneScreen(
                     state = state,
                     actions = signUpVm.actions,
@@ -198,7 +199,8 @@ fun BookShareNavGraph(
                             }
                         }
                     },
-                    navController = navController
+                    navController = navController,
+                    anyoneState = anyoneState
                 )
             }
         }
