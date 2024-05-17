@@ -19,6 +19,10 @@ class UtenteRepository (private val utenteDAO: UtenteDAO) {
         return utenteDAO.upsert(user)
     }
 
+    suspend fun fingerPrintAlreadyUsed(): Boolean = utenteDAO.fingerPrintAlreadyUsed()
+
+    suspend fun getUtenteByFingerPrint(): Utente = utenteDAO.getUtenteByFingerPrint()
+
     fun getFromUsername(username: String): Flow<Utente?>{
         return utenteDAO.getFromUsername(username)
     }

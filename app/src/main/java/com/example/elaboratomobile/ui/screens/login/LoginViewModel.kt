@@ -31,6 +31,9 @@ class LoginViewModel(
     private val _state = MutableStateFlow(LoginState())
     val state = _state.asStateFlow()
 
+    private val _impronta = MutableStateFlow(false)
+    val impronta = _impronta.asStateFlow()
+
     val actions = object : LoginActions {
         override fun setUsername(username: String) {
             _state.update { it.copy(username = username, errorMessage = null) }
@@ -38,6 +41,12 @@ class LoginViewModel(
 
         override fun setPassword(password: String) {
             _state.update { it.copy(password = password, errorMessage = null) }
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            _impronta.value = utenteRepository.fingerPrintAlreadyUsed()
         }
     }
 
@@ -57,6 +66,14 @@ class LoginViewModel(
                 }
                 callback(false)
             }
+        }
+    }
+
+    fun loginWithFingerPrint(callback: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val utente = utenteRepository.getUtenteByFingerPrint()
+            usernameRepository.setCurrentUsername(utente.username)
+            callback(true)
         }
     }
 }
