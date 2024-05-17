@@ -125,6 +125,21 @@ interface UtenteDAO {
     @Upsert
     suspend fun upsert(user: Utente)
 
+    @Query("SELECT EXISTS(SELECT 1 FROM UTENTE WHERE impronta = 1)")
+    suspend fun fingerPrintAlreadyUsed(): Boolean
+
+    @Query("SELECT * FROM UTENTE WHERE impronta = 1")
+    suspend fun getUtenteByFingerPrint(): Utente
+
+    @Query("UPDATE UTENTE SET impronta = 1 WHERE username = :username")
+    suspend fun addBiometricId(username: String)
+
+    @Query("UPDATE UTENTE SET impronta = 0 WHERE username = :username")
+    suspend fun removeBiometricId(username: String)
+
+    @Query("SELECT COUNT(*) > 0 FROM UTENTE WHERE username = :username AND impronta = 1")
+    suspend fun hasImpronta(username: String): Boolean
+
     @Delete
     suspend fun delete(item: Utente)
 

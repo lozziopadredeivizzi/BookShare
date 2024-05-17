@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Button
@@ -38,14 +36,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.elaboratomobile.ui.BookShareRoute
-import kotlinx.coroutines.launch
+import com.example.elaboratomobile.utils.BiometricPromptManager
 
 @Composable
 fun LoginScreen(
     state: LoginState,
     actions: LoginActions,
     onSubmit: () -> Unit,
-    navController: NavHostController
+    navController: NavHostController,
+    impronta: Boolean,
+    onAuthentication: () -> Unit,
+    openBiometric: () -> Unit,
+    biometricResult: BiometricPromptManager.BiometricResult?
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -69,7 +71,7 @@ fun LoginScreen(
             contentScale = ContentScale.Fit,
             colorFilter = ColorFilter.tint(Color.Black),
             modifier = Modifier
-                .padding(vertical = 16.dp)
+                .padding(vertical = 8.dp)
                 .fillMaxSize(0.3f)
 
         )
@@ -78,6 +80,30 @@ fun LoginScreen(
         if (state.errorMessage != null) {
             Text(text = state.errorMessage, color = Color.Red)
             Spacer(modifier = Modifier.size(15.dp))
+        }
+        biometricResult?.let { result ->
+            when (result) {
+                is BiometricPromptManager.BiometricResult.AuthenticationError -> {
+                    Text(text = result.error)
+                }
+
+                BiometricPromptManager.BiometricResult.AuthenticationFailed -> {
+                    Text(text = "Autenticazione Fallita")
+                }
+
+                BiometricPromptManager.BiometricResult.AuthenticationNotSet -> {
+                    Text(text = "Autenticazione non impostata")
+                }
+                BiometricPromptManager.BiometricResult.AuthenticationSuccess -> {
+                    onAuthentication()
+                }
+                BiometricPromptManager.BiometricResult.FeatureUnavailable -> {
+                    Text(text = "Funzionalità non disonibile")
+                }
+                BiometricPromptManager.BiometricResult.HardwareUnavailable -> {
+                    Text(text = "Hardaware non disponibile")
+                }
+            }
         }
 
         OutlinedTextField(
@@ -101,7 +127,8 @@ fun LoginScreen(
             label = { Text("Password") }
 
         )
-        Spacer(modifier = Modifier.size(65.dp))
+        if (impronta) Spacer(modifier = Modifier.size(30.dp))
+        else Spacer(modifier = Modifier.size(60.dp))
         val scope = rememberCoroutineScope()
         Button(
             onClick = {
@@ -116,8 +143,23 @@ fun LoginScreen(
                 color = Color.Black
             )
         }
-        Spacer(modifier = Modifier.size(36.dp))
-
+        if (impronta) Spacer(modifier = Modifier.size(20.dp))
+        else Spacer(modifier = Modifier.size(36.dp))
+        if (impronta) {
+            Button(
+                onClick = {
+                    openBiometric()
+                },
+                modifier = Modifier.width(160.dp),
+                border = BorderStroke(1.dp, Color.Blue)
+            ) {
+                Text(
+                    "Accedi con Impronta",
+                    color = Color.Black
+                )
+            }
+            Spacer(modifier = Modifier.size(20.dp))
+        }
         Row(
             modifier = Modifier
                 .padding(12.dp)

@@ -123,7 +123,11 @@ data class Utente(
     var immagineProfilo: Bitmap?,
 
     @ColumnInfo
-    var data_nascita: String // Data
+    var data_nascita: String,
+
+    @ColumnInfo
+    var impronta: Int?
+
 )
 
 

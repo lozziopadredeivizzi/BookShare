@@ -1,6 +1,7 @@
 package com.example.elaboratomobile.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -44,6 +45,7 @@ import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneScreen
 import com.example.elaboratomobile.ui.screens.registrazione.RegistrazioneViewModel
 import com.example.elaboratomobile.ui.screens.settings.SettingsScreen
 import com.example.elaboratomobile.ui.screens.settings.SettingsViewModel
+import com.example.elaboratomobile.utils.BiometricPromptManager
 import org.koin.androidx.compose.koinViewModel
 
 sealed class BookShareRoute(
@@ -125,7 +127,8 @@ fun BookShareNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     themeState: ThemeState,
-    onThemeSelected: (theme: Theme) -> Unit
+    onThemeSelected: (theme: Theme) -> Unit,
+    promptManager: BiometricPromptManager
 ) {
     NavHost(
         navController = navController,
@@ -150,6 +153,10 @@ fun BookShareNavGraph(
             composable(route) {
                 val loginVm = koinViewModel<LoginViewModel>()
                 val state by loginVm.state.collectAsStateWithLifecycle()
+                val impronta by loginVm.impronta.collectAsStateWithLifecycle()
+                val biometricResult by promptManager.promptResults.collectAsState(
+                    initial = null
+                )
                 LoginScreen(
                     state = state,
                     actions = loginVm.actions,
@@ -160,7 +167,20 @@ fun BookShareNavGraph(
                             }
                         }
                     },
-                    navController = navController
+                    navController = navController,
+                    impronta = impronta,
+                    onAuthentication = {
+                        loginVm.loginWithFingerPrint { success ->
+                            if (success) navController.navigate(BookShareRoute.HomeBooks.route)
+                        }
+                    },
+                    openBiometric = {
+                        promptManager.showBiometricPrompt(
+                            "Identificazione Biometrica",
+                            "Login attraverso dati biometrici"
+                        )
+                    },
+                    biometricResult = biometricResult
                 )
             }
         }
@@ -168,6 +188,7 @@ fun BookShareNavGraph(
             composable(route) {
                 val signUpVm = koinViewModel<RegistrazioneViewModel>()
                 val state by signUpVm.state.collectAsStateWithLifecycle()
+                val anyoneState by signUpVm.stateAnyone.collectAsStateWithLifecycle()
                 RegistrazioneScreen(
                     state = state,
                     actions = signUpVm.actions,
@@ -178,7 +199,8 @@ fun BookShareNavGraph(
                             }
                         }
                     },
-                    navController = navController
+                    navController = navController,
+                    anyoneState = anyoneState
                 )
             }
         }
@@ -277,6 +299,8 @@ fun BookShareNavGraph(
         with(BookShareRoute.Settings) {
             composable(route) {
                 val settingsVm = koinViewModel<SettingsViewModel>()
+                val hasBiometric by settingsVm.hasBiometric.collectAsStateWithLifecycle()
+                val anyone by settingsVm.anyone.collectAsStateWithLifecycle()
                 SettingsScreen(
                     navHostController = navController,
                     logOut = {
@@ -285,7 +309,11 @@ fun BookShareNavGraph(
                                 navController.navigate(BookShareRoute.Login.route)
                             }
                         }
-                    }
+                    },
+                    hasBiometric = hasBiometric,
+                    anyoneBiometric = anyone,
+                    addBiometric = { settingsVm.addBiometric() },
+                    removeBiometric = { settingsVm.removeBiometric() }
                 )
             }
         }

@@ -106,7 +106,7 @@ val appModule = module {
 
     viewModel { ModificaPasswordViewModel(get(), get()) }
 
-    viewModel { SettingsViewModel(get()) }
+    viewModel { SettingsViewModel(get(), get()) }
 
     viewModel { LoadingViewModel(get()) }
 

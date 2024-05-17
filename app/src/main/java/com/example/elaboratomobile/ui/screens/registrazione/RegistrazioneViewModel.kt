@@ -1,10 +1,8 @@
 package com.example.elaboratomobile.ui.screens.registrazione
 
 import android.graphics.Bitmap
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.elaboratomobile.R
 import com.example.elaboratomobile.data.database.Utente
 import com.example.elaboratomobile.data.repositories.UsernameRepository
 import com.example.elaboratomobile.data.repositories.UtenteRepository
@@ -21,6 +19,7 @@ data class AddUserState(
     val email: String = "",
     val data_nascita: String = "",
     val immagineProfilo: Bitmap? = null,
+    val impronta: Int? = 0,
     val signUpSuccess: Boolean? = null,
     val errorMessage: String? = null
 ) {
@@ -35,7 +34,8 @@ data class AddUserState(
         e_mail = email,
         data_nascita = data_nascita,
         immagineProfilo = immagineProfilo,
-        username = username
+        username = username,
+        impronta = impronta
     )
 }
 
@@ -47,6 +47,7 @@ interface AddUserActions {
     fun setName(nome: String)
     fun setSurname(cognome: String)
     fun setEmail(email: String)
+    fun setImpronta(attiva: Int)
 }
 
 class RegistrazioneViewModel(
@@ -55,6 +56,9 @@ class RegistrazioneViewModel(
 ) : ViewModel() {
     private val _state = MutableStateFlow(AddUserState())
     val state = _state.asStateFlow()
+
+    private val _stateAnyone = MutableStateFlow(false)
+    val stateAnyone = _stateAnyone.asStateFlow()
 
     val actions = object : AddUserActions {
         override fun setUsername(username: String) =
@@ -77,6 +81,16 @@ class RegistrazioneViewModel(
 
         override fun setEmail(email: String) =
             _state.update { it.copy(email = email, errorMessage = null) }
+
+        override fun setImpronta(attiva: Int) {
+            _state.update { it.copy(impronta = attiva, errorMessage = null) }
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            _stateAnyone.value = !utenteRepository.fingerPrintAlreadyUsed()
+        }
     }
 
     fun signUp(callback: (Boolean) -> Unit) {
