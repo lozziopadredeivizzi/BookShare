@@ -2,6 +2,7 @@ package com.example.elaboratomobile.ui.screens.login
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,17 +10,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -75,16 +81,16 @@ fun LoginScreen(
                 .fillMaxSize(0.3f)
 
         )
-        Spacer(modifier = Modifier.size(10.dp))
+        if (!impronta) Spacer(modifier = Modifier.size(10.dp))
 
         if (state.errorMessage != null) {
             Text(text = state.errorMessage, color = Color.Red)
-            Spacer(modifier = Modifier.size(15.dp))
+            Spacer(modifier = Modifier.size(10.dp))
         }
         biometricResult?.let { result ->
             when (result) {
                 is BiometricPromptManager.BiometricResult.AuthenticationError -> {
-                    Text(text = result.error)
+                    Text(text = "Autenticazione annullata")
                 }
 
                 BiometricPromptManager.BiometricResult.AuthenticationFailed -> {
@@ -94,12 +100,15 @@ fun LoginScreen(
                 BiometricPromptManager.BiometricResult.AuthenticationNotSet -> {
                     Text(text = "Autenticazione non impostata")
                 }
+
                 BiometricPromptManager.BiometricResult.AuthenticationSuccess -> {
                     onAuthentication()
                 }
+
                 BiometricPromptManager.BiometricResult.FeatureUnavailable -> {
                     Text(text = "Funzionalità non disonibile")
                 }
+
                 BiometricPromptManager.BiometricResult.HardwareUnavailable -> {
                     Text(text = "Hardaware non disponibile")
                 }
@@ -146,16 +155,20 @@ fun LoginScreen(
         if (impronta) Spacer(modifier = Modifier.size(20.dp))
         else Spacer(modifier = Modifier.size(36.dp))
         if (impronta) {
-            Button(
+            IconButton(
                 onClick = {
                     openBiometric()
                 },
-                modifier = Modifier.width(160.dp),
-                border = BorderStroke(1.dp, Color.Blue)
+                modifier = Modifier
+                    .size(50.dp)
+                    .clip(CircleShape)
+                    .border(BorderStroke(2.dp, Color.Blue), CircleShape)
             ) {
-                Text(
-                    "Accedi con Impronta",
-                    color = Color.Black
+                Icon(
+                    imageVector = Icons.Default.Fingerprint,
+                    contentDescription = "Fingerprint",
+                    tint = Color.Blue,
+                    modifier = Modifier.size(30.dp)
                 )
             }
             Spacer(modifier = Modifier.size(20.dp))
@@ -181,7 +194,7 @@ fun LoginScreen(
                 )
             )
         }
-
-
     }
+
+
 }
