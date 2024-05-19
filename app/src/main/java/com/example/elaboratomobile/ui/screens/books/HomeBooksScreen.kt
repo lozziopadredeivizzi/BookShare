@@ -1,5 +1,14 @@
 package com.example.elaboratomobile.ui.screens.books
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.MediaStore
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,10 +29,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.ModeEdit
+import androidx.compose.material.icons.outlined.Photo
+import androidx.compose.material.icons.outlined.PhotoCamera
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -40,15 +56,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavHostController
-import com.example.elaboratomobile.R
 import com.example.elaboratomobile.data.database.Genere
 import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.ui.composables.RatingBarNoClick
+import com.example.elaboratomobile.utils.rememberPermission
+import com.example.elaboratomobile.utils.uriToBitmap
 
 @Composable
 fun HomeBooksScreen(
@@ -57,8 +75,10 @@ fun HomeBooksScreen(
     listGeneri: List<Genere>,
     currentIdGenere: Int,
     like: (Int) -> Unit,
-    comboAction: (Int) -> Unit
+    comboAction: (Int) -> Unit,
+    editImage: (Int, Bitmap) -> Unit
 ) {
+
     Column(modifier = Modifier.fillMaxSize()) {
 
         ComboBox(comboAction, listGeneri, currentIdGenere)
@@ -74,10 +94,12 @@ fun HomeBooksScreen(
                     book = bookLike,
                     onClick = {
                         navController.navigate(BookShareRoute.BookDetails.buildRoute(bookLike.id_libro))
-                    }, onLikeClicked = like
+                    }, onLikeClicked = like,
+                    editImage
                 )
             }
         }
+
     }
 }
 
@@ -86,8 +108,83 @@ fun HomeBooksScreen(
 fun BookItem(
     book: BookLike,
     onClick: () -> Unit,
-    onLikeClicked: (Int) -> Unit
+    onLikeClicked: (Int) -> Unit,
+    editImage: (Int, Bitmap) -> Unit
 ) {
+    val showDialog = remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    fun Bitmap.resize(width: Int, height: Int): Bitmap {
+        return Bitmap.createScaledBitmap(this, width, height, true)
+    }
+    fun Bitmap.resizeToHeight(fixedHeight: Int): Bitmap {
+        val aspectRatio: Float = this.width.toFloat() / this.height.toFloat()
+        val width: Int = (fixedHeight * aspectRatio).toInt()
+        return Bitmap.createScaledBitmap(this, width, fixedHeight, true)
+    }
+    //GALLERIA
+    val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()){ result->
+        if(result.resultCode == Activity.RESULT_OK){
+            val data: Intent? = result.data
+            val selectedImageUri: Uri? = data?.data
+            if(selectedImageUri != null){
+                val bitmapImage = uriToBitmap(selectedImageUri, context.applicationContext.contentResolver)
+                val resizedBitmap = bitmapImage.resizeToHeight(130)
+                editImage(10, resizedBitmap)
+            }
+        }
+    }
+
+    val galleryPermission = rememberPermission(Manifest.permission.READ_EXTERNAL_STORAGE) { status ->
+        if (status.isGranted) {
+            galleryLauncher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
+        } else {
+            Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun pickImage() {
+        if (galleryPermission.status.isGranted) {
+            galleryLauncher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
+        } else {
+            galleryPermission.launchPermissionRequest()
+        }
+    }
+    if (showDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showDialog.value = false },
+            title = { Text("Scegli la fonte dell'immagine") },
+            text = { Text("Da dove vuoi scegliere l'immagine?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showDialog.value = false
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.PhotoCamera,
+                        contentDescription = "fotocamera",
+                        tint = Color.Black
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("Fotocamera", color = Color.Black)
+                }
+            },
+            dismissButton = {
+                Button(onClick = {
+                    pickImage()
+                    showDialog.value = false
+                }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Photo,
+                        contentDescription = "gallery",
+                        tint = Color.Black
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("Galleria", color = Color.Black)
+                }
+            }
+        )
+    }
     Card(
         onClick = onClick,
         modifier = Modifier
@@ -113,46 +210,72 @@ fun BookItem(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.copertina),
-                    contentDescription = "Cover",
-                    contentScale = ContentScale.Fit,
+
+                Box {
+                    if (book.copertina != null) {
+                        book.copertina.let { nonNullBitmap ->
+                            val imageBitmap: ImageBitmap = nonNullBitmap.asImageBitmap()
+                            Image(
+                                bitmap = imageBitmap,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .height(130.dp)
+                                    .padding(end = 30.dp)
+                                    .fillMaxWidth()
+                            )
+                        }
+                    } else {
+                        Icon(
+                            imageVector = Icons.Outlined.AccountBox,
+                            contentDescription = "Icona del profilo",
+                            modifier = Modifier.size(130.dp)
+                        )
+                    }
+                }
+                IconButton(
+                    onClick = { showDialog.value = true },
                     modifier = Modifier
-                        .height(130.dp)
-                        .padding(end = 30.dp)
-                )
-                Column(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .weight(1f),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .size(35.dp)
+                        .background(Color.White, shape = CircleShape)
+                        .padding(5.dp)
                 ) {
-                    Text(text = book.titolo)
-                    Text(text = book.autore)
-                    Text(text = book.genereNome)
-                    RatingBarNoClick(rating = book.recensione)
+                    Icon(
+                        imageVector = Icons.Outlined.ModeEdit,
+                        contentDescription = "modifica pfp",
+                    )
                 }
             }
-            Spacer(modifier = Modifier.size(8.dp))
-            // Posizionamento dell'IconButton
-            IconButton(
-                onClick = { onLikeClicked(book.id_libro) },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .size(25.dp)
 
+            Column(
+                modifier = Modifier
+                    .padding(8.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Favorite,
-                    contentDescription = "Preferito",
-                    tint = if (book.isLiked) Color.Red else Color.Gray
-                )
+                Text(text = book.titolo)
+                Text(text = book.autore)
+                Text(text = book.genereNome)
+                RatingBarNoClick(rating = book.recensione)
             }
         }
+        Spacer(modifier = Modifier.size(8.dp))
+        // Posizionamento dell'IconButton
+        IconButton(
+            onClick = { onLikeClicked(book.id_libro) },
+            modifier = Modifier
+                .size(25.dp)
 
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Favorite,
+                contentDescription = "Preferito",
+                tint = if (book.isLiked) Color.Red else Color.Gray
+            )
+        }
     }
+
 }
+
 
 @Composable
 fun ComboBox(comboAction: (Int) -> Unit, listGeneri: List<Genere>, currentIdGenere: Int) {
@@ -204,3 +327,6 @@ fun ComboBox(comboAction: (Int) -> Unit, listGeneri: List<Genere>, currentIdGene
         }
     }
 }
+
+
+

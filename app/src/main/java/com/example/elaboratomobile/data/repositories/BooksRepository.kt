@@ -1,5 +1,6 @@
 package com.example.elaboratomobile.data.repositories
 
+import android.graphics.Bitmap
 import com.example.elaboratomobile.data.database.BibliotecaDAO
 import com.example.elaboratomobile.data.database.Genere
 import com.example.elaboratomobile.data.database.GenereDAO
@@ -10,10 +11,10 @@ import com.example.elaboratomobile.data.database.LibroPrestito
 import com.example.elaboratomobile.data.database.LibroPrestitoDAO
 import com.example.elaboratomobile.data.database.Piacere
 import com.example.elaboratomobile.data.database.PiacereDAO
-import com.example.elaboratomobile.ui.screens.chronology.BookChrono
 import com.example.elaboratomobile.ui.screens.books.BookLike
 import com.example.elaboratomobile.ui.screens.booksDetails.BooKGenere
 import com.example.elaboratomobile.ui.screens.booksDetails.PossessoState
+import com.example.elaboratomobile.ui.screens.chronology.BookChrono
 import com.example.elaboratomobile.ui.screens.chronologyDetails.BookPrestito
 import kotlinx.coroutines.flow.Flow
 
@@ -69,7 +70,7 @@ class BooksRepository(
 
     suspend fun getRecensioniForLibro(idLibro: Int): List<Pair<Int, Int>> {
         val recensioni = libroPrestitoDAO.getRecensioniForBook(idLibro)
-        val recensioniAggregated = recensioni.groupingBy { it?: 0 }
+        val recensioniAggregated = recensioni.groupingBy { it ?: 0 }
             .eachCount()
             .toList()
         // Aggiungi manualmente le coppie mancanti per le stelle da 1 a 5
@@ -85,4 +86,7 @@ class BooksRepository(
 
         return recensioniComplete
     }
+
+    suspend fun editCopertina(copertina: Bitmap, id_libro: Int) =
+        libroDAO.editImage(copertina, id_libro)
 }
