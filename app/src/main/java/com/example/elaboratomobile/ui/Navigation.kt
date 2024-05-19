@@ -244,7 +244,8 @@ fun BookShareNavGraph(
                 val eventsState by eventVm.eventsState.collectAsStateWithLifecycle()
                 EventScreen(
                     navHostController = navController,
-                    eventsState
+                    eventsState,
+                    {image, id -> eventVm.editBiblio(image, id)}
                 )
             }
         }

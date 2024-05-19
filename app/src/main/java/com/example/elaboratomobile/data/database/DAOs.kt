@@ -129,6 +129,8 @@ interface BibliotecaDAO {
     @Query("SELECT id_biblioteca, nome, latitudine, longitudine FROM BIBLIOTECA")
     fun getBibliotecaLocations(): Flow<List<BibliotecheLocation>>
 
+
+
 }
 
 @Dao
@@ -189,6 +191,9 @@ interface EventoDAO {
 
     @Query("SELECT e.*, b.nome AS nomeBiblioteca, b.indirizzo AS indirizzoBiblio, b.immagine AS immagineBiblio FROM EVENTO e JOIN BIBLIOTECA b ON e.id_biblioteca= b.id_biblioteca ")
     fun getAll(): Flow<List<EventState>>
+
+    @Query("UPDATE BIBLIOTECA SET immagine = :immagine WHERE id_biblioteca = :id")
+    suspend fun editBiblio(immagine: Bitmap, id: Int)
 }
 
 @Dao
