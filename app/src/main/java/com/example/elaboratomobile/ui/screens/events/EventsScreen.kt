@@ -1,14 +1,7 @@
 package com.example.elaboratomobile.ui.screens.events
 
 import android.Manifest
-import android.app.Activity
-import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
-import android.provider.MediaStore
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -33,10 +26,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.ModeEdit
-import androidx.compose.material.icons.outlined.Photo
-import androidx.compose.material.icons.outlined.PhotoCamera
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -52,25 +41,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
-import com.example.elaboratomobile.R
 import com.example.elaboratomobile.utils.aggiungiEventoAlCalendario
 import com.example.elaboratomobile.utils.rememberPermission
-import com.example.elaboratomobile.utils.uriToBitmap
 
 @Composable
 fun EventScreen(
     navHostController: NavHostController,
-    list: List<EventState>,
-    editImage: (Bitmap, Int) -> Unit
+    list: List<EventState>
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(1),
@@ -79,7 +63,7 @@ fun EventScreen(
         modifier = Modifier.padding()
     ) {
         items(list) {event->
-            EventCard(event = event, editImage)
+            EventCard(event = event)
         }
     }
 }
@@ -101,7 +85,7 @@ fun MinimalDialog(onDismissRequest: () -> Unit, content: @Composable () -> Unit)
 
 
 @Composable
-fun EventCard(event: EventState, editImage: (Bitmap, Int) -> Unit) {
+fun EventCard(event: EventState) {
     var dialogOpen = remember {
         mutableStateOf(false)
     }
@@ -125,81 +109,10 @@ fun EventCard(event: EventState, editImage: (Bitmap, Int) -> Unit) {
     }
 
     val scrollState = rememberScrollState()
-    val showDialog = remember { mutableStateOf(false) }
-
-    fun Bitmap.resizeToWidth(fixedWidth: Int): Bitmap {
-        val aspectRatio: Float = this.height.toFloat() / this.width.toFloat()
-        val height: Int = (fixedWidth * aspectRatio).toInt()
-        return Bitmap.createScaledBitmap(this, fixedWidth, height, true)
-    }
-    //GALLERIA
-    val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()){ result->
-        if(result.resultCode == Activity.RESULT_OK){
-            val data: Intent? = result.data
-            val selectedImageUri: Uri? = data?.data
-            if(selectedImageUri != null){
-                val bitmapImage = uriToBitmap(selectedImageUri, context.applicationContext.contentResolver)
-                val resizedBitmap = bitmapImage.resizeToWidth(130)
-                editImage(resizedBitmap, 6)
-            }
-        }
-    }
-
-    val galleryPermission = rememberPermission(Manifest.permission.READ_EXTERNAL_STORAGE) { status ->
-        if (status.isGranted) {
-            galleryLauncher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
-        } else {
-            Toast.makeText(context, "Permission denied", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    fun pickImage() {
-        if (galleryPermission.status.isGranted) {
-            galleryLauncher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
-        } else {
-            galleryPermission.launchPermissionRequest()
-        }
-    }
-    if (showDialog.value) {
-        AlertDialog(
-            onDismissRequest = { showDialog.value = false },
-            title = { Text("Scegli la fonte dell'immagine") },
-            text = { Text("Da dove vuoi scegliere l'immagine?") },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        showDialog.value = false
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.PhotoCamera,
-                        contentDescription = "fotocamera",
-                        tint = Color.Black
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Fotocamera", color = Color.Black)
-                }
-            },
-            dismissButton = {
-                Button(onClick = {
-                    pickImage()
-                    showDialog.value = false
-                }) {
-                    Icon(
-                        imageVector = Icons.Outlined.Photo,
-                        contentDescription = "gallery",
-                        tint = Color.Black
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Galleria", color = Color.Black)
-                }
-            }
-        )
-    }
     Card(
         modifier = Modifier
             .padding(horizontal = 10.dp, vertical = 8.dp)
-            .height(260.dp),
+            .height(270.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         border = BorderStroke(1.dp, Color.Gray)
     ) {
@@ -216,7 +129,7 @@ fun EventCard(event: EventState, editImage: (Bitmap, Int) -> Unit) {
                     textAlign = TextAlign.Justify
                 )
             )
-            Spacer(modifier = Modifier.size(15.dp))
+            Spacer(modifier = Modifier.size(10.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box {
                     if (event.immagineBiblio != null) {
@@ -228,7 +141,7 @@ fun EventCard(event: EventState, editImage: (Bitmap, Int) -> Unit) {
                                 modifier = Modifier
                                     .width(140.dp)
                                     .padding(horizontal = 10.dp)
-                                    .fillMaxHeight(0.8f)
+                                    .fillMaxHeight(0.3f)
                             )
                         }
                     } else {
@@ -236,16 +149,6 @@ fun EventCard(event: EventState, editImage: (Bitmap, Int) -> Unit) {
                             imageVector = Icons.Outlined.AccountBox,
                             contentDescription = "Icona del profilo",
                             modifier = Modifier.size(50.dp)
-                        )
-                    }
-                    IconButton(
-                        onClick = { showDialog.value = true },
-                        modifier = Modifier
-                            .padding(8.dp)
-                    ){
-                        Icon(
-                            imageVector = Icons.Outlined.ModeEdit,
-                            contentDescription = "modifica pfp",
                         )
                     }
                 }
@@ -339,14 +242,25 @@ fun EventCard(event: EventState, editImage: (Bitmap, Int) -> Unit) {
                             )
                         )
                         Spacer(modifier = Modifier.size(15.dp))
-                        Image(
-                            painter = painterResource(id = R.drawable.logo_malatestiana_moderna_1),
-                            contentDescription = "logo biblioteca",
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier
-                                .width(140.dp)
-                                .padding(horizontal = 10.dp)
-                        )
+                        if (event.immagineBiblio != null) {
+                            event.immagineBiblio.let { nonNullBitmap ->
+                                val imageBitmap: ImageBitmap = nonNullBitmap.asImageBitmap()
+                                Image(
+                                    bitmap = imageBitmap,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .width(140.dp)
+                                        .padding(horizontal = 10.dp)
+                                        .fillMaxHeight(0.3f)
+                                )
+                            }
+                        } else {
+                            Icon(
+                                imageVector = Icons.Outlined.AccountBox,
+                                contentDescription = "Icona del profilo",
+                                modifier = Modifier.size(50.dp)
+                            )
+                        }
                         Spacer(modifier = Modifier.size(15.dp))
                         Column(
                             modifier = Modifier
