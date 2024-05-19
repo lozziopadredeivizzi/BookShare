@@ -16,13 +16,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,13 +32,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.elaboratomobile.R
 import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.ui.composables.RatingBar
 import java.text.SimpleDateFormat
@@ -77,14 +79,28 @@ fun ChronologyDetails(
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.copertina),
-                    contentDescription = "Cover",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .height(130.dp)
-                        .padding(end = 30.dp, start = 20.dp)
-                )
+                if (bookState != null) {
+                    if (bookState.copertina != null) {
+                        bookState.copertina.let { nonNullBitmap ->
+                            val imageBitmap: ImageBitmap = nonNullBitmap.asImageBitmap()
+                            Image(
+                                bitmap = imageBitmap,
+                                contentDescription = null,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier
+                                    .height(130.dp)
+                                    .padding(end = 30.dp)
+                                    .fillMaxWidth(0.4f)
+                            )
+                        }
+                    } else {
+                        Icon(
+                            imageVector = Icons.Outlined.AccountBox,
+                            contentDescription = "Icona del profilo",
+                            modifier = Modifier.size(130.dp)
+                        )
+                    }
+                }
                 Column(
                     modifier = Modifier
                         .padding(8.dp)
