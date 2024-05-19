@@ -103,7 +103,7 @@ fun BookItem(
                             contentDescription = null,
                             modifier = Modifier
                                 .height(130.dp)
-                                .padding(end = 30.dp)
+                                .padding(end = 10.dp)
                                 .fillMaxWidth(0.4f)
                         )
                     }
