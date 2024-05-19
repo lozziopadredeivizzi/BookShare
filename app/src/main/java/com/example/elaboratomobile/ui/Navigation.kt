@@ -233,8 +233,7 @@ fun BookShareNavGraph(
                     generiState.generi,
                     like = { bookId -> homebookVm.updateLikeStatus(bookId) },
                     comboAction = { genereId -> homebookVm.setSelectedGenre(genereId) },
-                    currentIdGenere = currentState,
-                    editImage = { image, id_libro -> homebookVm.editImage(image, id_libro)}
+                    currentIdGenere = currentState
                 )
             }
         }
