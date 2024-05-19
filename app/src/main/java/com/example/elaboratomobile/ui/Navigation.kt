@@ -15,6 +15,7 @@ import com.example.elaboratomobile.data.models.Theme
 import com.example.elaboratomobile.ui.screens.aspetto.AspettoScreen
 import com.example.elaboratomobile.ui.screens.aspetto.ThemeState
 import com.example.elaboratomobile.ui.screens.books.BooksViewModel
+import com.example.elaboratomobile.ui.screens.books.FavoriteBookViewModel
 import com.example.elaboratomobile.ui.screens.books.HomeBooksScreen
 import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsScreen
 import com.example.elaboratomobile.ui.screens.booksDetails.BookDetailsViewModel
@@ -267,7 +268,7 @@ fun BookShareNavGraph(
             }
         }
         with(BookShareRoute.FavoriteBooks) {
-            /*composable(route) {
+            composable(route) {
                 val favoriteVm = koinViewModel<FavoriteBookViewModel>()
                 val bookFavoriteState by favoriteVm.booksState.collectAsStateWithLifecycle()
                 val generiFavoriteState by favoriteVm.generiState.collectAsStateWithLifecycle()
@@ -278,10 +279,9 @@ fun BookShareNavGraph(
                     generiFavoriteState.generi,
                     like = { bookId -> favoriteVm.updateLikeStatus(bookId) },
                     comboAction = { genereId -> favoriteVm.setSelectedGenre(genereId) },
-                    currentIdGenere = currentFavoriteState,
-                    editImage = { image, id_libro -> homebookVm.editImage(image, id_libro)}
+                    currentIdGenere = currentFavoriteState
                 )
-            }*/
+            }
         }
         with(BookShareRoute.Profile) {
             composable(route) {
