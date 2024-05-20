@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -40,12 +41,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavHostController
-import com.example.elaboratomobile.R
 import com.example.elaboratomobile.data.database.Genere
 import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.ui.composables.RatingBarNoClick
@@ -59,6 +59,7 @@ fun HomeBooksScreen(
     like: (Int) -> Unit,
     comboAction: (Int) -> Unit
 ) {
+
     Column(modifier = Modifier.fillMaxSize()) {
 
         ComboBox(comboAction, listGeneri, currentIdGenere)
@@ -78,6 +79,7 @@ fun HomeBooksScreen(
                 )
             }
         }
+
     }
 }
 
@@ -102,57 +104,70 @@ fun BookItem(
         ),
         border = BorderStroke(1.dp, Color.Gray)
     ) {
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(30.dp)
-        ) { // Box che riempie l'intera area disponibile
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.copertina),
-                    contentDescription = "Cover",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .height(130.dp)
-                        .padding(end = 30.dp)
-                )
-                Column(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .weight(1f),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp, vertical = 30.dp)) {
+            Box(modifier = Modifier.weight(1f)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = book.titolo)
-                    Text(text = book.autore)
-                    Text(text = book.genereNome)
-                    RatingBarNoClick(rating = book.recensione)
+                    if (book.copertina != null) {
+                        book.copertina.let { nonNullBitmap ->
+                            val imageBitmap: ImageBitmap = nonNullBitmap.asImageBitmap()
+                            Image(
+                                bitmap = imageBitmap,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .height(130.dp)
+                                    .padding(end = 30.dp)
+                                    .fillMaxWidth(0.4f)
+                            )
+                        }
+                    } else {
+                        Icon(
+                            imageVector = Icons.Outlined.AccountBox,
+                            contentDescription = "Icona del profilo",
+                            modifier = Modifier.size(130.dp)
+                        )
+                    }
+
+                    Column(
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .weight(1f),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = book.titolo)
+                        Text(text = book.autore)
+                        Text(text = book.genereNome)
+                        RatingBarNoClick(rating = book.recensione)
+                    }
                 }
             }
-            Spacer(modifier = Modifier.size(8.dp))
-            // Posizionamento dell'IconButton
-            IconButton(
-                onClick = { onLikeClicked(book.id_libro) },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .size(25.dp)
-
+            Spacer(modifier = Modifier.size(4.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.Bottom
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.Favorite,
-                    contentDescription = "Preferito",
-                    tint = if (book.isLiked) Color.Red else Color.Gray
-                )
+                IconButton(
+                    onClick = { onLikeClicked(book.id_libro) },
+                    modifier = Modifier.size(25.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Favorite,
+                        contentDescription = "Preferito",
+                        tint = if (book.isLiked) Color.Red else Color.Gray
+                    )
+                }
             }
         }
-
     }
 }
+
 
 @Composable
 fun ComboBox(comboAction: (Int) -> Unit, listGeneri: List<Genere>, currentIdGenere: Int) {
@@ -204,3 +219,6 @@ fun ComboBox(comboAction: (Int) -> Unit, listGeneri: List<Genere>, currentIdGene
         }
     }
 }
+
+
+
