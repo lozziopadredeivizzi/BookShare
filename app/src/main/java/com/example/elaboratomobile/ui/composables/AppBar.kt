@@ -94,7 +94,6 @@ fun AppBar(
                     IconButton(onClick = { navController.navigate(BookShareRoute.Chronology.route) }) {
                         Icon(
                             contentDescription = "Cronologia",
-                            tint = Color.Black,
                             imageVector = Icons.Outlined.AccessTime,
                             modifier = Modifier.size(30.dp)
                         )
@@ -102,7 +101,6 @@ fun AppBar(
                     IconButton(onClick = { navController.navigate(BookShareRoute.Settings.route) }) {
                         Icon(
                             contentDescription = "Impostazioni",
-                            tint = Color.Black,
                             imageVector = Icons.Outlined.Settings,
                             modifier = Modifier.size(30.dp)
                         )

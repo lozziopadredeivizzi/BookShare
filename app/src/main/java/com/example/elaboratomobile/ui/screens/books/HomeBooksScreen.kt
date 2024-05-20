@@ -91,6 +91,7 @@ fun BookItem(
     onClick: () -> Unit,
     onLikeClicked: (Int) -> Unit
 ) {
+    val colorCard = MaterialTheme.colorScheme.onPrimary
     Card(
         onClick = onClick,
         modifier = Modifier
@@ -101,7 +102,7 @@ fun BookItem(
             .width(70.dp)
             .height(200.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = colorCard
         ),
         border = BorderStroke(1.dp, Color.Gray)
     ) {
@@ -141,9 +142,9 @@ fun BookItem(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(text = book.titolo)
-                        Text(text = book.autore)
-                        Text(text = book.genereNome)
+                        Text(text = book.titolo, color = MaterialTheme.colorScheme.onSurface)
+                        Text(text = book.autore, color = MaterialTheme.colorScheme.onSurface)
+                        Text(text = book.genereNome, color = MaterialTheme.colorScheme.onSurface)
                         RatingBarNoClick(rating = book.recensione)
                     }
                 }
@@ -184,13 +185,13 @@ fun ComboBox(comboAction: (Int) -> Unit, listGeneri: List<Genere>, currentIdGene
                 .padding(8.dp)
                 .clickable { expanded = !expanded }
                 .border(color = Color.Black, width = 1.dp, shape = RoundedCornerShape(8.dp))
-                .background(Color.White, RoundedCornerShape(8.dp))
+                .background(MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(8.dp))
                 .padding(10.dp)
         ) {
             Text(
 
                 text = options.first { it.id_genere == selectedGenreId }.nome,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.fillMaxWidth()
             )
             Icon(
@@ -202,7 +203,7 @@ fun ComboBox(comboAction: (Int) -> Unit, listGeneri: List<Genere>, currentIdGene
         DropdownMenu(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 10.dp),
+                .background(MaterialTheme.colorScheme.onPrimary),
             expanded = expanded,
             onDismissRequest = { expanded = false },
             properties = PopupProperties(focusable = false)

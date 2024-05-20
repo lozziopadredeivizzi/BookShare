@@ -22,6 +22,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -70,6 +71,7 @@ fun BookItem(
     book: BookChrono,
     onClick: () -> Unit,
 ) {
+    val colorCard = MaterialTheme.colorScheme.onPrimary
     Card(
         onClick = onClick,
         modifier = Modifier
@@ -80,7 +82,7 @@ fun BookItem(
             .width(70.dp)
             .height(200.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = colorCard
         ),
         border = BorderStroke(1.dp, Color.Gray)
     ) {
@@ -121,9 +123,9 @@ fun BookItem(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = book.titolo)
-                    Text(text = book.autore)
-                    Text(text = book.genereNome)
+                    Text(text = book.titolo, color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = book.autore, color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = book.genereNome, color = MaterialTheme.colorScheme.onSurface)
                     RatingBarNoClick(rating = book.recensione)
                 }
             }

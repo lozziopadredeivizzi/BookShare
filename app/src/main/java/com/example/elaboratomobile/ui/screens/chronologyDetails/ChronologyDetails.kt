@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,6 +51,7 @@ fun ChronologyDetails(
     bookState: BookPrestito?,
     onSubmit: (Int, Int, Int) -> Unit
 ) {
+    val colorCard = MaterialTheme.colorScheme.onPrimary
     var rating by remember {
         mutableIntStateOf(bookState?.recensionePrestito ?: 0)
     }
@@ -68,7 +70,7 @@ fun ChronologyDetails(
                 )
                 .fillMaxSize(),
             colors = CardDefaults.cardColors(
-                containerColor = Color.White
+                containerColor = colorCard
             ),
             border = BorderStroke(1.dp, Color.Gray)
         ) {
@@ -108,9 +110,9 @@ fun ChronologyDetails(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = bookState?.titolo ?: run { "Titolo" })
-                    Text(text = bookState?.autore ?: run { "Autore" })
-                    Text(text = bookState?.genereNome ?: run { "Genere" })
+                    Text(text = bookState?.titolo ?: run { "Titolo" }, color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = bookState?.autore ?: run { "Autore" }, color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = bookState?.genereNome ?: run { "Genere" }, color = MaterialTheme.colorScheme.onSurface)
                 }
             }
 
@@ -128,23 +130,23 @@ fun ChronologyDetails(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text(text = "Dettagli prestito", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    Text(text = "Dettagli prestito", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.Black)
                     Spacer(modifier = Modifier.size(15.dp))
                     Row {
-                        Text(text = "Presso:    ", fontWeight = FontWeight.Bold)
-                        Text(text = bookState?.nomeBiblioteca ?: run { "Nome" })
+                        Text(text = "Presso:    ", fontWeight = FontWeight.Bold, color = Color.Black)
+                        Text(text = bookState?.nomeBiblioteca ?: run { "Nome" }, color = Color.Black)
                     }
                     Spacer(modifier = Modifier.size(15.dp))
                     Row {
-                        Text(text = "Data Inizio:   ", fontWeight = FontWeight.Bold)
+                        Text(text = "Data Inizio:   ", fontWeight = FontWeight.Bold, color = Color.Black)
                         Text(text = bookState?.data_inizio?.let { dateFormatter.format(it) }
-                            ?: "Data Inizio")
+                            ?: "Data Inizio", color = Color.Black)
                     }
                     Spacer(modifier = Modifier.size(15.dp))
                     Row {
-                        Text(text = "Data Fine:    ", fontWeight = FontWeight.Bold)
+                        Text(text = "Data Fine:    ", fontWeight = FontWeight.Bold, color = Color.Black)
                         Text(text = bookState?.data_fine?.let { dateFormatter.format(it) }
-                            ?: "Data Fine")
+                            ?: "Data Fine", color = Color.Black)
                     }
                 }
             }
@@ -168,7 +170,7 @@ fun ChronologyDetails(
                     border = BorderStroke(1.dp, Color.Blue)
                 ) {
                     Text(
-                        "Valuta", color = Color.Black
+                        "Valuta", color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }

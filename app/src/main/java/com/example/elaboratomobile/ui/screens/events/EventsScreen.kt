@@ -32,6 +32,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -62,7 +63,7 @@ fun EventScreen(
         contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 80.dp),
         modifier = Modifier.padding()
     ) {
-        items(list) {event->
+        items(list) { event ->
             EventCard(event = event)
         }
     }
@@ -109,11 +110,12 @@ fun EventCard(event: EventState) {
     }
 
     val scrollState = rememberScrollState()
+    val colorCard = MaterialTheme.colorScheme.onPrimary
     Card(
         modifier = Modifier
             .padding(horizontal = 10.dp, vertical = 8.dp)
             .height(270.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = colorCard),
         border = BorderStroke(1.dp, Color.Gray)
     ) {
         Column(
@@ -127,7 +129,8 @@ fun EventCard(event: EventState) {
                 style = TextStyle(
                     fontSize = 20.sp,
                     textAlign = TextAlign.Justify
-                )
+                ),
+                color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.size(10.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -165,13 +168,13 @@ fun EventCard(event: EventState) {
                         imageVector = Icons.Outlined.Add, contentDescription = "aggiungi",
                         modifier = Modifier
                             .size(ButtonDefaults.IconSize),
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                     Text(
                         text = "Aggiungi al calendario", style = TextStyle(
                             fontSize = 10.sp,
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.onSurface,
                             textAlign = TextAlign.Center
                         )
                     )
@@ -185,25 +188,25 @@ fun EventCard(event: EventState) {
                     .padding(horizontal = 15.dp)
             ) {
                 Row {
-                    Text(text = "Evento:")
+                    Text(text = "Evento:", color = MaterialTheme.colorScheme.onSurface)
                     Spacer(modifier = Modifier.size(10.dp))
                     Text(text = event.titolo)
                 }
                 Spacer(modifier = Modifier.size(5.dp))
                 Row {
-                    Text(text = "Data:")
+                    Text(text = "Data:", color = MaterialTheme.colorScheme.onSurface)
                     Spacer(modifier = Modifier.size(10.dp))
                     Text(text = event.data)
                 }
                 Spacer(modifier = Modifier.size(5.dp))
                 Row {
-                    Text(text = "Ora:")
+                    Text(text = "Ora:", color = MaterialTheme.colorScheme.onSurface)
                     Spacer(modifier = Modifier.size(10.dp))
                     Text(text = event.ora)
                 }
                 Spacer(modifier = Modifier.size(5.dp))
                 Row {
-                    Text(text = "Presso:")
+                    Text(text = "Presso:", color = MaterialTheme.colorScheme.onSurface)
                     Spacer(modifier = Modifier.size(10.dp))
                     Text(text = event.indirizzoBiblio)
                 }
@@ -236,7 +239,7 @@ fun EventCard(event: EventState) {
                         Text(
                             event.titolo,
                             style = TextStyle(
-                                color = Color.Black,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 textAlign = TextAlign.Center,
                                 fontSize = 20.sp
                             )
@@ -268,15 +271,19 @@ fun EventCard(event: EventState) {
                                 .padding(horizontal = 5.dp)
                         ) {
                             Row {
-                                Text(text = "Aula:")
+                                Text(text = "Aula:", color = MaterialTheme.colorScheme.onSurface)
                                 Spacer(modifier = Modifier.size(10.dp))
-                                Text(text = event.aula ?: run { "/" },)
+                                Text(
+                                    text = event.aula ?: run { "/" },
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
                             }
                             Spacer(modifier = Modifier.size(8.dp))
                             Row {
                                 Text(
                                     text = "Descrizione Evento:",
-                                    modifier = Modifier.width(75.dp)
+                                    modifier = Modifier.width(75.dp),
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Spacer(modifier = Modifier.size(10.dp))
                                 Box(
@@ -285,7 +292,8 @@ fun EventCard(event: EventState) {
                                         .fillMaxHeight(0.1f)
                                 ) {
                                     Text(
-                                        text = event.descrizione
+                                        text = event.descrizione,
+                                        color = MaterialTheme.colorScheme.onSurface
                                     )
                                 }
                             }

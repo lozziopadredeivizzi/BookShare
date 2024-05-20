@@ -2,12 +2,14 @@ package com.example.elaboratomobile.ui.screens.loading
 
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,6 +33,7 @@ fun LoadingScreen(
         modifier = Modifier
             .padding(12.dp)
             .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background)
     ) {
         Spacer(modifier = Modifier.size(20.dp))
         Text(
@@ -39,6 +42,7 @@ fun LoadingScreen(
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.Normal,
                 fontSize = 34.sp,
+                color = MaterialTheme.colorScheme.onSurface
             )
         )
 
@@ -48,7 +52,7 @@ fun LoadingScreen(
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .padding(vertical = 16.dp)
-                .fillMaxSize(0.4f)
+                .fillMaxSize(0.6f)
 
         )
     }
