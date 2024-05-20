@@ -1,9 +1,9 @@
 package com.example.elaboratomobile.ui.screens.books
 
-import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.elaboratomobile.data.database.Genere
+import com.example.elaboratomobile.data.database.Libro
 import com.example.elaboratomobile.data.database.Piacere
 import com.example.elaboratomobile.data.repositories.BooksRepository
 import com.example.elaboratomobile.data.repositories.UsernameRepository
@@ -11,11 +11,15 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 //Classe che contiene i dati di libro e se gli è stato messo like dall'utente loggato
 data class BookLike(
@@ -23,7 +27,7 @@ data class BookLike(
     val titolo: String,
     val autore: String,
     val recensione: Double,
-    val copertina: Bitmap?,
+    val copertina: String,
     val trama: String,
     val id_genere: Int,
     val genereNome: String,
@@ -92,11 +96,5 @@ class BooksViewModel(
             loadBook()
         }
 
-    }
-
-    fun editImage(bookId: Int, copertina: Bitmap) {
-        viewModelScope.launch {
-            repository.editCopertina(copertina, bookId)
-        }
     }
 }

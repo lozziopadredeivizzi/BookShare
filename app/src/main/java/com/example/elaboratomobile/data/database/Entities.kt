@@ -23,9 +23,7 @@ data class Biblioteca(
 
     var latitudine: Double?,
 
-    var longitudine: Double?,
-
-    var immagine: Bitmap?
+    var longitudine: Double?
 
 )
 

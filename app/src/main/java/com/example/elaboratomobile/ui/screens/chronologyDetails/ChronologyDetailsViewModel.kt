@@ -1,9 +1,9 @@
 package com.example.elaboratomobile.ui.screens.chronologyDetails
 
-import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.elaboratomobile.data.repositories.BooksRepository
+import com.example.elaboratomobile.ui.screens.chronology.BookChrono
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -14,7 +14,7 @@ data class BookPrestito(
     val titolo: String,
     val autore: String,
     val recensione: Double,
-    val copertina: Bitmap?,
+    val copertina: String,
     val trama: String,
     val id_genere: Int,
     val genereNome: String,

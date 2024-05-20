@@ -1,6 +1,5 @@
 package com.example.elaboratomobile.ui.screens.chronology
 
-import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.elaboratomobile.data.repositories.BooksRepository
@@ -20,7 +19,7 @@ data class BookChrono(
     val titolo: String,
     val autore: String,
     val recensione: Double,
-    val copertina: Bitmap?,
+    val copertina: String,
     val trama: String,
     val id_genere: Int,
     val genereNome: String,

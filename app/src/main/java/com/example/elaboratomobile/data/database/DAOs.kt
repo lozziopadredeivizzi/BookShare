@@ -24,9 +24,6 @@ interface LibroDAO {
     @Delete
     suspend fun delete(item: Libro)
 
-    @Query("UPDATE LIBRO SET copertina = :copertina WHERE id_libro = :id_libro")
-    suspend fun editImage(copertina: Bitmap, id_libro: Int)
-
     @Query(
         """
     SELECT L.*, G.nome as genereNome
@@ -51,32 +48,27 @@ interface LibroDAO {
     )
     fun getBooksAndLikesByGenere(idGenere: Int, username: String): Flow<List<BookLike>>
 
-    @Query(
-        """
+    @Query("""
     SELECT L.*, G.nome as genereNome, 
            EXISTS(SELECT 1 FROM PIACERE P WHERE P.id_libro = L.id_libro AND P.username = :username) AS isLiked
     FROM LIBRO L
     JOIN GENERE G ON L.id_genere = G.id_genere
     JOIN PIACERE P ON L.id_libro = P.id_libro
     WHERE (L.id_genere = :idGenere OR :idGenere = 0) AND P.username = :username
-"""
-    )
+""")
     fun getLikedBooksByGenere(idGenere: Int, username: String): Flow<List<BookLike>>
 
-    @Query(
-        """
+    @Query("""
         SELECT l.*, g.nome as genereNome, lp.id_possesso as idPrestito
         FROM LIBRO_PRESTITO lp
         INNER JOIN LIBRO_POSSEDUTO lpos ON lp.id_possesso = lpos.id_possesso
         INNER JOIN LIBRO l ON lpos.id_libro = l.id_libro
         INNER JOIN GENERE g ON l.id_genere = g.id_genere
         WHERE lp.username = :username AND (l.id_genere = :idGenere OR :idGenere = 0)
-    """
-    )
+    """)
     fun getChronologyBooksByUser(username: String, idGenere: Int): Flow<List<BookChrono>>
 
-    @Query(
-        """
+    @Query("""
         WITH AverageRating AS (
             SELECT AVG(LP.recensione) as mediaRecensione
             FROM LIBRO_PRESTITO LP
@@ -86,8 +78,7 @@ interface LibroDAO {
         UPDATE LIBRO
         SET recensione = (SELECT mediaRecensione FROM AverageRating)
         WHERE id_libro = :idLibro;
-    """
-    )
+    """)
     suspend fun updateLibroRecensioneMedia(idLibro: Int)
 
 }
@@ -116,15 +107,13 @@ interface BibliotecaDAO {
     @Delete
     suspend fun delete(item: Biblioteca)
 
-    @Query(
-        """
+    @Query("""
         SELECT b.*, lp.id_possesso as idPossesso
         FROM LIBRO_POSSEDUTO lp
         JOIN BIBLIOTECA b ON lp.id_biblioteca = b.id_biblioteca
         WHERE lp.id_libro = :idLibro AND lp.statoPrenotazione = 'Libero'
-    """
-    )
-    fun getLibrariesWithFreeBook(idLibro: Int): Flow<List<PossessoState>>
+    """)
+    fun getLibrariesWithFreeBook(idLibro: Int) : Flow<List<PossessoState>>
 
     @Query("SELECT id_biblioteca, nome, latitudine, longitudine FROM BIBLIOTECA")
     fun getBibliotecaLocations(): Flow<List<BibliotecheLocation>>
@@ -187,7 +176,7 @@ interface EventoDAO {
     @Delete
     suspend fun delete(item: Evento)
 
-    @Query("SELECT e.*, b.nome AS nomeBiblioteca, b.indirizzo AS indirizzoBiblio, b.immagine AS immagineBiblio FROM EVENTO e JOIN BIBLIOTECA b ON e.id_biblioteca= b.id_biblioteca ")
+    @Query("SELECT e.*, b.nome AS nomeBiblioteca, b.indirizzo AS indirizzoBiblio FROM EVENTO e JOIN BIBLIOTECA b ON e.id_biblioteca= b.id_biblioteca ")
     fun getAll(): Flow<List<EventState>>
 }
 
@@ -208,14 +197,11 @@ interface LibroPrestitoDAO {
     @Delete
     suspend fun delete(item: LibroPrestito)
 
-    @Query(
-        "SELECT recensione FROM LIBRO_PRESTITO WHERE id_possesso IN " +
-                "(SELECT id_possesso FROM LIBRO_POSSEDUTO WHERE id_libro = :idLibro)"
-    )
+    @Query("SELECT recensione FROM LIBRO_PRESTITO WHERE id_possesso IN " +
+            "(SELECT id_possesso FROM LIBRO_POSSEDUTO WHERE id_libro = :idLibro)")
     suspend fun getRecensioniForBook(idLibro: Int): List<Int?>
 
-    @Query(
-        """
+    @Query("""
         SELECT 
             LP.data_inizio, 
             LP.data_fine, 
@@ -231,8 +217,7 @@ interface LibroPrestitoDAO {
         INNER JOIN BIBLIOTECA B ON LP2.id_biblioteca = B.id_biblioteca
         INNER JOIN GENERE G ON L.id_genere = G.id_genere
         WHERE LP.id_possesso = :idPossesso
-    """
-    )
+    """)
     fun getDettagliPrestito(idPossesso: Int): Flow<BookPrestito?>
 
     @Query("UPDATE LIBRO_PRESTITO SET recensione = :recensione WHERE id_possesso = :idPossesso")
@@ -241,16 +226,14 @@ interface LibroPrestitoDAO {
     @Query("SELECT COUNT(*) FROM LIBRO_PRESTITO WHERE username = :username AND data_fine = :today AND visualizzato = 'false'")
     suspend fun getCountLibriPrestitiNonVisualizzati(username: String, today: Date): Int
 
-    @Query(
-        "SELECT LIBRO.titolo AS titoloLibro, BIBLIOTECA.nome AS nomeBiblioteca, LIBRO_PRESTITO.id_possesso AS idPossesso " +
-                "FROM LIBRO " +
-                "INNER JOIN LIBRO_POSSEDUTO ON LIBRO.id_libro = LIBRO_POSSEDUTO.id_libro " +
-                "INNER JOIN BIBLIOTECA ON LIBRO_POSSEDUTO.id_biblioteca = BIBLIOTECA.id_biblioteca " +
-                "INNER JOIN LIBRO_PRESTITO ON LIBRO_POSSEDUTO.id_possesso = LIBRO_PRESTITO.id_possesso " +
-                "WHERE LIBRO_PRESTITO.username = :username " +
-                "AND LIBRO_PRESTITO.data_fine = :today"
-    )
-    fun getNotificationsDetails(username: String, today: Date): Flow<List<Notification>>
+    @Query("SELECT LIBRO.titolo AS titoloLibro, BIBLIOTECA.nome AS nomeBiblioteca, LIBRO_PRESTITO.id_possesso AS idPossesso " +
+            "FROM LIBRO " +
+            "INNER JOIN LIBRO_POSSEDUTO ON LIBRO.id_libro = LIBRO_POSSEDUTO.id_libro " +
+            "INNER JOIN BIBLIOTECA ON LIBRO_POSSEDUTO.id_biblioteca = BIBLIOTECA.id_biblioteca " +
+            "INNER JOIN LIBRO_PRESTITO ON LIBRO_POSSEDUTO.id_possesso = LIBRO_PRESTITO.id_possesso " +
+            "WHERE LIBRO_PRESTITO.username = :username " +
+            "AND LIBRO_PRESTITO.data_fine = :today")
+    fun getNotificationsDetails(username: String, today: Date) :Flow<List<Notification>>
 
     @Query("UPDATE LIBRO_PRESTITO SET visualizzato = 'true' WHERE id_possesso = :idPossesso")
     suspend fun updateVisualizzatoForIdPossesso(idPossesso: Int)

@@ -25,7 +25,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -41,13 +40,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.elaboratomobile.R
 import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.ui.composables.RatingBarNoClick
 import com.example.elaboratomobile.ui.composables.RatingGraph
@@ -88,28 +87,14 @@ fun BookDetailsScreen(
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                if (bookState != null) {
-                    if (bookState.copertina != null) {
-                        bookState.copertina.let { nonNullBitmap ->
-                            val imageBitmap: ImageBitmap = nonNullBitmap.asImageBitmap()
-                            Image(
-                                bitmap = imageBitmap,
-                                contentDescription = null,
-                                contentScale = ContentScale.Fit,
-                                modifier = Modifier
-                                    .height(130.dp)
-                                    .padding(end = 30.dp)
-                                    .fillMaxWidth(0.4f)
-                            )
-                        }
-                    } else {
-                        Icon(
-                            imageVector = Icons.Outlined.AccountBox,
-                            contentDescription = "Icona del profilo",
-                            modifier = Modifier.size(130.dp)
-                        )
-                    }
-                }
+                Image(
+                    painter = painterResource(id = R.drawable.copertina),
+                    contentDescription = "Cover",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .height(130.dp)
+                        .padding(end = 30.dp)
+                )
                 Column(
                     modifier = Modifier
                         .padding(8.dp)

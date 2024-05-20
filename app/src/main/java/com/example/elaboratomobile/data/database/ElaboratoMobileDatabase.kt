@@ -21,7 +21,7 @@ import java.util.Locale
         LibroPrestito::class,
         LibroPosseduto::class,
         Piacere::class,
-        Genere::class], version = 21
+        Genere::class], version = 16
 )
 @TypeConverters(Converters::class)
 abstract class ElaboratoMobileDatabase : RoomDatabase() {
@@ -74,7 +74,6 @@ class Converters {
     fun toBitmap(byteArray: ByteArray?): Bitmap? {
         if (byteArray == null || byteArray.isEmpty()) {
             return null // o restituisci un bitmap predefinito, o solleva un'eccezione, a seconda dei requisiti
-
         }
         return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
     }

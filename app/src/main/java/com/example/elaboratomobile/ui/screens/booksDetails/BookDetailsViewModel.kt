@@ -1,6 +1,6 @@
 package com.example.elaboratomobile.ui.screens.booksDetails
 
-import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.elaboratomobile.data.database.LibroPrestito
@@ -18,7 +18,7 @@ data class BooKGenere(
     val titolo: String,
     val autore: String,
     val recensione: Double,
-    val copertina: Bitmap?,
+    val copertina: String,
     val trama: String,
     val id_genere: Int,
     val genereNome: String,
