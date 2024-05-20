@@ -74,7 +74,7 @@ fun LoginScreen(
         )
 
         Image(
-            painter = painterResource(id = R.drawable.img_5097),
+            painter = painterResource(id = R.drawable.logo),
             "App Logo",
             contentScale = ContentScale.Fit,
             colorFilter = ColorFilter.tint(Color.Black),
