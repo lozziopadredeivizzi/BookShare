@@ -30,6 +30,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -65,6 +66,7 @@ fun BookDetailsScreen(
     var dialogOpen = remember {
         mutableStateOf(false)
     }
+    val colorCard = MaterialTheme.colorScheme.onPrimary
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -77,7 +79,7 @@ fun BookDetailsScreen(
                     horizontal = 16.dp, vertical = 16.dp
                 )
                 .fillMaxSize(), colors = CardDefaults.cardColors(
-                containerColor = Color.White
+                containerColor = colorCard
             ), border = BorderStroke(1.dp, Color.Gray)
         ) {
             Row(
@@ -102,9 +104,9 @@ fun BookDetailsScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = bookState?.titolo ?: run { "Titolo" })
-                    Text(text = bookState?.autore ?: run { "Autore" })
-                    Text(text = bookState?.genereNome ?: run { "Genere" })
+                    Text(text = bookState?.titolo ?: run { "Titolo" }, color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = bookState?.autore ?: run { "Autore" }, color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = bookState?.genereNome ?: run { "Genere" }, color = MaterialTheme.colorScheme.onSurface)
                     Box(modifier = Modifier.clickable { dialogOpen.value = true }) {
                         if (bookState != null)
                             RatingBarNoClick(rating = bookState.recensione)
@@ -123,7 +125,8 @@ fun BookDetailsScreen(
             ) {
                 Text(
                     fontSize = 13.sp,
-                    text = bookState?.trama ?: run { "Trama" }
+                    text = bookState?.trama ?: run { "Trama" },
+                    color = Color.Black
                 )
 
             }
@@ -176,9 +179,9 @@ fun BookDetailsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable { selectedItem = library.idPossesso }
-                                .background(if (library.idPossesso == selectedItem) Color.Cyan else Color.Transparent) // Change color if selected
+                                .background(if (library.idPossesso == selectedItem) MaterialTheme.colorScheme.secondary else Color.Transparent) // Change color if selected
                         ) {
-                            Text(text = library.nome, modifier = Modifier.padding(8.dp))
+                            Text(text = library.nome, color = Color.Black, modifier = Modifier.padding(8.dp))
                         }
                     }
                 }
@@ -214,10 +217,10 @@ fun BookDetailsScreen(
                         }
                     },
                     modifier = Modifier.width(200.dp),
-                    border = BorderStroke(1.dp, Color.Blue)
+                    border = BorderStroke(1.dp, Color.Gray)
                 ) {
                     Text(
-                        "Richiedi Prestito", color = Color.Black
+                        "Richiedi Prestito", color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }

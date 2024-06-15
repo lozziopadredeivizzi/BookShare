@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Paint.Style
 import android.net.Uri
 import android.provider.MediaStore
 import android.widget.Toast
@@ -12,13 +11,11 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,6 +29,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -42,7 +40,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -189,7 +186,7 @@ fun ProfileScreen(
                 Text(
                     user?.username ?: run { "/" },
                     style = TextStyle(
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 19.sp,
                         textAlign = TextAlign.End
                     ),
@@ -210,7 +207,7 @@ fun ProfileScreen(
                 Text(
                     user?.data_nascita ?: run { "/" },
                     style = TextStyle(
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 19.sp,
                         textAlign = TextAlign.End
                     ),
@@ -231,7 +228,7 @@ fun ProfileScreen(
                 Text(
                     num.toString(),
                     style = TextStyle(
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 19.sp,
                         textAlign = TextAlign.End
                     ),
@@ -244,9 +241,10 @@ fun ProfileScreen(
     }
     if (showDialog.value) {
         AlertDialog(
-            onDismissRequest = { showDialog.value = false },
-            title = { Text("Scegli la fonte dell'immagine") },
-            text = { Text("Da dove vuoi scegliere l'immagine?") },
+            containerColor = MaterialTheme.colorScheme.onPrimary,
+            onDismissRequest = { showDialog.value = false},
+            title = { Text("Scegli la fonte dell'immagine", color = MaterialTheme.colorScheme.onSurface) },
+            text = { Text("Da dove vuoi scegliere l'immagine?", color = MaterialTheme.colorScheme.onSurface) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -260,7 +258,7 @@ fun ProfileScreen(
                         tint = Color.Black
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("Fotocamera", color = Color.Black)
+                    Text("Fotocamera", color = MaterialTheme.colorScheme.onSurface)
                 }
             },
             dismissButton = {
@@ -274,7 +272,7 @@ fun ProfileScreen(
                         tint = Color.Black
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("Galleria", color = Color.Black)
+                    Text("Galleria", color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         )

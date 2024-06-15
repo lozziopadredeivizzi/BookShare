@@ -33,6 +33,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -160,7 +161,8 @@ fun RegistrazioneScreen(
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.Normal,
                 fontSize = 34.sp
-            )
+            ),
+            color = MaterialTheme.colorScheme.onSurface
         )
         Spacer(modifier = Modifier.size(6.dp))
 
@@ -210,7 +212,7 @@ fun RegistrazioneScreen(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done // Impedisce il ritorno a capo
             ),
-            label = { Text("Nome") }
+            label = { Text("Nome", color = MaterialTheme.colorScheme.onSurface) }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
@@ -220,7 +222,7 @@ fun RegistrazioneScreen(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done // Impedisce il ritorno a capo
             ),
-            label = { Text(text = "Cognome") }
+            label = { Text(text = "Cognome", color = MaterialTheme.colorScheme.onSurface) }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
@@ -230,7 +232,7 @@ fun RegistrazioneScreen(
                 keyboardType = KeyboardType.Decimal,
                 imeAction = ImeAction.Done
             ),
-            label = { Text("Data Di Nascita") }
+            label = { Text("Data Di Nascita", color = MaterialTheme.colorScheme.onSurface) }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
@@ -240,7 +242,7 @@ fun RegistrazioneScreen(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Done // Impedisce il ritorno a capo
             ),
-            label = { Text("E-mail") }
+            label = { Text("E-mail", color = MaterialTheme.colorScheme.onSurface) }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
@@ -250,7 +252,7 @@ fun RegistrazioneScreen(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done // Impedisce il ritorno a capo
             ),
-            label = { Text("Username") }
+            label = { Text("Username", color = MaterialTheme.colorScheme.onSurface) }
         )
         Spacer(modifier = Modifier.size(2.dp))
         OutlinedTextField(
@@ -260,7 +262,7 @@ fun RegistrazioneScreen(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done // Impedisce il ritorno a capo
             ),
-            label = { Text("Password") }
+            label = { Text("Password", color = MaterialTheme.colorScheme.onSurface) }
         )
 
         if (anyoneState) {
@@ -280,7 +282,7 @@ fun RegistrazioneScreen(
                     }
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Attiva autenticazione biometrica")
+                Text(text = "Attiva autenticazione biometrica", color = MaterialTheme.colorScheme.onSurface)
             }
         }
 
@@ -293,19 +295,20 @@ fun RegistrazioneScreen(
             },
             modifier = Modifier
                 .width(150.dp),
-            border = BorderStroke(1.dp, Color.Blue)
+            border = BorderStroke(1.dp, Color.Gray)
         ) {
             Text(
                 text = "Registrati",
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
     if (showDialog.value) {
         AlertDialog(
+            containerColor = MaterialTheme.colorScheme.onPrimary,
             onDismissRequest = { showDialog.value = false },
-            title = { Text("Scegli la fonte dell'immagine") },
-            text = { Text("Da dove vuoi scegliere l'immagine?") },
+            title = { Text("Scegli la fonte dell'immagine" , color = MaterialTheme.colorScheme.onSurface) },
+            text = { Text("Da dove vuoi scegliere l'immagine?", color = MaterialTheme.colorScheme.onSurface) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -319,7 +322,7 @@ fun RegistrazioneScreen(
                         tint = Color.Black
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("Fotocamera", color = Color.Black)
+                    Text("Fotocamera", color = MaterialTheme.colorScheme.onSurface)
                 }
             },
             dismissButton = {
@@ -333,7 +336,7 @@ fun RegistrazioneScreen(
                         tint = Color.Black
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("Galleria", color = Color.Black)
+                    Text("Galleria", color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         )

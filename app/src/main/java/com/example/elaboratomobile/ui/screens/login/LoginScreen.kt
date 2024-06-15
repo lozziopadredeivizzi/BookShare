@@ -15,10 +15,10 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Fingerprint
-import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,8 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -41,6 +41,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.elaboratomobile.R
 import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.utils.BiometricPromptManager
 
@@ -68,16 +69,15 @@ fun LoginScreen(
                 fontFamily = FontFamily.Serif,
                 fontWeight = FontWeight.Normal,
                 fontSize = 34.sp,
+                color = MaterialTheme.colorScheme.onSurface
             )
         )
 
         Image(
-            Icons.Outlined.Image,
+            painter = painterResource(id = R.drawable.logo),
             "App Logo",
             contentScale = ContentScale.Fit,
-            colorFilter = ColorFilter.tint(Color.Black),
             modifier = Modifier
-                .padding(vertical = 8.dp)
                 .fillMaxSize(0.3f)
 
         )
@@ -90,15 +90,24 @@ fun LoginScreen(
         biometricResult?.let { result ->
             when (result) {
                 is BiometricPromptManager.BiometricResult.AuthenticationError -> {
-                    Text(text = "Autenticazione annullata")
+                    Text(
+                        text = "Autenticazione annullata",
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
 
                 BiometricPromptManager.BiometricResult.AuthenticationFailed -> {
-                    Text(text = "Autenticazione Fallita")
+                    Text(
+                        text = "Autenticazione Fallita",
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
 
                 BiometricPromptManager.BiometricResult.AuthenticationNotSet -> {
-                    Text(text = "Autenticazione non impostata")
+                    Text(
+                        text = "Autenticazione non impostata",
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
 
                 BiometricPromptManager.BiometricResult.AuthenticationSuccess -> {
@@ -106,15 +115,21 @@ fun LoginScreen(
                 }
 
                 BiometricPromptManager.BiometricResult.FeatureUnavailable -> {
-                    Text(text = "Funzionalità non disonibile")
+                    Text(
+                        text = "Funzionalità non disonibile",
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
 
                 BiometricPromptManager.BiometricResult.HardwareUnavailable -> {
-                    Text(text = "Hardaware non disponibile")
+                    Text(
+                        text = "Hardaware non disponibile",
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
             }
         }
-
+        val colorScritta = MaterialTheme.colorScheme.onSurface
         OutlinedTextField(
             value = state.username,
             onValueChange = actions::setUsername,
@@ -122,7 +137,7 @@ fun LoginScreen(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done // Impedisce il ritorno a capo
             ),
-            label = { Text("Username") }
+            label = { Text("Username", color = colorScritta) }
         )
         Spacer(modifier = Modifier.size(20.dp))
         OutlinedTextField(
@@ -133,7 +148,7 @@ fun LoginScreen(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done // Impedisce il ritorno a capo
             ),
-            label = { Text("Password") }
+            label = { Text("Password", color = MaterialTheme.colorScheme.onSurface) }
 
         )
         if (impronta) Spacer(modifier = Modifier.size(30.dp))
@@ -145,11 +160,11 @@ fun LoginScreen(
                 onSubmit()
             },
             modifier = Modifier.width(150.dp),
-            border = BorderStroke(1.dp, Color.Blue)
+            border = BorderStroke(1.dp, Color.Gray)
         ) {
             Text(
                 "Accedi",
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
         if (impronta) Spacer(modifier = Modifier.size(20.dp))

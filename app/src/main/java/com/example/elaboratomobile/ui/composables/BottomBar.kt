@@ -13,8 +13,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import com.example.elaboratomobile.ui.BookShareRoute
@@ -57,7 +59,7 @@ fun BottomBar(
             )
         )
         NavigationBar(
-            containerColor = MaterialTheme.colorScheme.primary
+            containerColor = MaterialTheme.colorScheme.primary,
         ) {
             items.forEach { item ->
                 NavigationBarItem(
@@ -73,7 +75,14 @@ fun BottomBar(
                             contentDescription = "${item.title} Icon"
                         )
                     },
-                    label = { Text(text = item.title) }
+                    label = { Text(text = item.title) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Color.White, // Colore dell'icona selezionata
+                        unselectedIconColor = Color.Black, // Colore dell'icona non selezionata
+                        selectedTextColor = Color.White, // Colore del testo selezionato
+                        unselectedTextColor = Color.Black, // Colore del testo non selezionato
+                        indicatorColor = MaterialTheme.colorScheme.secondary // Colore dell'indicatore (cerchio selettore)
+                    )
                 )
             }
         }

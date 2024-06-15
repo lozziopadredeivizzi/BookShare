@@ -1,13 +1,16 @@
 package com.example.elaboratomobile.ui.composables
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material.icons.outlined.StarRate
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,7 +24,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
+private fun getSecondaryColor(): Color {
+    return MaterialTheme.colorScheme.secondary
+}
+@Composable
 fun RatingGraph(data: List<Pair<Int, Int>>) {
+    val secondaryColor = getSecondaryColor()
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -38,13 +46,15 @@ fun RatingGraph(data: List<Pair<Int, Int>>) {
                             Icons.Outlined.Star,
                             contentDescription = "Stella",
                             modifier = Modifier.size(15.dp),
-                            tint = Color.Blue
+                            tint = MaterialTheme.colorScheme.secondary
                         )
                     } else {
                         Icon(
                             Icons.Outlined.Star,
                             contentDescription = "Stella",
-                            modifier = Modifier.size(15.dp).alpha(0.0f) // Imposta l'opacità a 0 per nascondere le icone non utilizzate
+                            modifier = Modifier
+                                .size(15.dp)
+                                .alpha(0.0f) // Imposta l'opacità a 0 per nascondere le icone non utilizzate
                         )
                     }
                 }
@@ -74,7 +84,7 @@ fun RatingGraph(data: List<Pair<Int, Int>>) {
                             bottom = barHeight,
                             radiusX = 8f,
                             radiusY = 8f,
-                            paint = Paint().apply { color = Color.Blue }
+                            paint = Paint().apply { color = secondaryColor }
                         )
                     }
                 }

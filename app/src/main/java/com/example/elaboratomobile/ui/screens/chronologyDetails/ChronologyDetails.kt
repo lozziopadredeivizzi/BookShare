@@ -16,13 +16,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,13 +33,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.elaboratomobile.R
 import com.example.elaboratomobile.ui.BookShareRoute
 import com.example.elaboratomobile.ui.composables.RatingBar
 import java.text.SimpleDateFormat
@@ -48,6 +51,7 @@ fun ChronologyDetails(
     bookState: BookPrestito?,
     onSubmit: (Int, Int, Int) -> Unit
 ) {
+    val colorCard = MaterialTheme.colorScheme.onPrimary
     var rating by remember {
         mutableIntStateOf(bookState?.recensionePrestito ?: 0)
     }
@@ -66,7 +70,7 @@ fun ChronologyDetails(
                 )
                 .fillMaxSize(),
             colors = CardDefaults.cardColors(
-                containerColor = Color.White
+                containerColor = colorCard
             ),
             border = BorderStroke(1.dp, Color.Gray)
         ) {
@@ -77,14 +81,28 @@ fun ChronologyDetails(
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.copertina),
-                    contentDescription = "Cover",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .height(130.dp)
-                        .padding(end = 30.dp, start = 20.dp)
-                )
+                if (bookState != null) {
+                    if (bookState.copertina != null) {
+                        bookState.copertina.let { nonNullBitmap ->
+                            val imageBitmap: ImageBitmap = nonNullBitmap.asImageBitmap()
+                            Image(
+                                bitmap = imageBitmap,
+                                contentDescription = null,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier
+                                    .height(130.dp)
+                                    .padding(end = 30.dp)
+                                    .fillMaxWidth(0.4f)
+                            )
+                        }
+                    } else {
+                        Icon(
+                            imageVector = Icons.Outlined.AccountBox,
+                            contentDescription = "Icona del profilo",
+                            modifier = Modifier.size(130.dp)
+                        )
+                    }
+                }
                 Column(
                     modifier = Modifier
                         .padding(8.dp)
@@ -92,9 +110,9 @@ fun ChronologyDetails(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = bookState?.titolo ?: run { "Titolo" })
-                    Text(text = bookState?.autore ?: run { "Autore" })
-                    Text(text = bookState?.genereNome ?: run { "Genere" })
+                    Text(text = bookState?.titolo ?: run { "Titolo" }, color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = bookState?.autore ?: run { "Autore" }, color = MaterialTheme.colorScheme.onSurface)
+                    Text(text = bookState?.genereNome ?: run { "Genere" }, color = MaterialTheme.colorScheme.onSurface)
                 }
             }
 
@@ -112,23 +130,23 @@ fun ChronologyDetails(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text(text = "Dettagli prestito", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    Text(text = "Dettagli prestito", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.Black)
                     Spacer(modifier = Modifier.size(15.dp))
                     Row {
-                        Text(text = "Presso:    ", fontWeight = FontWeight.Bold)
-                        Text(text = bookState?.nomeBiblioteca ?: run { "Nome" })
+                        Text(text = "Presso:    ", fontWeight = FontWeight.Bold, color = Color.Black)
+                        Text(text = bookState?.nomeBiblioteca ?: run { "Nome" }, color = Color.Black)
                     }
                     Spacer(modifier = Modifier.size(15.dp))
                     Row {
-                        Text(text = "Data Inizio:   ", fontWeight = FontWeight.Bold)
+                        Text(text = "Data Inizio:   ", fontWeight = FontWeight.Bold, color = Color.Black)
                         Text(text = bookState?.data_inizio?.let { dateFormatter.format(it) }
-                            ?: "Data Inizio")
+                            ?: "Data Inizio", color = Color.Black)
                     }
                     Spacer(modifier = Modifier.size(15.dp))
                     Row {
-                        Text(text = "Data Fine:    ", fontWeight = FontWeight.Bold)
+                        Text(text = "Data Fine:    ", fontWeight = FontWeight.Bold, color = Color.Black)
                         Text(text = bookState?.data_fine?.let { dateFormatter.format(it) }
-                            ?: "Data Fine")
+                            ?: "Data Fine", color = Color.Black)
                     }
                 }
             }
@@ -152,7 +170,7 @@ fun ChronologyDetails(
                     border = BorderStroke(1.dp, Color.Blue)
                 ) {
                     Text(
-                        "Valuta", color = Color.Black
+                        "Valuta", color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }

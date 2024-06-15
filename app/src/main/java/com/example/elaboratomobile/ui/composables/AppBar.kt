@@ -73,7 +73,7 @@ fun AppBar(
                     IconButton(onClick = { navController.navigate(BookShareRoute.FavoriteBooks.route) }) {
                         Icon(
                             contentDescription = "Preferiti",
-                            tint = Color.Red,
+                            tint = MaterialTheme.colorScheme.tertiary,
                             imageVector = Icons.Outlined.Favorite,
                             modifier = Modifier.size(30.dp)
                         )
@@ -83,8 +83,8 @@ fun AppBar(
 
                         if (countNotific > 0) {
                             Badge(
-                                content = { Text(text = "$countNotific") },
-                                containerColor = Color.Red,
+                                content = { Text(text = "$countNotific", color = Color.White) },
+                                containerColor = MaterialTheme.colorScheme.surface,
                                 modifier = Modifier.padding(start = 17.dp, bottom = 6.dp)
                             )
                         }
@@ -94,7 +94,6 @@ fun AppBar(
                     IconButton(onClick = { navController.navigate(BookShareRoute.Chronology.route) }) {
                         Icon(
                             contentDescription = "Cronologia",
-                            tint = Color.Black,
                             imageVector = Icons.Outlined.AccessTime,
                             modifier = Modifier.size(30.dp)
                         )
@@ -102,7 +101,6 @@ fun AppBar(
                     IconButton(onClick = { navController.navigate(BookShareRoute.Settings.route) }) {
                         Icon(
                             contentDescription = "Impostazioni",
-                            tint = Color.Black,
                             imageVector = Icons.Outlined.Settings,
                             modifier = Modifier.size(30.dp)
                         )

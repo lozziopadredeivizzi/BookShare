@@ -38,6 +38,12 @@ class EventsViewModel(
             }
         }
     }
+
+    fun editBiblio (immagine: Bitmap, id: Int) {
+        viewModelScope.launch {
+            repository.updateBiblio(immagine, id)
+        }
+    }
 }
 
 
